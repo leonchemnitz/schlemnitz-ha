@@ -940,3 +940,40 @@
         data:
           percentage: 33
   mode: single
+- id: flur_schalter_nachzug
+  alias: Flur Schalter Nachzug
+  description: Die Hue-Wandschalter (RDM004) senden über die Zigbee-Bindung abwechselnd
+    On/OffWithEffect statt Toggle. Hat ein Druck nach 400 ms nichts bewirkt, schaltet
+    HA die Z2M-Gruppe flur_lichter um; die IKEA-Lampen folgen über "Flur Licht Synchronisation".
+  triggers:
+  - trigger: mqtt
+    topic: zigbee2mqtt/flur_wallswitch_1/action
+    payload: left_press
+  - trigger: mqtt
+    topic: zigbee2mqtt/flur_wallswitch_2/action
+    payload: left_press
+  - trigger: mqtt
+    topic: zigbee2mqtt/flur_wallswitch_3/action
+    payload: left_press
+  conditions:
+  - condition: state
+    entity_id: light.flur_lichter
+    state:
+    - 'on'
+    - 'off'
+  actions:
+  - variables:
+      zustand_vorher: '{{ states(''light.flur_lichter'') }}'
+      sekunden_seit_aenderung: '{{ (now() - states.light.flur_lichter.last_changed).total_seconds()
+        }}'
+  - delay:
+      milliseconds: 400
+  # Eine Lampenmeldung, die knapp vor dem left_press ankam, zählt als Wirkung dieses Drucks.
+  - condition: template
+    value_template: '{{ states(''light.flur_lichter'') == zustand_vorher and sekunden_seit_aenderung
+      | float(0) > 1 }}'
+  - action: light.toggle
+    target:
+      entity_id: light.flur_lichter
+  mode: single
+  max_exceeded: silent
