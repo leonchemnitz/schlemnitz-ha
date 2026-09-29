@@ -1,0 +1,942 @@
+- id: '1768751554915'
+  alias: Flur Licht Synchronisation
+  description: Follower-Gruppe folgt der Philips-Gruppe
+  triggers:
+  - entity_id: light.flur_lichter
+    to:
+    trigger: state
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.flur_lichter
+        state: 'on'
+      sequence:
+      - target:
+          entity_id: light.flur_alle_lichter
+        action: light.turn_on
+    - conditions:
+      - condition: state
+        entity_id: light.flur_lichter
+        state: 'off'
+      sequence:
+      - target:
+          entity_id: light.flur_alle_lichter
+        action: light.turn_off
+  mode: restart
+- id: '1768753634510'
+  alias: Tageszeit Modus setzen
+  description: Morgen (Elevation > -6°), Tag (Sunrise +1h), Abend (Sunset), Nacht
+    (22:30)
+  triggers:
+  - trigger: numeric_state
+    entity_id: sun.sun
+    attribute: elevation
+    above: -6
+    id: Morgen
+  - trigger: sun
+    event: sunrise
+    offset: 01:00:00
+    id: Tag
+  - trigger: sun
+    event: sunset
+    id: Abend
+  - trigger: time
+    at: '22:30:00'
+    id: Nacht
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: Morgen
+      - condition: state
+        entity_id: sun.sun
+        attribute: rising
+        state: false
+      sequence:
+      - stop: 'Abbruch: Elevation -6 Grad beim Untergang (Abenddämmerung) ignoriert.'
+  - action: input_select.select_option
+    target:
+      entity_id: input_select.tageszeit_modus
+    data:
+      option: '{{ trigger.id }}'
+  mode: restart
+- id: '1768753724330'
+  alias: Flur - Szenen Manager
+  description: Wendet Szenen an beim Einschalten oder Zeitwechsel
+  triggers:
+  - entity_id: light.flur_alle_lichter
+    from: 'off'
+    to: 'on'
+    trigger: state
+  - entity_id: input_select.tageszeit_modus
+    to:
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: light.flur_alle_lichter
+    state: 'on'
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Morgen
+      sequence:
+      - target:
+          entity_id: scene.flur_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Tag
+      sequence:
+      - target:
+          entity_id: scene.flur_hell
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Abend
+      sequence:
+      - target:
+          entity_id: scene.flur_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Nacht
+      sequence:
+      - target:
+          entity_id: scene.flur_ciao
+        data:
+          transition: 10
+        action: scene.turn_on
+  mode: restart
+- id: '1768759148324'
+  alias: Neue Automation
+  description: Follower-Gruppe folgt der Philips-Gruppe
+  triggers:
+  - entity_id: light.leon_lichter
+    to:
+    trigger: state
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: light.leon_lichter
+        state: 'on'
+      sequence:
+      - target:
+          entity_id: light.leon_palme
+        action: light.turn_on
+    - conditions:
+      - condition: state
+        entity_id: light.leon_lichter
+        state: 'off'
+      sequence:
+      - target:
+          entity_id: light.leon_palme
+        action: light.turn_off
+  mode: restart
+- id: '1768761039105'
+  alias: Leon - Tap Dial Control
+  description: Direkte Szenenwahl und Dimmen per Rad via MQTT
+  triggers:
+  - topic: zigbee2mqtt/leon_tapdialswitch
+    trigger: mqtt
+  conditions:
+  - condition: template
+    value_template: "{{ trigger.payload_json is defined \n   and trigger.payload_json.action
+      is defined \n   and trigger.payload_json.action != None \n   and trigger.payload_json.action
+      != '' }}\n"
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_1_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.leon_hell
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_2_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.leon_chillo
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_3_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.leon_chillo_2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_4_press'' }}'
+      sequence:
+      - action: switch.toggle
+        target:
+          entity_id: switch.leon_luftreiniger
+    - conditions:
+      - condition: template
+        value_template: '{{ ''hold'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.leon_alle_lichter
+        data:
+          transition: 1
+    - conditions:
+      - condition: template
+        value_template: '{{ ''dial_rotate'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: "{{ state_attr('light.leon_alle_lichter_entitaten', 'entity_id')\n
+            \  | select('is_state', 'on') | list }}"
+        data:
+          brightness_step_pct: '{% set direction = -1 if ''left'' in trigger.payload_json.action
+            else 1 %} {% set step_size = 15 if ''fast'' in trigger.payload_json.action
+            else 5 %} {{ direction * step_size }}
+
+            '
+          transition: 0.2
+  mode: queued
+  max: 50
+- id: '1768765441059'
+  alias: Wohnzimmer - Tapdial Control
+  description: Direkte Szenenwahl und Dimmen per Rad via MQTT
+  triggers:
+  - topic: zigbee2mqtt/wohnzimmer_tapdialswitch
+    trigger: mqtt
+  conditions:
+  - condition: template
+    value_template: "{{ trigger.payload_json is defined \n   and trigger.payload_json.action
+      is defined \n   and trigger.payload_json.action != None \n   and trigger.payload_json.action
+      != '' }}\n"
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_1_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.wohnzimmer_hell
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_2_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.wohnzimmer_chillo
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_3_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.wohnzimmer_ciao
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ ''hold'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.wohnzimmer_alle_lichter
+        data:
+          transition: 1
+    - conditions:
+      - condition: template
+        value_template: '{{ ''dial_rotate'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: '{{ state_attr(''light.wohnzimmer_alle_lichter_entitaten'', ''entity_id'')
+            }}'
+        data:
+          brightness_step_pct: '{% set direction = -1 if ''left'' in trigger.payload_json.action
+            else 1 %} {% set step_size = 15 if ''fast'' in trigger.payload_json.action
+            else 5 %} {{ direction * step_size }}
+
+            '
+          transition: 0.2
+  mode: queued
+  max: 50
+- id: '1769364987864'
+  alias: Ems Tapdial Control
+  description: Direkte Szenenwahl und Dimmen per Rad via MQTT
+  triggers:
+  - topic: zigbee2mqtt/ems_tapdialswitch
+    trigger: mqtt
+  conditions:
+  - condition: template
+    value_template: "{{ trigger.payload_json is defined \n   and trigger.payload_json.action
+      is defined \n   and trigger.payload_json.action != None \n   and trigger.payload_json.action
+      != '' }}\n"
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_1_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.ems_hell
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_2_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.ems_chillo
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_3_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.ems_chillo_plus
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_4_press'' }}'
+      sequence:
+      - action: switch.toggle
+        target:
+          entity_id: switch.ems_diskokugel
+    - conditions:
+      - condition: template
+        value_template: '{{ ''hold'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.ems_alle_lichter
+        data:
+          transition: 1
+    - conditions:
+      - condition: template
+        value_template: '{{ ''dial_rotate'' in trigger.payload_json.action }}'
+      sequence:
+      - if:
+        - condition: template
+          value_template: '{{ ''left'' in trigger.payload_json.action and ''fast''
+            in trigger.payload_json.action }}'
+        then:
+        - action: switch.turn_off
+          target:
+            entity_id: switch.ems_lichter_nicht_dimmbar
+      - if:
+        - condition: template
+          value_template: "{{ state_attr('light.ems_alle_lichter_entitaten', 'entity_id')\n
+            \  | select('is_state', 'on')\n   | reject('eq', 'light.ems_diskokugel_spot')\n
+            \  | list | count > 0 }}"
+        then:
+        - action: light.turn_on
+          target:
+            entity_id: "{{ state_attr('light.ems_alle_lichter_entitaten', 'entity_id')\n
+              \  | select('is_state', 'on')\n   | reject('eq', 'light.ems_diskokugel_spot')\n
+              \  | list }}"
+          data:
+            brightness_step_pct: '{% set direction = -1 if ''left'' in trigger.payload_json.action
+              else 1 %} {% set step_size = 15 if ''fast'' in trigger.payload_json.action
+              else 5 %} {{ direction * step_size }}'
+            transition: 0.2
+      - if:
+        - condition: state
+          entity_id: light.ems_diskokugel_spot
+          state: 'on'
+        then:
+        - action: light.turn_on
+          target:
+            entity_id: light.ems_diskokugel_spot
+          data:
+            brightness_step_pct: '{% set direction = -1 if ''left'' in trigger.payload_json.action
+              else 1 %} {% set step_size = 15 if ''fast'' in trigger.payload_json.action
+              else 5 %} {{ (direction * step_size) / 2 }}'
+            transition: 0.2
+  mode: queued
+  max: 50
+- id: '1769368246556'
+  alias: Bad - Tap Dial Control
+  description: Direkte Szenenwahl und Dimmen per Rad via MQTT
+  triggers:
+  - topic: zigbee2mqtt/bad_tapdialswitch
+    trigger: mqtt
+  conditions:
+  - condition: template
+    value_template: "{{ trigger.payload_json is defined \n   and trigger.payload_json.action
+      is defined \n   and trigger.payload_json.action != None \n   and trigger.payload_json.action
+      != '' }}\n"
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_1_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.bad_hell
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_2_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.bad_chillo
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_3_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.bad_ciao
+    - conditions:
+      - condition: template
+        value_template: '{{ ''hold'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.bad_lichter
+        data:
+          transition: 1
+    - conditions:
+      - condition: template
+        value_template: '{{ ''dial_rotate'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: '{{ state_attr(''light.bad_alle_lichter_entitaten'', ''entity_id'')
+            }}'
+        data:
+          brightness_step_pct: '{% set direction = -1 if ''left'' in trigger.payload_json.action
+            else 1 %} {% set step_size = 15 if ''fast'' in trigger.payload_json.action
+            else 5 %} {{ direction * step_size }}
+
+            '
+          transition: 0.2
+  mode: queued
+  max: 50
+- id: '1769503511228'
+  alias: Küche - Tap Dial Control
+  description: Direkte Szenenwahl und Dimmen per Rad via MQTT
+  triggers:
+  - topic: zigbee2mqtt/kueche_tapdialswitch
+    trigger: mqtt
+  conditions:
+  - condition: template
+    value_template: "{{ trigger.payload_json is defined \n   and trigger.payload_json.action
+      is defined \n   and trigger.payload_json.action != None \n   and trigger.payload_json.action
+      != '' }}\n"
+  actions:
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_1_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.kuche_hell
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_2_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.kuche_chillo
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ trigger.payload_json.action == ''button_3_press'' }}'
+      sequence:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.kuche_ciao
+        data:
+          transition: 2
+    - conditions:
+      - condition: template
+        value_template: '{{ ''hold'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.kueche_lichter
+        data:
+          transition: 1
+    - conditions:
+      - condition: template
+        value_template: '{{ ''dial_rotate'' in trigger.payload_json.action }}'
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: "{{ state_attr('light.kuche_alle_lichter_entitaten', 'entity_id')\n
+            \  | select('is_state', 'on') | list }}"
+        data:
+          brightness_step_pct: '{% set direction = -1 if ''left'' in trigger.payload_json.action
+            else 1 %} {% set step_size = 15 if ''fast'' in trigger.payload_json.action
+            else 5 %} {{ direction * step_size }}
+
+            '
+          transition: 0.2
+  mode: queued
+  max: 50
+- id: '1770107769590'
+  alias: Leon - TRV follower
+  description: Sendet die Env-Temperatur als externen Eingang an das TRV
+  triggers:
+  - entity_id: sensor.leon_temperatur
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+    trigger: state
+  conditions: []
+  actions:
+  - action: number.set_value
+    target:
+      entity_id: number.leon_thermostat_external_temperature_input
+    data:
+      value: '{{ (states(''sensor.leon_temperatur'') | float(0)) | round(1) }}'
+  mode: single
+- id: '1770139158588'
+  alias: Lavalampen Auto-Off Steuerung
+  description: Startet Timer bei Licht-An und schaltet Licht bei Timer-Ende aus.
+  triggers:
+  - entity_id: light.leon_lavalampen
+    from: 'off'
+    to: 'on'
+    id: light_on
+    trigger: state
+  - event_type: timer.finished
+    event_data:
+      entity_id: timer.leon_lavalampen_timer
+    id: timer_end
+    trigger: event
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: light_on
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.leon_lavalampen_timer
+    - conditions:
+      - condition: trigger
+        id: timer_end
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.leon_lavalampen
+  mode: restart
+- id: '1771076661388'
+  alias: Waschküche - Szenen Manager
+  description: Wendet Szenen an beim Einschalten oder Zeitwechsel
+  triggers:
+  - entity_id: light.waschkueche_decke
+    from: 'off'
+    to: 'on'
+    trigger: state
+  - entity_id: input_select.tageszeit_modus
+    to:
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: light.waschkueche_decke
+    state: 'on'
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Morgen
+      sequence:
+      - target:
+          entity_id: scene.waschkuche_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Tag
+      sequence:
+      - target:
+          entity_id: scene.waschkuche_hell
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Abend
+      sequence:
+      - target:
+          entity_id: scene.waschkuche_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Nacht
+      sequence:
+      - target:
+          entity_id: scene.waschkuche_ciao
+        data:
+          transition: 10
+        action: scene.turn_on
+  mode: restart
+- id: '1771080280418'
+  alias: Küche - Szenen Manager
+  description: Wendet Szenen an beim Einschalten oder Zeitwechsel
+  triggers:
+  - entity_id: light.kueche_lichter
+    from: 'off'
+    to: 'on'
+    trigger: state
+  - entity_id: input_select.tageszeit_modus
+    to:
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: light.kueche_lichter
+    state: 'on'
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Morgen
+      sequence:
+      - target:
+          entity_id: scene.kuche_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Tag
+      sequence:
+      - target:
+          entity_id: scene.kuche_hell
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Abend
+      sequence:
+      - target:
+          entity_id: scene.kuche_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Nacht
+      sequence:
+      - target:
+          entity_id: scene.kuche_ciao
+        data:
+          transition: 10
+        action: scene.turn_on
+  mode: restart
+- id: '1771090391754'
+  alias: Bad - Szenen Manager
+  description: Wendet Szenen an beim Einschalten oder Zeitwechsel
+  triggers:
+  - entity_id: light.bad_lichter
+    from: 'off'
+    to: 'on'
+    trigger: state
+  - entity_id: input_select.tageszeit_modus
+    to:
+    trigger: state
+  conditions:
+  - condition: state
+    entity_id: light.bad_lichter
+    state: 'on'
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Morgen
+      sequence:
+      - target:
+          entity_id: scene.bad_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Tag
+      sequence:
+      - target:
+          entity_id: scene.bad_hell
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Abend
+      sequence:
+      - target:
+          entity_id: scene.bad_chillo
+        data:
+          transition: 10
+        action: scene.turn_on
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Nacht
+      sequence:
+      - target:
+          entity_id: scene.bad_ciao
+        data:
+          transition: 10
+        action: scene.turn_on
+  mode: restart
+- id: '1771158055109'
+  alias: Leon - Lichtwecker
+  description: ''
+  triggers:
+  - minutes: '*'
+    trigger: time_pattern
+  conditions: []
+  actions:
+  - wait_template: '{{sensor == ''none'' or as_timestamp(states(sensor), None) !=
+      None}}'
+  - wait_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
+      = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+      %} {{ 0 < target_time - current_time <= float(seconds) and states(check_entity)
+      in [''unknown'', ''on'', ''home''] }}'
+  - choose: []
+    default: []
+  - condition: template
+    value_template: '{{sensor == ''none'' or as_timestamp(states(sensor), None) !=
+      None}}'
+  - condition: template
+    value_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
+      = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+      %} {{ 0 < target_time - current_time <= float(seconds) and states(check_entity)
+      in [''unknown'', ''on'', ''home''] }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{state_attr(light_entity, ''min_mireds'') != None}}'
+      sequence:
+      - data:
+          brightness: '{{start_brightness}}'
+          color_temp: '{{start_mired}}'
+        entity_id: light.leon_wecklichter
+        action: light.turn_on
+    default:
+    - data:
+        brightness: '{{start_brightness}}'
+      entity_id: light.leon_wecklichter
+      action: light.turn_on
+  - repeat:
+      while:
+      - condition: template
+        value_template: '{{ states(check_entity) == ''on'' }}'
+      - condition: template
+        value_template: '{{sensor == ''none'' or as_timestamp(states(sensor), None)
+          != None}}'
+      - condition: template
+        value_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
+          = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+          %} {{ 0 < target_time - current_time <= float(seconds) }}'
+      sequence:
+      - delay: '{{tick_time}}'
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ 0 < state_attr(light_entity, ''brightness'') | int(0)
+              < end_brightness | int }}'
+          - condition: template
+            value_template: '{{ sensor == ''none'' or as_timestamp(states(sensor),
+              None) != None }}'
+          - condition: template
+            value_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
+              = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+              %} {{ 0 < target_time - current_time <= float(seconds) }}'
+          sequence:
+          - choose:
+            - conditions:
+              - condition: template
+                value_template: '{{state_attr(light_entity, ''min_mireds'') != None}}'
+              sequence:
+              - data:
+                  brightness: '{% set current_time = as_timestamp(now()) %} {% set
+                    target_time = as_timestamp(states(sensor)) if sensor != ''none''
+                    else as_timestamp(today_at(manual_time)) %} {{ (float(end_brightness)
+                    - (float(range_brightness) * (target_time - current_time) / float(seconds)))
+                    | int(0) }}'
+                  color_temp: '{% set current_time = as_timestamp(now()) %} {% set
+                    target_time = as_timestamp(states(sensor)) if sensor != ''none''
+                    else as_timestamp(today_at(manual_time)) %} {{ (float(end_mired)
+                    + (float(start_mired) - float(end_mired)) * ((target_time - current_time)
+                    / float(seconds))) | int(0) }}'
+                entity_id: light.leon_wecklichter
+                action: light.turn_on
+            default:
+            - data:
+                brightness: '{% set current_time = as_timestamp(now()) %} {% set target_time
+                  = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+                  %} {{ (float(end_brightness) - (float(range_brightness) * (target_time
+                  - current_time) / float(seconds))) | int(0) }}'
+              entity_id: light.leon_wecklichter
+              action: light.turn_on
+  - choose: []
+    default: []
+  mode: single
+  max_exceeded: silent
+  variables:
+    light_entity: light.leon_wecklichter
+    sensor: none
+    sunrise_duration: 25
+    start_brightness: 1
+    end_brightness: 254
+    range_brightness: '{{float(end_brightness)-float(start_brightness)}}'
+    manual_time: '{{ states(''input_datetime.leon_weckzeit'') }}'
+    seconds: '{{float(sunrise_duration) * 60}}'
+    min_mired: 0
+    start_mired: '{{state_attr(light_entity, ''max_mireds'')}}'
+    end_mired: '{{[state_attr(light_entity, ''min_mireds'')|int(0), min_mired|int(0)]|max}}'
+    tick_time: '{{float(seconds) / float(range_brightness)}}'
+    check_entity: input_boolean.leon_wecker_aktiv
+- id: '1771874805322'
+  alias: Ems - Luftreiniger Helligkeit
+  description: ''
+  triggers:
+  - entity_id: input_select.tageszeit_modus
+    to:
+    trigger: state
+  actions:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Morgen
+      sequence:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.ems_luftreiniger_helligkeit
+        data:
+          option: Bright
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Tag
+      sequence:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.ems_luftreiniger_helligkeit
+        data:
+          option: Brightest
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Abend
+      sequence:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.ems_luftreiniger_helligkeit
+        data:
+          option: Bright
+    - conditions:
+      - condition: state
+        entity_id: input_select.tageszeit_modus
+        state: Nacht
+      sequence:
+      - action: select.select_option
+        metadata: {}
+        target:
+          entity_id: select.ems_luftreiniger_helligkeit
+        data:
+          option: Close
+  mode: restart
+- id: '1771879133159'
+  alias: Ems - Lufreiniger automation
+  description: ''
+  triggers:
+  - trigger: numeric_state
+    entity_id: sensor.ems_pm25
+    below: 20
+  - trigger: numeric_state
+    entity_id: sensor.ems_pm25
+    above: 19
+    below: 121
+  - trigger: numeric_state
+    entity_id: sensor.ems_pm25
+    above: 120
+  actions:
+  - choose:
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.ems_pm25
+        below: 20
+      sequence:
+      - action: fan.set_preset_mode
+        target:
+          entity_id: fan.ems_luftreiniger
+        data:
+          preset_mode: Sleep
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.ems_pm25
+        above: 19
+        below: 121
+      sequence:
+      - action: fan.set_percentage
+        target:
+          entity_id: fan.ems_luftreiniger
+        data:
+          percentage: 33
+    - conditions:
+      - condition: numeric_state
+        entity_id: sensor.ems_pm25
+        above: 120
+      sequence:
+      - action: fan.set_percentage
+        target:
+          entity_id: fan.ems_luftreiniger
+        data:
+          percentage: 33
+  mode: single

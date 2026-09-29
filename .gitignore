@@ -1,0 +1,29 @@
+# Secrets: real values live only on HA; see secrets.example.yaml
+secrets.yaml
+*.pem
+*.key
+
+# Recorder database and logs
+*.db
+*.db-*
+*.log
+*.log.*
+home-assistant.log.fault
+
+# HA runtime state (registries, auth tokens, integration credentials)
+/.storage/
+/.cloud/
+/.cache/
+/.ha_run.lock
+/deps/
+/tts/
+/backups/
+__pycache__/
+
+# HACS-managed code, see README.md
+/custom_components/
+/www/community/
+
+# Zigbee2MQTT: configuration.yaml contains network_key, pan_id/ext_pan_id and
+# the MQTT password; coordinator_backup.json contains the network key too.
+/zigbee2mqtt/

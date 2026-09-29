@@ -1,0 +1,2684 @@
+- id: '1768752739983'
+  name: Tag
+  entities:
+    light.flur_decke_1:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2604
+      hs_color:
+      - 28.614
+      - 68.881
+      rgb_color:
+      - 255
+      - 163
+      - 79
+      xy_color:
+      - 0.536
+      - 0.389
+      friendly_name: Flur Decke 1
+      supported_features: 44
+      state: 'on'
+    light.flur_kommode:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2652
+      hs_color:
+      - 28.502
+      - 67.279
+      rgb_color:
+      - 255
+      - 165
+      - 83
+      xy_color:
+      - 0.53
+      - 0.389
+      icon: mdi:lightbulb
+      friendly_name: Flur Kommode
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_1:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 204
+      color_temp_kelvin: 2801
+      hs_color:
+      - 28.185
+      - 62.588
+      rgb_color:
+      - 255
+      - 170
+      - 95
+      xy_color:
+      - 0.516
+      - 0.386
+      friendly_name: Flur Kronenleuchter 1
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_2:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 204
+      color_temp_kelvin: 2702
+      hs_color:
+      - 28.391
+      - 65.659
+      rgb_color:
+      - 255
+      - 167
+      - 88
+      xy_color:
+      - 0.524
+      - 0.388
+      friendly_name: Flur Kronenleuchter 2
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_3:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 204
+      color_temp_kelvin: 2666
+      hs_color:
+      - 28.47
+      - 66.821
+      rgb_color:
+      - 255
+      - 165
+      - 85
+      xy_color:
+      - 0.529
+      - 0.387
+      friendly_name: Flur Kronenleuchter 3
+      supported_features: 44
+      state: 'on'
+    light.flur_decke_2:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: flur_decke_2
+      supported_features: 44
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2724
+      hs_color:
+      - 28.343
+      - 64.962
+      rgb_color:
+      - 255
+      - 168
+      - 89
+      xy_color:
+      - 0.523
+      - 0.388
+      state: 'on'
+  icon: mdi:sun-clock
+  metadata: {}
+- id: '1768753210577'
+  name: Flur Ciao
+  entities:
+    light.flur_decke_1:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 186
+      color_temp_kelvin:
+      hs_color:
+      - 32.526
+      - 74.51
+      rgb_color:
+      - 255
+      - 168
+      - 65
+      xy_color:
+      - 0.54
+      - 0.403
+      friendly_name: Flur Decke 1
+      supported_features: 44
+      state: 'on'
+    light.flur_kommode:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 209
+      color_temp_kelvin:
+      hs_color:
+      - 28.481
+      - 61.961
+      rgb_color:
+      - 255
+      - 172
+      - 97
+      xy_color:
+      - 0.513
+      - 0.388
+      icon: mdi:lightbulb
+      friendly_name: Flur Kommode
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_1:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 153
+      color_temp_kelvin:
+      hs_color:
+      - 35.825
+      - 80.784
+      rgb_color:
+      - 255
+      - 172
+      - 49
+      xy_color:
+      - 0.542
+      - 0.415
+      friendly_name: Flur Kronenleuchter 1
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_2:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 69
+      color_temp_kelvin:
+      hs_color:
+      - 24.783
+      - 72.157
+      rgb_color:
+      - 255
+      - 147
+      - 71
+      xy_color:
+      - 0.563
+      - 0.375
+      friendly_name: Flur Kronenleuchter 2
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_3:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 153
+      color_temp_kelvin:
+      hs_color:
+      - 24.066
+      - 71.373
+      rgb_color:
+      - 255
+      - 146
+      - 73
+      xy_color:
+      - 0.562
+      - 0.373
+      friendly_name: Flur Kronenleuchter 3
+      supported_features: 44
+      state: 'on'
+    light.flur_decke_2:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: flur_decke_2
+      supported_features: 44
+      effect:
+      color_mode: color_temp
+      brightness: 48
+      color_temp_kelvin: 1798
+      hs_color:
+      - 29.712
+      - 100
+      rgb_color:
+      - 255
+      - 126
+      - 0
+      xy_color:
+      - 0.614
+      - 0.373
+      state: 'on'
+  icon: mdi:weather-night
+  metadata: {}
+- id: '1768759667116'
+  name: Leon Hell
+  entities:
+    light.leon_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 191
+      color_temp_kelvin: 3095
+      hs_color:
+      - 27.676
+      - 54.374
+      rgb_color:
+      - 255
+      - 180
+      - 116
+      xy_color:
+      - 0.487
+      - 0.381
+      friendly_name: Leon Decke
+      supported_features: 44
+      state: 'on'
+    light.leon_palme:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2398
+      hs_color:
+      - 29.157
+      - 76.348
+      rgb_color:
+      - 255
+      - 155
+      - 60
+      xy_color:
+      - 0.557
+      - 0.39
+      friendly_name: Leon Palme
+      supported_features: 44
+      state: 'on'
+    light.leon_regal:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2570
+      hs_color:
+      - 28.696
+      - 70.045
+      rgb_color:
+      - 255
+      - 162
+      - 76
+      xy_color:
+      - 0.539
+      - 0.389
+      friendly_name: Leon Regal
+      supported_features: 44
+      state: 'on'
+    light.leon_lavalampen:
+      supported_color_modes:
+      - onoff
+      color_mode:
+      friendly_name: Leon Lavalampen
+      supported_features: 0
+      state: 'off'
+    light.leon_bild:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2680
+      hs_color:
+      - 28.439
+      - 66.366
+      rgb_color:
+      - 255
+      - 166
+      - 86
+      xy_color:
+      - 0.527
+      - 0.388
+      friendly_name: leon_bild
+      supported_features: 44
+      state: 'on'
+  icon: mdi:weather-sunny
+  metadata: {}
+- id: '1768759786345'
+  name: Leon Chillo
+  entities:
+    light.leon_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 105
+      color_temp_kelvin:
+      hs_color:
+      - 28.708
+      - 81.961
+      rgb_color:
+      - 255
+      - 146
+      - 46
+      xy_color:
+      - 0.579
+      - 0.385
+      friendly_name: Leon Decke
+      supported_features: 44
+      state: 'on'
+    light.leon_palme:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2398
+      hs_color:
+      - 29.157
+      - 76.348
+      rgb_color:
+      - 255
+      - 155
+      - 60
+      xy_color:
+      - 0.557
+      - 0.39
+      friendly_name: Leon Palme
+      supported_features: 44
+      state: 'on'
+    light.leon_regal:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      hs_color:
+      - 22.813
+      - 75.294
+      rgb_color:
+      - 255
+      - 136
+      - 63
+      xy_color:
+      - 0.581
+      - 0.367
+      friendly_name: Leon Regal
+      supported_features: 44
+      state: 'on'
+    light.leon_lavalampen:
+      supported_color_modes:
+      - onoff
+      color_mode: onoff
+      friendly_name: Leon Lavalampen
+      supported_features: 0
+      state: 'on'
+    light.leon_bild:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2164
+      hs_color:
+      - 29.929
+      - 86.298
+      rgb_color:
+      - 255
+      - 145
+      - 35
+      xy_color:
+      - 0.582
+      - 0.388
+      friendly_name: leon_bild
+      supported_features: 44
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1768759936975'
+  name: Leon Ciao
+  entities:
+    light.leon_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      friendly_name: Leon Decke
+      supported_features: 44
+      state: 'off'
+    light.leon_palme:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2398
+      hs_color:
+      - 29.157
+      - 76.348
+      rgb_color:
+      - 255
+      - 155
+      - 60
+      xy_color:
+      - 0.557
+      - 0.39
+      friendly_name: Leon Palme
+      supported_features: 44
+      state: 'on'
+    light.leon_regal:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 76
+      color_temp_kelvin:
+      hs_color:
+      - 26.907
+      - 76.078
+      rgb_color:
+      - 255
+      - 148
+      - 61
+      xy_color:
+      - 0.568
+      - 0.381
+      friendly_name: Leon Regal
+      supported_features: 44
+      state: 'on'
+    light.leon_lavalampen:
+      supported_color_modes:
+      - onoff
+      color_mode: onoff
+      friendly_name: Leon Lavalampen
+      supported_features: 0
+      state: 'on'
+    light.leon_bild:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 161
+      color_temp_kelvin: 2028
+      hs_color:
+      - 30.477
+      - 93.047
+      rgb_color:
+      - 255
+      - 138
+      - 18
+      xy_color:
+      - 0.596
+      - 0.384
+      friendly_name: leon_bild
+      supported_features: 44
+      state: 'on'
+  icon: mdi:weather-night
+  metadata: {}
+- id: '1768764550925'
+  name: Wohnzimmer Hell
+  entities:
+    light.wohnzimmer_bar:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 30.182
+      - 64.706
+      rgb_color:
+      - 255
+      - 173
+      - 90
+      xy_color:
+      - 0.518
+      - 0.393
+      friendly_name: Wohnzimmer Bar
+      supported_features: 44
+      state: 'on'
+    light.wohnzimmer_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2865
+      color_temp: 349
+      hs_color:
+      - 28.062
+      - 60.691
+      rgb_color:
+      - 255
+      - 173
+      - 100
+      xy_color:
+      - 0.508
+      - 0.386
+      friendly_name: Wohnzimmer Decke
+      supported_features: 44
+      state: 'on'
+    switch.wohnzimmer_kerzenstaender:
+      friendly_name: Wohnzimmer Kerzenständer
+      state: 'on'
+    switch.wohnzimmer_hinter_fernseher:
+      friendly_name: Wohnzimmer Hinter Fernseher
+      state: 'on'
+    light.wohnzimmer_revolver:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 184
+      color_temp_kelvin: 2481
+      color_temp: 403
+      hs_color:
+      - 28.925
+      - 73.215
+      rgb_color:
+      - 255
+      - 158
+      - 68
+      xy_color:
+      - 0.549
+      - 0.389
+      friendly_name: Wohnzimmer Revolver
+      supported_features: 44
+      state: 'on'
+  icon: mdi:weather-sunny
+  metadata: {}
+- id: '1768764808497'
+  name: Wohnzimmer Chillo
+  entities:
+    light.wohnzimmer_bar:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 30.182
+      - 64.706
+      rgb_color:
+      - 255
+      - 173
+      - 90
+      xy_color:
+      - 0.518
+      - 0.393
+      friendly_name: Wohnzimmer Bar
+      supported_features: 44
+      state: 'on'
+    light.wohnzimmer_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 125
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 24.058
+      - 81.176
+      rgb_color:
+      - 255
+      - 131
+      - 48
+      xy_color:
+      - 0.596
+      - 0.368
+      friendly_name: Wohnzimmer Decke
+      supported_features: 44
+      state: 'on'
+    switch.wohnzimmer_kerzenstaender:
+      friendly_name: Wohnzimmer Kerzenständer
+      state: 'on'
+    switch.wohnzimmer_hinter_fernseher:
+      friendly_name: Wohnzimmer Hinter Fernseher
+      state: 'on'
+    light.wohnzimmer_revolver:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 28.812
+      - 79.216
+      rgb_color:
+      - 255
+      - 150
+      - 53
+      xy_color:
+      - 0.57
+      - 0.387
+      friendly_name: Wohnzimmer Revolver
+      supported_features: 44
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1768764922581'
+  name: Wohnzimmer Ciao
+  entities:
+    light.wohnzimmer_bar:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      min_mireds: 250
+      max_mireds: 454
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 21.099
+      - 71.373
+      rgb_color:
+      - 255
+      - 137
+      - 73
+      xy_color:
+      - 0.573
+      - 0.363
+      friendly_name: Wohnzimmer Bar
+      supported_features: 44
+      state: 'on'
+    light.wohnzimmer_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 18
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 24.058
+      - 81.176
+      rgb_color:
+      - 255
+      - 131
+      - 48
+      xy_color:
+      - 0.596
+      - 0.368
+      friendly_name: Wohnzimmer Decke
+      supported_features: 44
+      state: 'on'
+    switch.wohnzimmer_kerzenstaender:
+      friendly_name: Wohnzimmer Kerzenständer
+      state: 'on'
+    switch.wohnzimmer_hinter_fernseher:
+      friendly_name: Wohnzimmer Hinter Fernseher
+      state: 'off'
+    light.wohnzimmer_revolver:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 74
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 26.916
+      - 83.922
+      rgb_color:
+      - 255
+      - 137
+      - 41
+      xy_color:
+      - 0.592
+      - 0.377
+      friendly_name: Wohnzimmer Revolver
+      supported_features: 44
+      state: 'on'
+  icon: mdi:weather-night
+  metadata: {}
+- id: '1768844117481'
+  name: Küche Hell
+  entities:
+    light.kueche_arbeitsflaeche:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2840
+      hs_color:
+      - 28.109
+      - 61.425
+      rgb_color:
+      - 255
+      - 172
+      - 98
+      xy_color:
+      - 0.511
+      - 0.386
+      friendly_name: Küche Arbeitsfläche
+      supported_features: 44
+      state: 'on'
+    light.kueche_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2994
+      hs_color:
+      - 27.835
+      - 57.058
+      rgb_color:
+      - 255
+      - 177
+      - 110
+      xy_color:
+      - 0.496
+      - 0.383
+      friendly_name: Küche Decke
+      supported_features: 44
+      state: 'on'
+    light.kueche_konsole:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: kueche_konsole
+      supported_features: 44
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2832
+      hs_color:
+      - 28.125
+      - 61.661
+      rgb_color:
+      - 255
+      - 171
+      - 98
+      xy_color:
+      - 0.512
+      - 0.385
+      state: 'on'
+  icon: mdi:sun-compass
+  metadata: {}
+- id: '1768844319769'
+  name: Küche Ciao
+  entities:
+    light.kueche_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 166
+      color_temp_kelvin: 2000
+      hs_color:
+      - 30.601
+      - 94.547
+      rgb_color:
+      - 255
+      - 137
+      - 14
+      xy_color:
+      - 0.598
+      - 0.383
+      friendly_name: Küche Decke
+      supported_features: 44
+      state: 'on'
+    light.kueche_arbeitsflaeche:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      hs_color:
+      - 33.333
+      - 70.588
+      rgb_color:
+      - 255
+      - 175
+      - 75
+      xy_color:
+      - 0.526
+      - 0.405
+      friendly_name: Küche Arbeitsfläche
+      supported_features: 44
+      state: 'on'
+    light.kueche_konsole:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: kueche_konsole
+      supported_features: 44
+      effect:
+      color_mode: xy
+      brightness: 140
+      color_temp_kelvin:
+      hs_color:
+      - 39.681
+      - 98.431
+      rgb_color:
+      - 255
+      - 170
+      - 4
+      xy_color:
+      - 0.555
+      - 0.422
+      state: 'on'
+  icon: mdi:weather-night
+  metadata: {}
+- id: '1769281044708'
+  name: Ems Hell
+  entities:
+    light.ems_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 230
+      color_temp_kelvin: 2680
+      hs_color:
+      - 28.439
+      - 66.366
+      rgb_color:
+      - 255
+      - 166
+      - 86
+      xy_color:
+      - 0.527
+      - 0.388
+      friendly_name: Ems Decke
+      supported_features: 44
+      state: 'on'
+    light.ems_diskokugel_spot:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      friendly_name: Ems Diskokugel Spot
+      supported_features: 44
+      state: 'off'
+    light.ems_heizung:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 242
+      color_temp_kelvin: 2801
+      hs_color:
+      - 28.185
+      - 62.588
+      rgb_color:
+      - 255
+      - 170
+      - 95
+      xy_color:
+      - 0.516
+      - 0.386
+      friendly_name: Ems Heizung
+      supported_features: 44
+      state: 'on'
+    light.ems_kugelstaender:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 199
+      color_temp_kelvin:
+      hs_color:
+      - 15.976
+      - 66.275
+      rgb_color:
+      - 255
+      - 131
+      - 86
+      xy_color:
+      - 0.57
+      - 0.348
+      friendly_name: Ems Kugelständer
+      supported_features: 44
+      state: 'on'
+    switch.ems_lichterkette:
+      friendly_name: Ems Lichterkette
+      state: 'on'
+    light.ems_projektor:
+      supported_color_modes:
+      - onoff
+      color_mode:
+      friendly_name: Ems Projektor
+      supported_features: 0
+      state: 'off'
+    switch.ems_sonnenlampe:
+      friendly_name: Ems Sonnenlampe
+      state: 'off'
+    switch.ems_sonnenlampe_outlet_control_protect:
+      friendly_name: Ems Sonnenlampe Outlet control protect
+      state: 'on'
+    light.ems_saeule:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: ems_saeule
+      supported_features: 44
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      state: 'off'
+  icon: mdi:weather-sunny
+  metadata: {}
+- id: '1769281093209'
+  name: Ems Chillo
+  entities:
+    light.ems_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 71
+      color_temp_kelvin:
+      hs_color:
+      - 339.449
+      - 99.608
+      rgb_color:
+      - 255
+      - 1
+      - 88
+      xy_color:
+      - 0.643
+      - 0.273
+      friendly_name: Ems Decke
+      supported_features: 44
+      state: 'on'
+    light.ems_diskokugel_spot:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      hs_color:
+      - 9.667
+      - 70.588
+      rgb_color:
+      - 255
+      - 104
+      - 75
+      xy_color:
+      - 0.607
+      - 0.328
+      friendly_name: Ems Diskokugel Spot
+      supported_features: 44
+      state: 'on'
+    light.ems_heizung:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 242
+      color_temp_kelvin:
+      hs_color:
+      - 29.811
+      - 62.353
+      rgb_color:
+      - 255
+      - 175
+      - 96
+      xy_color:
+      - 0.51
+      - 0.392
+      friendly_name: Ems Heizung
+      supported_features: 44
+      state: 'on'
+    light.ems_kugelstaender:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 168
+      color_temp_kelvin:
+      hs_color:
+      - 22.041
+      - 76.863
+      rgb_color:
+      - 255
+      - 131
+      - 59
+      xy_color:
+      - 0.591
+      - 0.363
+      friendly_name: Ems Kugelständer
+      supported_features: 44
+      state: 'on'
+    switch.ems_lichterkette:
+      friendly_name: Ems Lichterkette
+      state: 'on'
+    light.ems_projektor:
+      supported_color_modes:
+      - onoff
+      color_mode:
+      friendly_name: Ems Projektor
+      supported_features: 0
+      state: 'off'
+    switch.ems_sonnenlampe:
+      friendly_name: Ems Sonnenlampe
+      state: 'on'
+    switch.ems_sonnenlampe_outlet_control_protect:
+      friendly_name: Ems Sonnenlampe Outlet control protect
+      state: 'on'
+    light.ems_saeule:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      hs_color:
+      - 2.53
+      - 65.098
+      rgb_color:
+      - 255
+      - 96
+      - 89
+      xy_color:
+      - 0.601
+      - 0.312
+      friendly_name: ems_saeule
+      supported_features: 44
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1769364903601'
+  name: Ems Chillo +
+  entities:
+    light.ems_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      hs_color:
+      rgb_color:
+      xy_color:
+      friendly_name: Ems Decke
+      supported_features: 44
+      state: 'off'
+    light.ems_diskokugel_spot:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      hs_color:
+      - 9.667
+      - 70.588
+      rgb_color:
+      - 255
+      - 104
+      - 75
+      xy_color:
+      - 0.607
+      - 0.328
+      friendly_name: Ems Diskokugel Spot
+      supported_features: 44
+      state: 'on'
+    light.ems_heizung:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 153
+      color_temp_kelvin:
+      hs_color:
+      - 21.977
+      - 67.451
+      rgb_color:
+      - 255
+      - 146
+      - 83
+      xy_color:
+      - 0.555
+      - 0.367
+      friendly_name: Ems Heizung
+      supported_features: 44
+      state: 'on'
+    light.ems_kugelstaender:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 153
+      color_temp_kelvin:
+      hs_color:
+      - 24.052
+      - 90.98
+      rgb_color:
+      - 255
+      - 116
+      - 23
+      xy_color:
+      - 0.625
+      - 0.358
+      friendly_name: Ems Kugelständer
+      supported_features: 44
+      state: 'on'
+    switch.ems_lichterkette:
+      friendly_name: Ems Lichterkette
+      state: 'off'
+    light.ems_projektor:
+      supported_color_modes:
+      - onoff
+      color_mode: onoff
+      friendly_name: Ems Projektor
+      supported_features: 0
+      state: 'on'
+    switch.ems_sonnenlampe:
+      friendly_name: Ems Sonnenlampe
+      state: 'off'
+    switch.ems_sonnenlampe_outlet_control_protect:
+      friendly_name: Ems Sonnenlampe Outlet control protect
+      state: 'on'
+    light.ems_saeule:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: ems_saeule
+      supported_features: 44
+      effect:
+      color_mode: xy
+      brightness: 255
+      color_temp_kelvin:
+      hs_color:
+      - 9.231
+      - 66.275
+      rgb_color:
+      - 255
+      - 112
+      - 86
+      xy_color:
+      - 0.589
+      - 0.329
+      state: 'on'
+  icon: mdi:weather-night
+  metadata: {}
+- id: '1769367617953'
+  name: Bad Hell
+  entities:
+    light.bad_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2881
+      color_temp: 347
+      hs_color:
+      - 28.033
+      - 60.227
+      rgb_color:
+      - 255
+      - 173
+      - 101
+      xy_color:
+      - 0.507
+      - 0.385
+      friendly_name: Bad Decke
+      supported_features: 44
+      state: 'on'
+    light.bad_spiegel_1:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 128
+      color_temp_kelvin: 3389
+      color_temp: 295
+      hs_color:
+      - 27.291
+      - 47.241
+      rgb_color:
+      - 255
+      - 189
+      - 135
+      xy_color:
+      - 0.462
+      - 0.375
+      friendly_name: Bad Spiegel 1
+      supported_features: 44
+      state: 'on'
+    light.bad_spiegel_2:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 128
+      color_temp_kelvin: 3389
+      color_temp: 295
+      hs_color:
+      - 27.291
+      - 47.241
+      rgb_color:
+      - 255
+      - 189
+      - 135
+      xy_color:
+      - 0.462
+      - 0.375
+      friendly_name: Bad Spiegel 2
+      supported_features: 44
+      state: 'on'
+  icon: mdi:weather-sunny
+  metadata: {}
+- id: '1769367904280'
+  name: Bad Chillo
+  entities:
+    light.bad_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 196
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 25
+      - 80
+      rgb_color:
+      - 255
+      - 136
+      - 51
+      xy_color:
+      - 0.589
+      - 0.372
+      friendly_name: Bad Decke
+      supported_features: 44
+      state: 'on'
+    light.bad_spiegel_1:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 105
+      color_temp_kelvin: 2512
+      color_temp: 398
+      hs_color:
+      - 28.843
+      - 72.089
+      rgb_color:
+      - 255
+      - 160
+      - 71
+      xy_color:
+      - 0.545
+      - 0.39
+      friendly_name: Bad Spiegel 1
+      supported_features: 44
+      state: 'on'
+    light.bad_spiegel_2:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 117
+      color_temp_kelvin: 2450
+      color_temp: 408
+      hs_color:
+      - 29.009
+      - 74.364
+      rgb_color:
+      - 255
+      - 157
+      - 65
+      xy_color:
+      - 0.552
+      - 0.39
+      friendly_name: Bad Spiegel 2
+      supported_features: 44
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1769368419500'
+  name: Waschküche Hell
+  entities:
+    light.waschkueche_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6666
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2976
+      color_temp: 336
+      hs_color:
+      - 27.865
+      - 57.551
+      rgb_color:
+      - 255
+      - 176
+      - 108
+      xy_color:
+      - 0.498
+      - 0.383
+      friendly_name: Waschüche Decke
+      supported_features: 44
+      state: 'on'
+  icon: mdi:weather-sunny
+  metadata: {}
+- id: '1769368462908'
+  name: Waschküche Ciao
+  entities:
+    light.waschkueche_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6666
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 227
+      color_temp_kelvin: 2173
+      color_temp: 460
+      hs_color:
+      - 29.895
+      - 85.88
+      rgb_color:
+      - 255
+      - 145
+      - 36
+      xy_color:
+      - 0.581
+      - 0.388
+      friendly_name: Waschüche Decke
+      supported_features: 44
+      state: 'on'
+  icon: mdi:weather-night
+  metadata: {}
+- id: '1771005779247'
+  name: Bad Ciao
+  entities:
+    light.bad_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 36
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      - 25
+      - 80
+      rgb_color:
+      - 255
+      - 136
+      - 51
+      xy_color:
+      - 0.589
+      - 0.372
+      friendly_name: Bad Decke
+      supported_features: 44
+      state: 'on'
+    light.bad_spiegel_1:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 51
+      color_temp_kelvin: 2347
+      color_temp: 426
+      hs_color:
+      - 29.309
+      - 78.366
+      rgb_color:
+      - 255
+      - 153
+      - 55
+      xy_color:
+      - 0.563
+      - 0.39
+      friendly_name: Bad Spiegel 1
+      supported_features: 44
+      state: 'on'
+    light.bad_spiegel_2:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 555
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 51
+      color_temp_kelvin: 2247
+      color_temp: 445
+      hs_color:
+      - 29.633
+      - 82.557
+      rgb_color:
+      - 255
+      - 148
+      - 44
+      xy_color:
+      - 0.574
+      - 0.388
+      friendly_name: Bad Spiegel 2
+      supported_features: 44
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1771068349487'
+  name: Flur Chillo
+  entities:
+    light.flur_decke_1:
+      min_color_temp_kelvin: 1801
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 235
+      color_temp_kelvin: 2347
+      hs_color:
+      - 29.309
+      - 78.366
+      rgb_color:
+      - 255
+      - 153
+      - 55
+      xy_color:
+      - 0.563
+      - 0.39
+      friendly_name: Flur Decke 1
+      supported_features: 44
+      state: 'on'
+    light.flur_kommode:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: xy
+      brightness: 237
+      color_temp_kelvin:
+      hs_color:
+      - 28.481
+      - 61.961
+      rgb_color:
+      - 255
+      - 172
+      - 97
+      xy_color:
+      - 0.513
+      - 0.388
+      icon: mdi:lightbulb
+      friendly_name: Flur Kommode
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_1:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 163
+      color_temp_kelvin: 2538
+      hs_color:
+      - 28.776
+      - 71.163
+      rgb_color:
+      - 255
+      - 161
+      - 74
+      xy_color:
+      - 0.541
+      - 0.389
+      friendly_name: Flur Kronenleuchter 1
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_2:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 166
+      color_temp_kelvin: 2500
+      hs_color:
+      - 28.874
+      - 72.522
+      rgb_color:
+      - 255
+      - 159
+      - 70
+      xy_color:
+      - 0.546
+      - 0.389
+      friendly_name: Flur Kronenleuchter 2
+      supported_features: 44
+      state: 'on'
+    light.flur_kronenleuchter_3:
+      min_color_temp_kelvin: 2202
+      max_color_temp_kelvin: 4000
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 168
+      color_temp_kelvin: 2610
+      hs_color:
+      - 28.6
+      - 68.678
+      rgb_color:
+      - 255
+      - 163
+      - 80
+      xy_color:
+      - 0.535
+      - 0.388
+      friendly_name: Flur Kronenleuchter 3
+      supported_features: 44
+      state: 'on'
+    light.flur_decke_2:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: flur_decke_2
+      supported_features: 44
+      effect:
+      color_mode: color_temp
+      brightness: 145
+      color_temp_kelvin: 2358
+      hs_color:
+      - 29.276
+      - 77.925
+      rgb_color:
+      - 255
+      - 153
+      - 56
+      xy_color:
+      - 0.562
+      - 0.389
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1771073918165'
+  name: Waschküche Chillo
+  entities:
+    light.waschkueche_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6666
+      min_mireds: 150
+      max_mireds: 500
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2538
+      color_temp: 394
+      hs_color:
+      - 28.776
+      - 71.163
+      rgb_color:
+      - 255
+      - 161
+      - 74
+      xy_color:
+      - 0.541
+      - 0.389
+      friendly_name: Waschüche Decke
+      supported_features: 44
+      state: 'on'
+  icon: mdi:sofa
+  metadata: {}
+- id: '1771079496071'
+  name: Küche Chillo
+  entities:
+    light.kueche_decke:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 181
+      color_temp_kelvin: 2551
+      hs_color:
+      - 28.743
+      - 70.706
+      rgb_color:
+      - 255
+      - 161
+      - 75
+      xy_color:
+      - 0.541
+      - 0.389
+      friendly_name: Küche Decke
+      supported_features: 44
+      state: 'on'
+    light.kueche_arbeitsflaeche:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - candle
+      - fireplace
+      - colorloop
+      - finish_effect
+      - stop_effect
+      - stop_hue_effect
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 2409
+      hs_color:
+      - 29.125
+      - 75.922
+      rgb_color:
+      - 255
+      - 155
+      - 61
+      xy_color:
+      - 0.557
+      - 0.389
+      friendly_name: Küche Arbeitsfläche
+      supported_features: 44
+      state: 'on'
+    light.kueche_konsole:
+      min_color_temp_kelvin: 1798
+      max_color_temp_kelvin: 6535
+      effect_list:
+      - blink
+      - breathe
+      - okay
+      - channel_change
+      - finish_effect
+      - stop_effect
+      - colorloop
+      - stop_colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      friendly_name: kueche_konsole
+      supported_features: 44
+      effect:
+      color_mode: color_temp
+      brightness: 255
+      color_temp_kelvin: 1908
+      hs_color:
+      - 31.041
+      - 99.79
+      rgb_color:
+      - 255
+      - 132
+      - 1
+      xy_color:
+      - 0.606
+      - 0.379
+      state: 'on'
+  icon: mdi:weather-night
+  metadata: {}
