@@ -1,0 +1,30 @@
+# YAML-Modus: Home Assistant lädt diese Datei.
+# Der visuelle Editor speichert sie nicht. Nach Änderungen die Datei
+# speichern; HA liest sie beim nächsten Abruf erneut.
+views:
+  - type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Neuer Abschnitt
+          - type: entities
+            entities:
+              - entity: remote.ems_tv
+              - entity: media_player.ems_tv
+          - type: custom:universal-remote-card
+            rows:
+              - - back
+                - power
+                - home
+                - menu
+              - - touchpad
+                - - volume_buttons
+              - - rewind
+                - previous
+                - play_pause
+                - next
+                - fast_forward
+            remote_id: remote.ems_tv
+            custom_actions: []
+            media_player_id: media_player.ems_tv_3

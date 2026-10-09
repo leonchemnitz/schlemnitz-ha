@@ -11,13 +11,20 @@ no git state or GitHub credentials.
 - `~/ha/bin/ha-check` runs HA's config check (`POST /api/config/core/check_config`)
   using `HA_URL` / `HA_TOKEN` from `~/.config/ha/env`.
 
+## Lovelace dashboards
+
+User-created dashboards live in `dashboards/` and are loaded by Home Assistant
+(YAML mode, see `configuration.yaml`). Those files are the source of truth.
+The visual editor does not save them: edit the file, then reload the
+dashboard in the browser. Details are in `dashboards/README.md`.
+
 ## Not in this repo
 
 | Path | Why |
 | --- | --- |
 | `secrets.yaml` | Real credentials. `secrets.example.yaml` lists the keys with placeholder values. |
 | `*.db*`, `*.log*`, `home-assistant.log.fault` | Recorder database and logs: large, constantly changing. |
-| `.storage/` | UI-managed registries, dashboards, auth tokens, and integration credentials. |
+| `.storage/` | UI-managed registries, auth tokens, and integration credentials. Strategy dashboards (Übersicht, Karte) stay here. |
 | `.cloud/`, `.cache/`, `.ha_run.lock`, `deps/`, `tts/`, `backups/`, `__pycache__/` | Runtime state, caches, generated files. |
 | `custom_components/`, `www/community/` | Installed by HACS; reinstall from the list below. |
 | `zigbee2mqtt/` | `configuration.yaml` contains the Zigbee `network_key`, `pan_id`/`ext_pan_id` and the MQTT password; `coordinator_backup.json` also contains the network key. Back it up via HA backups instead. |

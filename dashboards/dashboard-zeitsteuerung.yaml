@@ -1,0 +1,12 @@
+# YAML-Modus: Home Assistant lädt diese Datei.
+# Der visuelle Editor speichert sie nicht. Nach Änderungen die Datei
+# speichern; HA liest sie beim nächsten Abruf erneut.
+views:
+  - type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Neuer Abschnitt
+          - type: custom:scheduler-card
+            include: []

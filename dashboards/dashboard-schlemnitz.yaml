@@ -1,0 +1,1642 @@
+# YAML-Modus: Home Assistant lädt diese Datei.
+# Der visuelle Editor speichert sie nicht. Nach Änderungen die Datei
+# speichern; HA liest sie beim nächsten Abruf erneut.
+views:
+  - title: Schlemnitz
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading_style: subtitle
+          - show_current: true
+            show_forecast: true
+            type: weather-forecast
+            entity: weather.forecast_home
+            forecast_type: daily
+          - type: custom:bubble-card
+            card_type: select
+            sub_button:
+              main: []
+              bottom: []
+            entity: input_select.tageszeit_modus
+            show_attribute: false
+            attribute: editable
+            show_state: true
+          - type: custom:bubble-card
+            card_type: button
+            name: Ems TV
+            icon: mdi:television
+            entity: media_player.ems_tv
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                service: browser_mod.popup
+                data:
+                  title: Ems TV Steuerung
+                  content:
+                    type: vertical-stack
+                    cards:
+                      - type: custom:mushroom-media-player-card
+                        entity: media_player.ems_tv
+                        name: Ems TV
+                        use_media_info: true
+                        show_volume_level: false
+                        icon_type: icon
+                        primary_info: name
+                        secondary_info: state
+                        fill_container: true
+                        layout: horizontal
+                        media_controls:
+                          - play_pause_stop
+                        volume_controls:
+                          - volume_buttons
+                        tap_action:
+                          action: more-info
+                        card_mod:
+                          style: |
+                            ha-card {
+                              background: rgba(0,0,0,0.4) !important; /* Leicht transparent */
+                              border: none !important;
+                              padding-bottom: 10px !important;
+                            }
+                      - type: custom:universal-remote-card
+                        remote_id: remote.ems_tv
+                        media_player_id: media_player.ems_tv_3
+                        visual_feedback: true
+                        rows:
+                          - - back
+                            - power
+                            - home
+                            - menu
+                          - - touchpad
+                            - - volume_buttons
+                          - - rewind
+                            - previous
+                            - play_pause
+                            - next
+                            - fast_forward
+                      - type: grid
+                        columns: 4
+                        square: false
+                        cards:
+                          - type: button
+                            icon: mdi:netflix
+                            tap_action:
+                              action: call-service
+                              service: remote.turn_on
+                              target:
+                                entity_id: remote.ems_tv
+                              data:
+                                activity: https://www.netflix.com/title
+                          - type: button
+                            icon: mdi:television-classic
+                            tap_action:
+                              action: call-service
+                              service: remote.turn_on
+                              target:
+                                entity_id: remote.ems_tv
+                              data:
+                                activity: https://www.disneyplus.com
+                          - type: button
+                            icon: mdi:alpha-r-box
+                            tap_action:
+                              action: call-service
+                              service: remote.turn_on
+                              target:
+                                entity_id: remote.ems_tv
+                              data:
+                                activity: de.rtli.vod.firetv
+                          - type: button
+                            icon: mdi:play-box-outline
+                            tap_action:
+                              action: call-service
+                              service: remote.turn_on
+                              target:
+                                entity_id: remote.ems_tv
+                              data:
+                                activity: de.prosiebensat1digital.seventv
+            button_type: switch
+            sub_button:
+              main: []
+              bottom: []
+            slider_fill_orientation: left
+            slider_value_position: right
+          - type: custom:bubble-card
+            card_type: horizontal-buttons-stack
+            1_link: '#ems'
+            1_name: Ems
+            1_entity: light.ems_lichter
+            1_icon: mdi:bed-king
+            2_link: '#wohnzimmer'
+            2_name: Wohnzimmer
+            2_icon: mdi:sofa
+            3_link: '#leon'
+            3_name: Leon
+            3_icon: mdi:desk
+            3_entity: light.leon_alle_lichter
+            4_link: '#kueche'
+            4_name: Küche
+            4_icon: mdi:stove
+            4_entity: light.kueche_lichter
+            5_link: '#bad'
+            5_name: Bad
+            5_icon: mdi:bathtub
+            5_entity: light.bad_alle_lichter_entitaten
+            6_link: '#flur'
+            6_name: Flur
+            6_icon: mdi:hanger
+            6_entity: light.flur_alle_lichter
+            7_link: '#waschkueche'
+            7_name: Waschküche
+            7_icon: mdi:washing-machine
+            7_entity: light.waschkueche_decke
+            2_entity: light.wohnzimmer_lichter
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                name: Ems
+                icon: mdi:bed-king
+                hash: '#ems'
+                entity: sensor.zhimi_mb5_c00e_temperature
+                show_state: true
+                button_type: slider
+                tap_action:
+                  action: more-info
+                sub_button:
+                  main:
+                    - entity: sensor.zhimi_mb5_c00e_relative_humidity
+                      show_state: true
+                      show_icon: true
+                      icon: mdi:water-percent
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: custom:bubble-card
+                card_type: media-player
+                sub_button:
+                  main: []
+                  bottom: []
+                entity: media_player.ems_tv
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                sub_button:
+                  main:
+                    - entity: fan.zhimi_mb5_c00e_air_purifier
+                      sub_button_type: slider
+                      select_attribute: preset_modes
+                      scrolling_effect: false
+                      show_background: true
+                      slider_fill_orientation: left
+                      slider_value_position: right
+                  bottom: []
+                show_icon: true
+                force_icon: false
+                scrolling_effect: false
+                name: Luftreiniger
+                show_attribute: false
+                attribute: environment.pm2_5_density
+                entity: fan.ems_luftreiniger
+                icon: mdi:fan
+                show_state: true
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.ems_hell
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.ems_hell
+                      data:
+                        transition: 2
+                    name: Hell
+                    scrolling_effect: false
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.ems_hell
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.ems_chillo
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Chillo
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.ems_chillo
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.ems_chillo
+                        data:
+                          transition: 2
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    sub_button:
+                      main: []
+                      bottom: []
+                    entity: scene.ems_chillo_plus
+                    show_icon: true
+                    scrolling_effect: false
+                    show_state: false
+                    name: Ciao
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.ems_chillo_plus
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.ems_chillo_plus
+                        data:
+                          transition: 2
+              - type: custom:bubble-card
+                card_type: separator
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.ems_decke
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    use_accent_color: false
+                    show_icon: true
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Decke
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.ems_kugelstaender
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Kugelständer
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.ems_diskokugel_spot
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    use_accent_color: false
+                    show_icon: true
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Spot
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.ems_heizung
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Heizung
+                    scrolling_effect: false
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: switch
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    use_accent_color: false
+                    show_icon: true
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Sonnenlampe
+                    button_action: {}
+                    entity: light.ems_sonnenlampe
+                    icon: mdi:light-flood-up
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.ems_saeule
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    use_accent_color: false
+                    show_icon: true
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Säule
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    icon: mdi:glass-stange
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: switch
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    use_accent_color: false
+                    show_icon: true
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Lichterkette
+                    entity: light.ems_lichterkette
+                    button_action: {}
+                    icon: mdi:string-lights
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: switch
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Projektor
+                    icon: mdi:projector
+                    scrolling_effect: false
+                    show_last_changed: false
+                    show_last_updated: false
+                    show_attribute: false
+                    button_action: {}
+                    entity: light.ems_projektor
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: switch
+                    entity: switch.ems_diskokugel
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    use_accent_color: false
+                    show_icon: true
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Diskokugel
+                    slider_fill_orientation: left
+                    slider_value_position: right
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+                entity: light.ems_lichter
+                light_slider_type: brightness
+            title: Ems Popup
+            grid_options:
+              rows: auto
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                name: Wohnzimmer
+                icon: mdi:sofa-outline
+                hash: '#wohnzimmer'
+                button_type: name
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+                show_icon: true
+                scrolling_effect: false
+              - type: custom:bubble-card
+                card_type: media-player
+                sub_button:
+                  main: []
+                  bottom: []
+                entity: media_player.wohnzimmer_anlage
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.wohnzimmer_hell
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.wohnzimmer_hell
+                      data:
+                        transition: 2
+                    name: Hell
+                    scrolling_effect: false
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.wohnzimmer_hell
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.wohnzimmer_chillo
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Chillo
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.wohnzimmer_chillo
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.wohnzimmer_chillo
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    sub_button:
+                      main: []
+                      bottom: []
+                    show_icon: true
+                    scrolling_effect: false
+                    show_state: false
+                    name: Ciao
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.wohnzimmer_ciao
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.wohnzimmer_ciao
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: scene.wohnzimmer_ciao
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.wohnzimmer_decke
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                    name: Decke
+                    icon: mdi:ceiling-light
+                    scrolling_effect: false
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.wohnzimmer_bar
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                    name: Bar
+                    icon: mdi:glass-cocktail
+                    scrolling_effect: false
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: switch
+                    entity: light.wohnzimmer_kerzenstander
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                    name: Kerzenständer
+                    icon: mdi:candelabra
+                    scrolling_effect: false
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: switch
+                    entity: light.wohnzimmer_hinter_fernseher
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                    name: Hinterm Fernseher
+                    icon: mdi:television
+                    scrolling_effect: false
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                sub_button:
+                  main: []
+                  bottom: []
+                entity: light.wohnzimmer_revolver
+                name: Revolver
+                icon: mdi:light-flood-up
+                slider_fill_orientation: left
+                slider_value_position: right
+                light_slider_type: brightness
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+                entity: light.wohnzimmer_lichter
+                light_slider_type: brightness
+                scrolling_effect: false
+                name: Alle Lichter
+            title: Wohnzimmer
+            grid_options:
+              rows: auto
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                entity: sensor.leon_sensor_env_temperature
+                name: Leon
+                icon: mdi:desk
+                show_state: true
+                hash: '#leon'
+                button_type: slider
+                tap_action:
+                  action: more-info
+                styles: |
+                  .bubble-sub-button-1 {
+                    background-color: ${hass.states['input_boolean.leon_wecker_aktiv'].state === 'on' ? 'var(--accent-color)' : ''} !important;
+                    color: ${hass.states['input_boolean.leon_wecker_aktiv'].state === 'on' ? '#ffffff' : ''} !important;
+                  }
+                sub_button:
+                  main:
+                    - icon: mdi:alarm
+                      scrolling_effect: false
+                      entity: input_datetime.leon_weckzeit
+                      state_background: false
+                      show_state: true
+                      content_layout: icon-left
+                      tap_action:
+                        action: fire-dom-event
+                        browser_mod:
+                          service: browser_mod.popup
+                          data:
+                            title: Lichtwecker
+                            content:
+                              type: entities
+                              entities:
+                                - entity: input_boolean.leon_wecker_aktiv
+                                  name: Wecker aktiv
+                                - entity: input_datetime.leon_weckzeit
+                                  name: Weckzeit
+                    - entity: sensor.leon_sensor_env_humidity
+                      show_state: true
+                      show_icon: true
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: custom:bubble-card
+                card_type: button
+                button_type: switch
+                sub_button:
+                  main: []
+                  bottom: []
+                entity: fan.leon_luftreiniger
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: custom:bubble-card
+                card_type: climate
+                sub_button:
+                  main:
+                    - name: HVAC modes menu
+                      select_attribute: hvac_modes
+                      state_background: false
+                      show_arrow: false
+                      sub_button_type: select
+                  bottom: []
+                entity: climate.leon_thermostat
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.leon_hell
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.leon_hell
+                      data:
+                        transition: 2
+                    name: Hell
+                    scrolling_effect: false
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.leon_hell
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Chillo
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.leon_chillo
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.leon_chillo
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: scene.leon_chillo
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    sub_button:
+                      main: []
+                      bottom: []
+                    show_icon: true
+                    scrolling_effect: false
+                    show_state: false
+                    name: Ciao
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.leon_chillo_2
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.leon_chillo_2
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: scene.leon_chillo_2
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.leon_decke
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Decke
+                    scrolling_effect: false
+                    button_action: {}
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    icon: mdi:ceiling-light
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    sub_button:
+                      main: []
+                      bottom: []
+                    entity: light.leon_regal
+                    name: Regal
+                    icon: mdi:dresser
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.leon_palme
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Palme
+                    scrolling_effect: false
+                    button_action: {}
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    icon: mdi:palm-tree
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: switch
+                    sub_button:
+                      main: []
+                      bottom: []
+                    entity: light.leon_lavalampen
+                    name: Lavalampen
+                    icon: mdi:lava-lamp
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.leon_bild
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Bild
+                    scrolling_effect: false
+                    button_action: {}
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    icon: mdi:palm-tree
+                    light_slider_type: brightness
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                sub_button:
+                  main: []
+                  bottom: []
+                entity: light.leon_alle_lichter
+                name: Alle Lichter
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                name: Bad
+                icon: mdi:bathtub
+                show_state: false
+                hash: '#bad'
+                button_type: slider
+                margin_top: 0px
+                tap_action:
+                  action: more-info
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.bad_hell
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.bad_hell
+                      data:
+                        transition: 2
+                    name: Hell
+                    scrolling_effect: false
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.bad_hell
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.bad_chillo
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Chillo
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.bad_chillo
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.bad_chillo
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    sub_button:
+                      main: []
+                      bottom: []
+                    show_icon: true
+                    scrolling_effect: false
+                    show_state: false
+                    name: Ciao
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.bad_ciao
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.bad_ciao
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: scene.bad_ciao
+              - type: custom:bubble-card
+                card_type: separator
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Decke
+                    scrolling_effect: false
+                    icon: mdi:ceiling-light
+                    entity: light.bad_decke
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.bad_spiegel_2
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Spiegel L
+                    icon: mdi:mirror-rectangle
+                    show_last_changed: false
+                    scrolling_effect: false
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.bad_spiegel_1
+                    name: Spiegel R
+                    icon: mdi:mirror-rectangle
+                    show_state: false
+                    scrolling_effect: false
+                    styles: ''
+                    sub_button:
+                      main: []
+                      bottom: []
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+                entity: light.bad_lichter
+                light_slider_type: brightness
+                name: Alle Lichter
+                scrolling_effect: false
+            title: Bad
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                name: Küche
+                icon: mdi:stove
+                show_state: false
+                hash: '#kueche'
+                button_type: slider
+                tap_action:
+                  action: more-info
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: custom:bubble-card
+                card_type: media-player
+                sub_button:
+                  main: []
+                  bottom: []
+                entity: media_player.kuche_anlage_2
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target: {}
+                      data:
+                        transition: 2
+                    name: Hell
+                    scrolling_effect: false
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target: {}
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: scene.kuche_hell
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Chillo
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target: {}
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target: {}
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: scene.kuche_chillo
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    sub_button:
+                      main: []
+                      bottom: []
+                    show_icon: true
+                    scrolling_effect: false
+                    show_state: false
+                    name: Ciao
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.leon_chillo_2
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.leon_chillo_2
+                        data:
+                          transition: 2
+                    entity: scene.kuche_ciao
+              - type: custom:bubble-card
+                card_type: separator
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Decke
+                    scrolling_effect: false
+                    icon: mdi:ceiling-light
+                    entity: light.kueche_decke
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.kueche_arbeitsflaeche
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Arbeitsfläche
+                    icon: mdi:countertop
+                    show_last_changed: false
+                    scrolling_effect: false
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Konsole
+                    icon: mdi:soundbar
+                    show_last_changed: false
+                    scrolling_effect: false
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                    entity: light.kueche_konsole
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+                entity: light.kueche_lichter
+                light_slider_type: brightness
+                name: Alle Lichter
+                scrolling_effect: false
+            title: Küche
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                name: Flur
+                icon: mdi:hanger
+                show_state: false
+                hash: '#flur'
+                button_type: slider
+                tap_action:
+                  action: more-info
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.flur_hell
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.flur_hell
+                      data:
+                        transition: 2
+                    name: Hell
+                    scrolling_effect: false
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.flur_hell
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.flur_chillo
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Chillo
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.flur_chillo
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.flur_chillo
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    sub_button:
+                      main: []
+                      bottom: []
+                    entity: scene.flur_ciao
+                    show_icon: true
+                    scrolling_effect: false
+                    show_state: false
+                    name: Ciao
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.flur_ciao
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.flur_ciao
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+              - type: custom:bubble-card
+                card_type: separator
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.flur_decke_1
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Decke
+                    icon: mdi:ceiling-light
+                    show_last_changed: false
+                    scrolling_effect: false
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.flur_kommode
+                    name: Kommode
+                    icon: mdi:dresser
+                    show_state: false
+                    scrolling_effect: false
+                    styles: ''
+                    sub_button:
+                      main: []
+                      bottom: []
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.flur_kronenleuchter_1
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: KL 1
+                    icon: mdi:chandelier
+                    show_last_changed: false
+                    scrolling_effect: false
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    entity: light.flur_kronenleuchter_2
+                    name: KL 2
+                    icon: mdi:chandelier
+                    show_state: false
+                    scrolling_effect: false
+                    styles: ''
+                    sub_button:
+                      main: []
+                      bottom: []
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    sub_button:
+                      main: []
+                      bottom: []
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: light.flur_kronenleuchter_3
+                    light_slider_type: brightness
+                    scrolling_effect: false
+                    name: KL 3
+                    icon: mdi:chandelier
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+                entity: light.flur_alle_lichter
+                light_slider_type: brightness
+                scrolling_effect: false
+                name: Alle Lichter
+            title: Flur
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: pop-up
+                name: Waschküche
+                icon: mdi:washing-machine
+                show_state: false
+                hash: '#waschkueche'
+                button_type: slider
+                tap_action:
+                  action: more-info
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.waschkuche_hell
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.waschkuche_hell
+                      data:
+                        transition: 2
+                    name: Hell
+                    scrolling_effect: false
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id:
+                            - scene.bad_hell
+                            - scene.waschkuche_hell
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: scene.waschkuche_chillo
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    scrolling_effect: false
+                    show_last_changed: false
+                    name: Chillo
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.waschkuche_chillo
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.waschkuche_chillo
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    sub_button:
+                      main: []
+                      bottom: []
+                    show_icon: true
+                    scrolling_effect: false
+                    show_state: false
+                    name: Ciao
+                    tap_action:
+                      action: perform-action
+                      perform_action: scene.turn_on
+                      target:
+                        entity_id: scene.waschkuche_ciao
+                      data:
+                        transition: 2
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: scene.turn_on
+                        target:
+                          entity_id: scene.waschkuche_ciao
+                        data:
+                          transition: 2
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    entity: scene.waschkuche_ciao
+              - type: custom:bubble-card
+                card_type: separator
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: slider
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    name: Decke
+                    scrolling_effect: false
+                    icon: mdi:ceiling-light
+                    entity: light.waschkueche_decke
+                    slider_fill_orientation: left
+                    slider_value_position: right
+                    light_slider_type: brightness
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                sub_button:
+                  main: []
+                  bottom: []
+                slider_fill_orientation: left
+                slider_value_position: right
+                entity: light.waschkueche_decke
+                light_slider_type: brightness
+                name: Alle Lichter
+                scrolling_effect: false
+            title: Waschküche
+    type: sections
+    max_columns: 4
+    cards: []

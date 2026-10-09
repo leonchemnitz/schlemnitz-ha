@@ -16,3 +16,28 @@ sensor:
       - 'time'
       - 'date'
       
+
+# User-created Lovelace dashboards. YAML mode: the visual editor does not
+# save these. Strategy dashboards (Übersicht, Karte) stay in storage mode.
+lovelace:
+  dashboards:
+    dashboard-schlemnitz:
+      mode: yaml
+      filename: dashboards/dashboard-schlemnitz.yaml
+      title: Schlemnitz
+      icon: mdi:cards-heart
+      show_in_sidebar: true
+      require_admin: false
+    dashboard-test:
+      mode: yaml
+      filename: dashboards/dashboard-test.yaml
+      title: Test
+      show_in_sidebar: true
+      require_admin: false
+    dashboard-zeitsteuerung:
+      mode: yaml
+      filename: dashboards/dashboard-zeitsteuerung.yaml
+      title: Zeitsteuerung
+      icon: mdi:calendar-clock
+      show_in_sidebar: true
+      require_admin: false
