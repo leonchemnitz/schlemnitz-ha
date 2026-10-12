@@ -169,6 +169,10 @@ views:
                       show_state: true
                       show_icon: true
                       icon: mdi:water-percent
+                    - entity: sensor.ems_pm25
+                      show_state: true
+                      show_icon: true
+                      icon: mdi:air-filter
                   bottom: []
                 slider_fill_orientation: left
                 slider_value_position: right
