@@ -9,8 +9,10 @@ views:
           - type: heading
             heading_style: subtitle
           - type: iframe
-            url: /local/wetter-moabit.html
+            url: /local/wetter-moabit.html?v=2
             aspect_ratio: "300:250"
+            allow_open_top_navigation: true
+            hide_background: true
           - type: custom:bubble-card
             card_type: select
             sub_button:
