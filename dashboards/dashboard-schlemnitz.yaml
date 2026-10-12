@@ -163,6 +163,17 @@ views:
                 button_type: slider
                 tap_action:
                   action: more-info
+                styles: |
+                  .bubble-sub-button-2 {
+                    background-color: ${(() => {
+                      const raw = hass.states['sensor.ems_pm25'] && hass.states['sensor.ems_pm25'].state;
+                      const n = parseFloat(raw);
+                      if (raw == null || raw === '' || raw === 'unavailable' || raw === 'unknown' || isNaN(n)) return '#8b919a';
+                      if (n < 20) return '#2e9d4b';
+                      if (n <= 120) return '#ef8b1a';
+                      return '#d32f2f';
+                    })()} !important;
+                  }
                 sub_button:
                   main:
                     - entity: sensor.zhimi_mb5_c00e_relative_humidity
