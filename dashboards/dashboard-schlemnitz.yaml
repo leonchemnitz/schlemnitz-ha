@@ -8,11 +8,9 @@ views:
         cards:
           - type: heading
             heading_style: subtitle
-          - show_current: true
-            show_forecast: true
-            type: weather-forecast
-            entity: weather.forecast_home
-            forecast_type: daily
+          - type: iframe
+            url: /local/wetter-moabit.html
+            aspect_ratio: "300:250"
           - type: custom:bubble-card
             card_type: select
             sub_button:
