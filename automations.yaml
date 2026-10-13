@@ -731,7 +731,8 @@
   mode: restart
 - id: '1771158055109'
   alias: Leon - Lichtwecker
-  description: ''
+  description: Sonnenaufgang endet zur Weckzeit. Die Uhrzeit wird in den Templates
+    live aus input_datetime.leon_weckzeit gelesen.
   triggers:
   - minutes: '*'
     trigger: time_pattern
@@ -740,7 +741,7 @@
   - wait_template: '{{sensor == ''none'' or as_timestamp(states(sensor), None) !=
       None}}'
   - wait_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
-      = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+      = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(states(''input_datetime.leon_weckzeit'')))
       %} {{ 0 < target_time - current_time <= float(seconds) and states(check_entity)
       in [''unknown'', ''on'', ''home''] }}'
   - choose: []
@@ -750,7 +751,7 @@
       None}}'
   - condition: template
     value_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
-      = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+      = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(states(''input_datetime.leon_weckzeit'')))
       %} {{ 0 < target_time - current_time <= float(seconds) and states(check_entity)
       in [''unknown'', ''on'', ''home''] }}'
   - choose:
@@ -777,7 +778,7 @@
           != None}}'
       - condition: template
         value_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
-          = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+          = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(states(''input_datetime.leon_weckzeit'')))
           %} {{ 0 < target_time - current_time <= float(seconds) }}'
       sequence:
       - delay: '{{tick_time}}'
@@ -791,7 +792,7 @@
               None) != None }}'
           - condition: template
             value_template: '{% set current_time = as_timestamp(now()) %} {% set target_time
-              = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+              = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(states(''input_datetime.leon_weckzeit'')))
               %} {{ 0 < target_time - current_time <= float(seconds) }}'
           sequence:
           - choose:
@@ -802,12 +803,12 @@
               - data:
                   brightness: '{% set current_time = as_timestamp(now()) %} {% set
                     target_time = as_timestamp(states(sensor)) if sensor != ''none''
-                    else as_timestamp(today_at(manual_time)) %} {{ (float(end_brightness)
+                    else as_timestamp(today_at(states(''input_datetime.leon_weckzeit''))) %} {{ (float(end_brightness)
                     - (float(range_brightness) * (target_time - current_time) / float(seconds)))
                     | int(0) }}'
                   color_temp: '{% set current_time = as_timestamp(now()) %} {% set
                     target_time = as_timestamp(states(sensor)) if sensor != ''none''
-                    else as_timestamp(today_at(manual_time)) %} {{ (float(end_mired)
+                    else as_timestamp(today_at(states(''input_datetime.leon_weckzeit''))) %} {{ (float(end_mired)
                     + (float(start_mired) - float(end_mired)) * ((target_time - current_time)
                     / float(seconds))) | int(0) }}'
                 entity_id: light.leon_wecklichter
@@ -815,7 +816,7 @@
             default:
             - data:
                 brightness: '{% set current_time = as_timestamp(now()) %} {% set target_time
-                  = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(manual_time))
+                  = as_timestamp(states(sensor)) if sensor != ''none'' else as_timestamp(today_at(states(''input_datetime.leon_weckzeit'')))
                   %} {{ (float(end_brightness) - (float(range_brightness) * (target_time
                   - current_time) / float(seconds))) | int(0) }}'
               entity_id: light.leon_wecklichter
@@ -831,7 +832,6 @@
     start_brightness: 1
     end_brightness: 254
     range_brightness: '{{float(end_brightness)-float(start_brightness)}}'
-    manual_time: '{{ states(''input_datetime.leon_weckzeit'') }}'
     seconds: '{{float(sunrise_duration) * 60}}'
     min_mired: 0
     start_mired: '{{state_attr(light_entity, ''max_mireds'')}}'
