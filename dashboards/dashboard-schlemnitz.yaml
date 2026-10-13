@@ -210,6 +210,9 @@ views:
                       show_name: false
                       show_icon: true
                       icon: mdi:water-percent
+                      tap_action:
+                        action: navigate
+                        navigation_path: /dashboard-schlemnitz/wandfeuchte
                   bottom: []
                 styles: |
                   .bubble-sub-button-2 {
@@ -1670,3 +1673,97 @@ views:
     type: sections
     max_columns: 4
     cards: []
+  - title: Wandfeuchte
+    path: wandfeuchte
+    subview: true
+    icon: mdi:water-percent
+    type: sections
+    max_columns: 1
+    sections:
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:bubble-card
+                card_type: button
+                button_type: name
+                name: Zurück
+                icon: mdi:arrow-left
+                show_icon: true
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-schlemnitz
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.ems_sensor_wand_temperature
+                name: Wandtemperatur
+                icon: mdi:thermometer
+                show_state: true
+                show_icon: true
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.zhimi_mb5_c00e_temperature
+                name: Raumtemperatur
+                icon: mdi:thermometer
+                show_state: true
+                show_icon: true
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.ems_rh_wand
+                name: Wandfeuchte
+                icon: mdi:water-percent
+                show_state: true
+                show_icon: true
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.zhimi_mb5_c00e_relative_humidity
+                name: Raumfeuchte
+                icon: mdi:water-percent
+                show_state: true
+                show_icon: true
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: state
+                entity: sensor.ems_rh_wand_kategorie
+                name: Schimmelrisiko
+                icon: mdi:shield-check
+                show_state: true
+                show_icon: true
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+                styles: |
+                  .bubble-button-background {
+                    background-color: ${(() => {
+                      const raw = hass.states['sensor.ems_rh_wand_kategorie'] && hass.states['sensor.ems_rh_wand_kategorie'].state;
+                      if (raw === 'Sicher') return '#2e9d4b';
+                      if (raw === 'Erhöht') return '#ef8b1a';
+                      if (raw === 'Kritisch') return '#d32f2f';
+                      return '#8b919a';
+                    })()} !important;
+                  }

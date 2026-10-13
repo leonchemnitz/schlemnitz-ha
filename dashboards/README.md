@@ -15,7 +15,7 @@ folder: Übersicht (`/lovelace`, original-states) and Karte (`/map`).
 
 | Title | URL path | Sidebar | Icon | File | Views |
 | --- | --- | --- | --- | --- | --- |
-| Schlemnitz | `/dashboard-schlemnitz` | shown | `mdi:cards-heart` | `dashboard-schlemnitz.yaml` | 1 |
+| Schlemnitz | `/dashboard-schlemnitz` | shown | `mdi:cards-heart` | `dashboard-schlemnitz.yaml` | 2 (`wandfeuchte` is a subview) |
 | Test | `/dashboard-test` | shown | default | `dashboard-test.yaml` | 1 |
 | Zeitsteuerung | `/dashboard-zeitsteuerung` | shown | `mdi:calendar-clock` | `dashboard-zeitsteuerung.yaml` | 1 |
 
