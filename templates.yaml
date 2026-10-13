@@ -1,0 +1,41 @@
+# Ems wall mold risk.
+# T_raum and RH_raum are the air purifier, not the wall sensor.
+# T_wand is sensor.ems_sensor_wand_temperature only (its humidity is ignored).
+#
+# E(T) = 6.112 * exp((17.67 * T) / (T + 243.5))
+# e = E(T_raum) * (RH_raum / 100)
+# RH_wand = (e / E(T_wand)) * 100
+#
+# Templates expose Euler's number as `e`, so exp(x) is written `e ** x`.
+# RH_wand: Sicher < 70, Erhöht 70–79.9, Kritisch >= 80.
+
+- sensor:
+    - unique_id: ems_rh_wand
+      default_entity_id: sensor.ems_rh_wand
+      name: Ems Wandfeuchte
+      unit_of_measurement: "%"
+      device_class: humidity
+      state_class: measurement
+      suggested_display_precision: 1
+      icon: mdi:water-percent
+      availability: >
+        {{ states('sensor.zhimi_mb5_c00e_temperature') | is_number
+           and states('sensor.zhimi_mb5_c00e_relative_humidity') | is_number
+           and states('sensor.ems_sensor_wand_temperature') | is_number }}
+      state: >
+        {% set t_raum = states('sensor.zhimi_mb5_c00e_temperature') | float %}
+        {% set rh_raum = states('sensor.zhimi_mb5_c00e_relative_humidity') | float %}
+        {% set t_wand = states('sensor.ems_sensor_wand_temperature') | float %}
+        {% set e_raum = 6.112 * e ** ((17.67 * t_raum) / (t_raum + 243.5)) %}
+        {% set vapor = e_raum * (rh_raum / 100) %}
+        {% set e_wand = 6.112 * e ** ((17.67 * t_wand) / (t_wand + 243.5)) %}
+        {{ ((vapor / e_wand) * 100) | round(1) }}
+
+    - unique_id: ems_rh_wand_kategorie
+      default_entity_id: sensor.ems_rh_wand_kategorie
+      name: Ems Wand Schimmelrisiko
+      icon: mdi:shield-check
+      availability: "{{ states('sensor.ems_rh_wand') | is_number }}"
+      state: >
+        {% set rh = states('sensor.ems_rh_wand') | float %}
+        {% if rh < 70 %}Sicher{% elif rh < 80 %}Erhöht{% else %}Kritisch{% endif %}

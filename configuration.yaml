@@ -9,6 +9,10 @@ frontend:
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
+
+# Jinja template sensors. Reloadable without a Core restart.
+template: !include templates.yaml
+
 sensor:
   - platform: time_date
     display_options:
