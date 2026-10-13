@@ -2,6 +2,8 @@
 
 Versioned Home Assistant configuration (HA OS at `192.168.178.57`).
 
+Cloud Agents read `AGENTS.md`, `docs/kontext.md`, and `docs/signoz.md`. Speak German with Leon.
+
 The working copy lives on the management VM at `~/ha/config`. HA itself holds
 no git state or GitHub credentials.
 
