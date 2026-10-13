@@ -16,7 +16,6 @@
       unit_of_measurement: "%"
       device_class: humidity
       state_class: measurement
-      suggested_display_precision: 1
       icon: mdi:water-percent
       availability: >
         {{ states('sensor.zhimi_mb5_c00e_temperature') | is_number
