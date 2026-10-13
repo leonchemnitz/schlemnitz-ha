@@ -205,22 +205,14 @@ views:
                       show_background: true
                       slider_fill_orientation: left
                       slider_value_position: right
-                  bottom:
                     - entity: sensor.ems_rh_wand
-                      name: Wand
-                      show_name: true
                       show_state: true
+                      show_name: false
                       show_icon: true
                       icon: mdi:water-percent
-                      show_background: true
-                    - entity: sensor.ems_rh_wand_kategorie
-                      name: Schimmel
-                      show_name: false
-                      show_state: true
-                      show_icon: false
-                      show_background: true
+                  bottom: []
                 styles: |
-                  .bubble-sub-button.schimmel {
+                  .bubble-sub-button-2 {
                     background-color: ${(() => {
                       const raw = hass.states['sensor.ems_rh_wand_kategorie'] && hass.states['sensor.ems_rh_wand_kategorie'].state;
                       if (raw === 'Sicher') return '#2e9d4b';
