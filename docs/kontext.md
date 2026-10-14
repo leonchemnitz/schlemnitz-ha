@@ -57,6 +57,8 @@ Lichtwecker: die Automation liest die Weckzeit live. Ein Alarm um 08:00 startet 
 
 ## Leon Heizung
 
+Aufbau, Einstellungen, gefundene Fehler und Checkliste für weitere Räume: `docs/heizung.md`.
+
 Sonoff TRVZB `climate.leon_thermostat`, Raumfühler `sensor.leon_sensor_env_temperature`, Better Thermostat `climate.leon_thermostat_2`. Schritt 0,5°. Kalibrierungstyp Target Temperature Based (`target_temp_based`), nicht Offset Based. `number.leon_thermostat_local_temperature_calibration` bleibt 0. Better Thermostat schreibt den Offset nicht mehr, sondern setzt vorübergehend den Ventil-Soll (weit auf bei Wärmebedarf, nahe am Minimum zum Schließen), gerechnet aus Raumfühler und Soll.
 
 `switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen nur `climate.set_temperature` auf `climate.leon_thermostat_2` auf. Diese Raum-Solltemperatur in den ersten ein bis zwei Tagen nach der Umstellung nicht von Hand ändern. Das Einpendeln dauert 24 bis 48 Stunden.
