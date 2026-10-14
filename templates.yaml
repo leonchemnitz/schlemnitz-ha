@@ -38,3 +38,25 @@
       state: >
         {% set rh = states('sensor.ems_rh_wand') | float %}
         {% if rh < 70 %}Sicher{% elif rh < 80 %}Erhöht{% else %}Kritisch{% endif %}
+
+    # Sonoff system_mode, not the frost setpoint and not running_state alone.
+    # Off keeps reporting hvac_action heating while the setpoint sits at 7 °C.
+    - unique_id: leon_ventil
+      default_entity_id: sensor.leon_ventil
+      name: Leon Ventil
+      icon: >
+        {% if this.state == 'Heizt' %}mdi:radiator
+        {% elif this.state == 'Zu' %}mdi:valve-closed
+        {% elif this.state == 'Auto' %}mdi:calendar-clock
+        {% elif this.state == 'Aus' %}mdi:radiator-off
+        {% else %}mdi:help-circle-outline
+        {% endif %}
+      state: >
+        {% set mode = states('climate.leon_thermostat') %}
+        {% set action = state_attr('climate.leon_thermostat', 'hvac_action') %}
+        {% if mode in ['unavailable', 'unknown', 'none'] %}Nicht erreichbar
+        {% elif mode == 'heat' and action == 'heating' %}Heizt
+        {% elif mode == 'heat' %}Zu
+        {% elif mode == 'auto' %}Auto
+        {% else %}Aus
+        {% endif %}
