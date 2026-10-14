@@ -526,9 +526,10 @@
 - id: leon_heizung_heilen
   alias: Leon Heizung heilen
   description: 'Stellt Heat wieder her, ohne die Solltemperatur anzufassen. 21° um
-    04:00 und 19,5° um 20:00 bleiben die Scheduler-Schalter. Eine Temperatur am
-    Dashboard gilt bis zum nächsten dieser Zeitpunkte. Aus bleibt, wenn call_for_heat
-    aus ist.'
+    04:00 und 19,5° um 20:00 bleiben die Scheduler-Schalter. Eine Temperatur an
+    Better Thermostat gilt bis zum nächsten dieser Zeitpunkte. Aus bleibt, wenn
+    call_for_heat aus ist. Der temporäre Ventil-Soll aus Target Temperature Based
+    ist kein Fehler und wird nicht zurückgesetzt.'
   triggers:
   - trigger: state
     entity_id:
@@ -539,13 +540,7 @@
       seconds: 20
   - trigger: state
     entity_id: climate.leon_thermostat_2
-    attribute: temperature
-  - trigger: state
-    entity_id: climate.leon_thermostat_2
     attribute: call_for_heat
-  - trigger: state
-    entity_id: climate.leon_thermostat
-    attribute: temperature
   - trigger: homeassistant
     event: start
     id: start
@@ -569,10 +564,10 @@
   - condition: template
     value_template: '{% set bt = ''climate.leon_thermostat_2'' %} {% set ventil =
       ''climate.leon_thermostat'' %} {% set soll = state_attr(bt, ''temperature'')
-      | float(0) %} {% set ventil_soll = state_attr(ventil, ''temperature'') | float(0)
-      %} {{ state_attr(bt, ''call_for_heat'') == true and states(bt) not in [''unavailable'',
+      | float(0) %} {{ state_attr(bt, ''call_for_heat'') == true and states(bt) not
+      in [''unavailable'', ''unknown''] and states(ventil) not in [''unavailable'',
       ''unknown''] and soll >= 10 and (states(bt) != ''heat'' or states(ventil) !=
-      ''heat'' or ventil_soll < 8) }}'
+      ''heat'') }}'
   - action: climate.set_temperature
     target:
       entity_id: climate.leon_thermostat_2
