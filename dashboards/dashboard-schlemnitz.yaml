@@ -763,16 +763,15 @@ views:
                 slider_value_position: right
               - type: custom:bubble-card
                 card_type: climate
-                name: Heizung
-                entity: climate.leon_thermostat_2
                 sub_button:
                   main:
-                    - entity: sensor.leon_ventil
-                      name: Ventil
-                      show_state: true
-                      show_icon: true
-                      show_name: true
+                    - name: HVAC modes menu
+                      select_attribute: hvac_modes
+                      state_background: false
+                      show_arrow: false
+                      sub_button_type: select
                   bottom: []
+                entity: climate.leon_thermostat
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
