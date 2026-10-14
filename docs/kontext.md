@@ -63,7 +63,9 @@ Sonoff TRVZB `climate.leon_thermostat`, Raumfühler `sensor.leon_sensor_env_temp
 
 Die Karte im Popup Leon ist die Klima-Karte auf `climate.leon_thermostat` mit dem HVAC-Modus-Auswahlfeld. Orange und Flamme kommen von `hvac_action` des Ventils. Der Schieber zeigt den temporären Ventil-Soll, nicht die 19,5° oder 21° von Better Thermostat.
 
-„Leon Heizung heilen“ stellt Heat mit der gespeicherten Better-Thermostat-Solltemperatur wieder her, solange `call_for_heat` an ist. Ein niedriger Ventil-Soll ist dabei kein Fehler. `call_for_heat` ist aus, wenn die Außentemperatur die `off_temperature` von 20° erreicht. Die Kindersicherung `switch.leon_leon_thermostat_kindersicherung` bleibt an, damit ein Ventil-Aus nicht wieder als Wunsch gilt.
+`hvac_action` des Ventils ist kein Beleg für ein offenes Ventil. Es meldet `heating` auch im Modus Aus und bei Soll 7° unter Ist 21,7° (Verlauf 1. bis 14. Oktober 2026).
+
+Die Kindersicherung von Better Thermostat (`switch.leon_leon_thermostat_kindersicherung`) und die Gerätesperre (`switch.leon_thermostat_child_lock`) bleiben aus. Mit Kindersicherung schaltet Better Thermostat ein Aus am Ventil sofort zurück. Ohne sie übernimmt es ein Aus am Ventil als Aus. Es gibt keine Automation, die Heat wiederherstellt. `call_for_heat` ist aus, wenn die Außentemperatur die `off_temperature` von 20° erreicht; dann schaltet Better Thermostat das Ventil aus.
 
 ## Offen
 
