@@ -1,11 +1,11 @@
 # Schlemnitz HA
 
-Stand 13. Oktober 2026. Leon Chemnitz. Zeitzone Europe/Berlin, Ort „Home“.
+Stand 14. Oktober 2026. Leon Chemnitz. Zeitzone Europe/Berlin, Ort „Home“.
 
 ## Anlage
 
 - Proxmox im LAN `192.168.178.0/24`
-- Home Assistant OS 18.2 auf `http://192.168.178.57:8123`. Core war 2026.8.2, 2026.9.4 war verfügbar und nicht eingespielt
+- Home Assistant OS 18.3 auf `http://192.168.178.57:8123`. Core 2026.10.1, eingespielt am 14. Oktober 2026
 - Agent-VM: Ubuntu, Hostname `agent-home`, `192.168.178.105`, User `agent`. Darauf läuft der Self-hosted-Worker `ha-worker`
 - `/config` auf HA ist die Arbeitskopie. Git und GitHub-Zugang liegen nur auf der VM, Checkout `~/ha/config`, Remote `git@github-ha:leonchemnitz/schlemnitz-ha.git`
 - Etwa 463 Entities (156 Sensoren, 46 Lichter, 17 Automationen)
@@ -58,5 +58,5 @@ Lichtwecker: die Automation liest die Weckzeit live. Ein Alarm um 08:00 startet 
 ## Offen
 
 - SigNoz ist nicht installiert. Plan und Vorschläge stehen in `docs/signoz.md`. Leon hat die Defaults noch nicht angenommen. Dafür HA nicht anfassen.
-- Health-Check steht aus: Datei `home-assistant.log.fault`, damals 15 nicht verfügbare Entities, Core-Update 2026.9.4.
+- Health-Check steht aus: Datei `home-assistant.log.fault`, damals 15 nicht verfügbare Entities.
 - Leons Wandschalter: `OffWithEffect` an den Lavalampen noch nicht real gedrückt.

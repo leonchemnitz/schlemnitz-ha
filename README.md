@@ -38,20 +38,20 @@ Integrations (`custom_components/`):
 | Repository | Version |
 | --- | --- |
 | [hacs/integration](https://github.com/hacs/integration) | 2.0.5 |
-| [KartoffelToby/better_thermostat](https://github.com/KartoffelToby/better_thermostat) | 1.7.0 |
-| [thomasloven/hass-browser_mod](https://github.com/thomasloven/hass-browser_mod) | v2.7.3 |
+| [KartoffelToby/better_thermostat](https://github.com/KartoffelToby/better_thermostat) | 1.9.3 |
+| [thomasloven/hass-browser_mod](https://github.com/thomasloven/hass-browser_mod) | v3.3.0 |
 | [Hypfer/hass-scene_presets](https://github.com/Hypfer/hass-scene_presets) | 2.4.0 |
 | [nielsfaber/scheduler-component](https://github.com/nielsfaber/scheduler-component) | v3.3.8 |
-| [al-one/hass-xiaomi-miot](https://github.com/al-one/hass-xiaomi-miot) | v1.1.2 |
+| [al-one/hass-xiaomi-miot](https://github.com/al-one/hass-xiaomi-miot) | v1.1.5 |
 
 Frontend cards (`www/community/`):
 
 | Repository | Version |
 | --- | --- |
-| [Clooos/Bubble-Card](https://github.com/Clooos/Bubble-Card) | v3.1.4 |
-| [Gh61/lovelace-hue-like-light-card](https://github.com/Gh61/lovelace-hue-like-light-card) | v1.8.1 |
-| [piitaya/lovelace-mushroom](https://github.com/piitaya/lovelace-mushroom) | v5.0.11 |
+| [Clooos/Bubble-Card](https://github.com/Clooos/Bubble-Card) | v3.4.1 |
+| [Gh61/lovelace-hue-like-light-card](https://github.com/Gh61/lovelace-hue-like-light-card) | v1.11.0 |
+| [piitaya/lovelace-mushroom](https://github.com/piitaya/lovelace-mushroom) | v5.2.3 |
 | [thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod) | v4.2.1 |
-| [kalkih/mini-media-player](https://github.com/kalkih/mini-media-player) | v1.16.10 |
-| [nielsfaber/scheduler-card](https://github.com/nielsfaber/scheduler-card) | v4.0.16 |
-| [Nerwyn/universal-remote-card](https://github.com/Nerwyn/universal-remote-card) | 4.10.8 |
+| [kalkih/mini-media-player](https://github.com/kalkih/mini-media-player) | v1.16.12 |
+| [nielsfaber/scheduler-card](https://github.com/nielsfaber/scheduler-card) | v4.0.19 |
+| [Nerwyn/universal-remote-card](https://github.com/Nerwyn/universal-remote-card) | 4.11.5 |
