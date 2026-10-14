@@ -55,6 +55,14 @@ Leon: Zigbee-Gruppe `leon_lichter` enthält Decke (Hue), Regal (innr), Bild (inn
 
 Lichtwecker: die Automation liest die Weckzeit live. Ein Alarm um 08:00 startet das Licht um 07:35.
 
+## Leon Heizung
+
+Solltemperatur liegt auf Better Thermostat `climate.leon_thermostat_2`. `switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen nur `climate.set_temperature` auf. Eine Änderung an der Bubble-Karte gilt bis zum nächsten dieser Zeitpunkte.
+
+`climate.leon_thermostat` ist das Sonoff-Ventil. Modus Aus setzt den Frostschutz auf 7°. Better Thermostat übernimmt dieses Aus vom entriegelten Ventil und schickt im Aus-Modus keine neue Solltemperatur mehr ans Gerät. „Leon Heizung heilen“ stellt Heat mit der gespeicherten Solltemperatur wieder her, solange `call_for_heat` an ist. Das ist aus, wenn die Außentemperatur die `off_temperature` von 20° erreicht. Die Kindersicherung `switch.leon_leon_thermostat_kindersicherung` bleibt an, damit ein Ventil-Aus nicht wieder als Wunsch gilt.
+
+Die Karte im Popup Leon steuert `climate.leon_thermostat_2`. `sensor.leon_ventil` zeigt den Ventilzustand aus `system_mode` und `hvac_action`: Heizt, Zu, Aus, Auto oder Nicht erreichbar. `running_state: heat` bei Modus Aus ist kein offenes Ventil.
+
 ## Offen
 
 - SigNoz ist nicht installiert. Plan und Vorschläge stehen in `docs/signoz.md`. Leon hat die Defaults noch nicht angenommen. Dafür HA nicht anfassen.
