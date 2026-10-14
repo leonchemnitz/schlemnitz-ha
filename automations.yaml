@@ -523,59 +523,6 @@
     data:
       value: '{{ (states(''sensor.leon_temperatur'') | float(0)) | round(1) }}'
   mode: single
-- id: leon_heizung_heilen
-  alias: Leon Heizung heilen
-  description: 'Stellt Heat wieder her, ohne die Solltemperatur anzufassen. 21° um
-    04:00 und 19,5° um 20:00 bleiben die Scheduler-Schalter. Eine Temperatur an
-    Better Thermostat gilt bis zum nächsten dieser Zeitpunkte. Aus bleibt, wenn
-    call_for_heat aus ist. Der temporäre Ventil-Soll aus Target Temperature Based
-    ist kein Fehler und wird nicht zurückgesetzt.'
-  triggers:
-  - trigger: state
-    entity_id:
-    - climate.leon_thermostat
-    - climate.leon_thermostat_2
-    to: 'off'
-    for:
-      seconds: 20
-  - trigger: state
-    entity_id: climate.leon_thermostat_2
-    attribute: call_for_heat
-  - trigger: homeassistant
-    event: start
-    id: start
-  - trigger: time_pattern
-    minutes: /10
-  actions:
-  - if:
-    - condition: trigger
-      id: start
-    then:
-    - delay:
-        seconds: 75
-  - if:
-    - condition: state
-      entity_id: switch.leon_leon_thermostat_kindersicherung
-      state: 'off'
-    then:
-    - action: switch.turn_on
-      target:
-        entity_id: switch.leon_leon_thermostat_kindersicherung
-  - condition: template
-    value_template: '{% set bt = ''climate.leon_thermostat_2'' %} {% set ventil =
-      ''climate.leon_thermostat'' %} {% set soll = state_attr(bt, ''temperature'')
-      | float(0) %} {{ state_attr(bt, ''call_for_heat'') == true and states(bt) not
-      in [''unavailable'', ''unknown''] and states(ventil) not in [''unavailable'',
-      ''unknown''] and soll >= 10 and (states(bt) != ''heat'' or states(ventil) !=
-      ''heat'') }}'
-  - action: climate.set_temperature
-    target:
-      entity_id: climate.leon_thermostat_2
-    data:
-      hvac_mode: heat
-      temperature: '{{ state_attr(''climate.leon_thermostat_2'', ''temperature'') }}'
-  mode: single
-  max_exceeded: silent
 - id: '1770139158588'
   alias: Lavalampen Auto-Off Steuerung
   description: Startet Timer bei Licht-An und schaltet Licht bei Timer-Ende aus.
