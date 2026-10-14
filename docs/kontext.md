@@ -57,11 +57,13 @@ Lichtwecker: die Automation liest die Weckzeit live. Ein Alarm um 08:00 startet 
 
 ## Leon Heizung
 
-Solltemperatur liegt auf Better Thermostat `climate.leon_thermostat_2`. `switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen nur `climate.set_temperature` auf. Eine Änderung an der Bubble-Karte gilt bis zum nächsten dieser Zeitpunkte.
+Sonoff TRVZB `climate.leon_thermostat`, Raumfühler `sensor.leon_sensor_env_temperature`, Better Thermostat `climate.leon_thermostat_2`. Schritt 0,5°. Kalibrierungstyp Target Temperature Based (`target_temp_based`), nicht Offset Based. `number.leon_thermostat_local_temperature_calibration` bleibt 0. Better Thermostat schreibt den Offset nicht mehr, sondern setzt vorübergehend den Ventil-Soll (weit auf bei Wärmebedarf, nahe am Minimum zum Schließen), gerechnet aus Raumfühler und Soll.
 
-`climate.leon_thermostat` ist das Sonoff-Ventil. Modus Aus setzt den Frostschutz auf 7°. Better Thermostat übernimmt dieses Aus vom entriegelten Ventil und schickt im Aus-Modus keine neue Solltemperatur mehr ans Gerät. „Leon Heizung heilen“ stellt Heat mit der gespeicherten Solltemperatur wieder her, solange `call_for_heat` an ist. Das ist aus, wenn die Außentemperatur die `off_temperature` von 20° erreicht. Die Kindersicherung `switch.leon_leon_thermostat_kindersicherung` bleibt an, damit ein Ventil-Aus nicht wieder als Wunsch gilt.
+`switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen nur `climate.set_temperature` auf `climate.leon_thermostat_2` auf. Diese Raum-Solltemperatur in den ersten ein bis zwei Tagen nach der Umstellung nicht von Hand ändern. Das Einpendeln dauert 24 bis 48 Stunden.
 
-Die Karte im Popup Leon steuert `climate.leon_thermostat_2`. `sensor.leon_ventil` zeigt den Ventilzustand aus `system_mode` und `hvac_action`: Heizt, Zu, Aus, Auto oder Nicht erreichbar. `running_state: heat` bei Modus Aus ist kein offenes Ventil.
+Die Karte im Popup Leon ist die Klima-Karte auf `climate.leon_thermostat` mit dem HVAC-Modus-Auswahlfeld. Orange und Flamme kommen von `hvac_action` des Ventils. Der Schieber zeigt den temporären Ventil-Soll, nicht die 19,5° oder 21° von Better Thermostat.
+
+„Leon Heizung heilen“ stellt Heat mit der gespeicherten Better-Thermostat-Solltemperatur wieder her, solange `call_for_heat` an ist. Ein niedriger Ventil-Soll ist dabei kein Fehler. `call_for_heat` ist aus, wenn die Außentemperatur die `off_temperature` von 20° erreicht. Die Kindersicherung `switch.leon_leon_thermostat_kindersicherung` bleibt an, damit ein Ventil-Aus nicht wieder als Wunsch gilt.
 
 ## Offen
 
