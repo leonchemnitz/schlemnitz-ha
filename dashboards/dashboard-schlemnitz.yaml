@@ -498,9 +498,17 @@ views:
             name: Wohnzimmer
             icon: mdi:sofa-outline
             hash: '#wohnzimmer'
-            button_type: name
+            entity: sensor.wohnzimmer_sensor_env_temperature
+            show_state: true
+            button_type: slider
+            tap_action:
+              action: more-info
             sub_button:
-              main: []
+              main:
+                - entity: sensor.wohnzimmer_sensor_env_humidity
+                  show_state: true
+                  show_icon: true
+                  icon: mdi:water-percent
               bottom: []
             slider_fill_orientation: left
             slider_value_position: right
@@ -972,15 +980,20 @@ views:
             card_type: pop-up
             name: Bad
             icon: mdi:bathtub
-            show_state: false
             hash: '#bad'
+            entity: sensor.bad_sensor_env_temperature
+            show_state: true
             button_type: slider
             margin_top: 0px
             tap_action:
               action: more-info
             scrolling_effect: false
             sub_button:
-              main: []
+              main:
+                - entity: sensor.bad_sensor_env_humidity
+                  show_state: true
+                  show_icon: true
+                  icon: mdi:water-percent
               bottom: []
             slider_fill_orientation: left
             slider_value_position: right
@@ -1146,14 +1159,19 @@ views:
             card_type: pop-up
             name: Küche
             icon: mdi:stove
-            show_state: false
             hash: '#kueche'
+            entity: sensor.kueche_sensor_env_temperature
+            show_state: true
             button_type: slider
             tap_action:
               action: more-info
             scrolling_effect: false
             sub_button:
-              main: []
+              main:
+                - entity: sensor.kueche_sensor_env_humidity
+                  show_state: true
+                  show_icon: true
+                  icon: mdi:water-percent
               bottom: []
             slider_fill_orientation: left
             slider_value_position: right

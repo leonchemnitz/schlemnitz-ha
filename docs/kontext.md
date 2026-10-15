@@ -55,6 +55,16 @@ Leon: Zigbee-Gruppe `leon_lichter` enthält Decke (Hue), Regal (innr), Bild (inn
 
 Lichtwecker: die Automation liest die Weckzeit live. Ein Alarm um 08:00 startet das Licht um 07:35.
 
+## Raumfühler
+
+Temperatur steht im Popup-Kopf, Feuchte als Sub-Button daneben.
+
+- Wohnzimmer: `sensor.wohnzimmer_sensor_env_temperature`, `sensor.wohnzimmer_sensor_env_humidity`. Gerät `wohnzimmer_sensor_env`, Bereich Wohnzimmer
+- Bad: `sensor.bad_sensor_env_temperature`, `sensor.bad_sensor_env_humidity`. Gerät `bad_sensor_env`, Bereich Bad
+- Küche: `sensor.kueche_sensor_env_temperature`, `sensor.kueche_sensor_env_humidity`. Gerät `kueche_sensor_env`, Bereich Küche
+- Leon: `sensor.leon_sensor_env_temperature`, `sensor.leon_sensor_env_humidity`
+- Ems: `sensor.zhimi_mb5_c00e_temperature`, `sensor.zhimi_mb5_c00e_relative_humidity`
+
 ## Leon Heizung
 
 Aufbau, Einstellungen, gefundene Fehler und Checkliste für weitere Räume: `docs/heizung.md`.
