@@ -83,11 +83,11 @@
         {% set action = state_attr('climate.leon_thermostat', 'hvac_action') %}
         {{ action if action in ['cooling', 'defrosting', 'drying', 'fan', 'heating', 'idle', 'off', 'preheating'] else 'idle' }}
       current_temperature: >
-        {% if states('sensor.leon_temperatur') is number %}
+        {% if states('sensor.leon_temperatur') | is_number %}
           {{ states('sensor.leon_temperatur') }}
         {% endif %}
       target_temperature: >
-        {% if states('sensor.leon_heizung_soll') is number %}
+        {% if states('sensor.leon_heizung_soll') | is_number %}
           {{ states('sensor.leon_heizung_soll') }}
         {% endif %}
       set_temperature:
