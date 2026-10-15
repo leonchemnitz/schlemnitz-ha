@@ -38,3 +38,24 @@
       state: >
         {% set rh = states('sensor.ems_rh_wand') | float %}
         {% if rh < 70 %}Sicher{% elif rh < 80 %}Erhöht{% else %}Kritisch{% endif %}
+
+# Leon Heizung: Raum-Soll und ob das Fenster das Ventil ausgeschaltet hat.
+# Gesetzt nur über das Event leon_heizung (Skript leon_heizung_soll und
+# Automation "Leon - Heizung"). Bleibt über Neustarts erhalten.
+- triggers:
+    - trigger: event
+      event_type: leon_heizung
+  sensor:
+    - unique_id: leon_heizung_soll
+      default_entity_id: sensor.leon_heizung_soll
+      name: Leon Heizung Soll
+      unit_of_measurement: "°C"
+      device_class: temperature
+      icon: mdi:thermostat
+      state: >
+        {% set soll = trigger.event.data.soll | default(none) %}
+        {{ soll | float | round(1) if soll is number else this.state }}
+      attributes:
+        fenster_aus: >
+          {% set aus = trigger.event.data.fenster_aus | default(none) %}
+          {{ aus if aus in [true, false] else this.attributes.get('fenster_aus', false) }}

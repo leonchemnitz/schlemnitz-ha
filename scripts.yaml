@@ -1,0 +1,20 @@
+leon_heizung_soll:
+  alias: Leon Heizung Soll setzen
+  description: Raum-Soll für Leon. Die Zeitpläne rufen das auf. Ist das Ventil auf
+    Heizen, übernimmt "Leon - Heizung" den Wert sofort, sonst beim nächsten Einschalten.
+  icon: mdi:thermostat
+  fields:
+    temperatur:
+      name: Temperatur
+      required: true
+      selector:
+        number:
+          min: 4
+          max: 35
+          step: 0.5
+          unit_of_measurement: °C
+  sequence:
+  - event: leon_heizung
+    event_data:
+      soll: '{{ temperatur | float }}'
+  mode: queued

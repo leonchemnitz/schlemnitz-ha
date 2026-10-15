@@ -515,14 +515,113 @@
       minutes: 0
       seconds: 1
     trigger: state
-  conditions: []
+  conditions:
+  - condition: template
+    value_template: '{{ states(''sensor.leon_temperatur'') | is_number }}'
   actions:
   - action: number.set_value
     target:
       entity_id: number.leon_thermostat_external_temperature_input
     data:
-      value: '{{ (states(''sensor.leon_temperatur'') | float(0)) | round(1) }}'
+      value: '{{ states(''sensor.leon_temperatur'') | float | round(1) }}'
   mode: single
+- id: leon_heizung
+  alias: Leon - Heizung
+  description: Fenster auf schaltet das Ventil aus, Fenster zu wieder auf Heizen, wenn
+    das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.leon_heizung_soll
+    gleich, in beide Richtungen.
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.leon_fenstersensor_contact
+    to: 'on'
+    id: fenster_auf
+  - trigger: state
+    entity_id: binary_sensor.leon_fenstersensor_contact
+    from: 'on'
+    to: 'off'
+    id: fenster_zu
+  - trigger: state
+    entity_id: sensor.leon_heizung_soll
+    id: soll_zum_ventil
+  - trigger: state
+    entity_id: climate.leon_thermostat
+    to: heat
+    id: soll_zum_ventil
+  # Nach dem Einschalten meldet das Ventil kurz 7°, bis das Soll angekommen ist.
+  # Erst ein Wert, der 10 Sekunden steht, gilt als Eingabe an Ventil oder Karte.
+  - trigger: state
+    entity_id: climate.leon_thermostat
+    attribute: temperature
+    for:
+      seconds: 10
+    id: ventil_zum_soll
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: fenster_auf
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: climate.leon_thermostat
+          state: 'off'
+      sequence:
+      - event: leon_heizung
+        event_data:
+          fenster_aus: true
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.leon_thermostat
+        data:
+          hvac_mode: 'off'
+    - conditions:
+      - condition: trigger
+        id: fenster_zu
+      - condition: state
+        entity_id: sensor.leon_heizung_soll
+        attribute: fenster_aus
+        state: true
+      sequence:
+      - event: leon_heizung
+        event_data:
+          fenster_aus: false
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.leon_thermostat
+        data:
+          hvac_mode: heat
+    - conditions:
+      - condition: trigger
+        id: soll_zum_ventil
+      - condition: state
+        entity_id: climate.leon_thermostat
+        state: heat
+      - condition: template
+        value_template: '{{ states(''sensor.leon_heizung_soll'') | is_number and states(''sensor.leon_heizung_soll'')
+          | float != state_attr(''climate.leon_thermostat'', ''temperature'') | float(0)
+          }}'
+      sequence:
+      - action: climate.set_temperature
+        target:
+          entity_id: climate.leon_thermostat
+        data:
+          temperature: '{{ states(''sensor.leon_heizung_soll'') | float }}'
+    - conditions:
+      - condition: trigger
+        id: ventil_zum_soll
+      - condition: state
+        entity_id: climate.leon_thermostat
+        state: heat
+      - condition: template
+        value_template: '{{ trigger.to_state.attributes.temperature is number and trigger.to_state.attributes.temperature
+          != states(''sensor.leon_heizung_soll'') | float(0) }}'
+      sequence:
+      - event: leon_heizung
+        event_data:
+          soll: '{{ trigger.to_state.attributes.temperature }}'
+  mode: queued
+  max: 10
 - id: '1770139158588'
   alias: Lavalampen Auto-Off Steuerung
   description: Startet Timer bei Licht-An und schaltet Licht bei Timer-Ende aus.
