@@ -8,7 +8,7 @@ Stand 15. Oktober 2026. Läuft in Leons Zimmer. Vorlage für weitere Räume.
 - Raumfühler: externer Temperatursensor in HA. Eine Automation schreibt ihn an den externen Eingang des Ventils. Das Ventil regelt damit selbst.
 - Raum-Soll: Template-Sensor, gesetzt über ein Skript. Eine Automation hält ihn und das Ventil-Soll gleich und schaltet bei offenem Fenster aus.
 - Zeitpläne (Scheduler-Komponente, nicht im Repo) rufen das Skript auf.
-- Dashboard: Bubble-Klima-Karte direkt auf dem Ventil. Karte, Ventil und Verlauf zeigen dasselbe Soll.
+- Dashboard: Bubble-Klima-Karte auf `climate.leon_heizung`. Die zeigt den Raum-Soll, auch wenn das Ventil im Modus Aus 7° meldet. Modus und Flamme kommen vom Ventil.
 
 Bis 15. Oktober 2026 lief Better Thermostat dazwischen. Es hat nur noch Fenster, Zeitpläne und Außentemperatur verwaltet und dabei die Fehler 1, 3, 4 und 6 unten verursacht. Ausgebaut, weil der TRVZB den externen Fühler selbst kann.
 
@@ -25,6 +25,7 @@ Leon:
 | Fenstersensor | `binary_sensor.leon_fenstersensor_contact` |
 | Raum-Soll | `sensor.leon_heizung_soll` |
 | Soll setzen | `script.leon_heizung_soll` |
+| Karte | `climate.leon_heizung` |
 | Zeitplan 04:00 auf 21° | `switch.schedule_3a20f1` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_f66468` |
 
@@ -43,6 +44,8 @@ Leon:
 `templates.yaml`: `sensor.leon_heizung_soll`, Trigger auf das Event `leon_heizung`. Daten `soll` (Zahl) und `fenster_aus` (true/false), jeweils optional. Behält den Wert über Neustarts.
 
 `scripts.yaml`: `script.leon_heizung_soll` mit Feld `temperatur`. Feuert `leon_heizung` mit `soll`.
+
+`templates.yaml`: `climate.leon_heizung` für die Karte. Solltemperatur ist `sensor.leon_heizung_soll`, Isttemperatur `sensor.leon_temperatur`. HVAC-Modus und `hvac_action` kommen von `climate.leon_thermostat`. Eine Solländerung ruft das Skript auf, ein Moduswechsel das Ventil.
 
 Zeitpläne: Aktion `script.turn_on`, Entity `script.leon_heizung_soll`, Daten `variables: {temperatur: 21}`. Läuft ein Zeitplan, während das Ventil aus ist, gilt der Wert beim nächsten Einschalten.
 
@@ -101,7 +104,7 @@ Im Modus External Sensor Offset Only hat Better Thermostat das Ventil-Soll alle 
 6. „Leon - Heizung“ kopieren, Ventil, Fenstersensor, Sensor und Event tauschen.
 7. `local_temperature_calibration` am Ventil auf 0, Tastensperre aus.
 8. Zeitpläne: `script.turn_on` auf das neue Skript mit `variables: {temperatur: …}`.
-9. Bubble-Klima-Karte auf das Ventil, mit Auswahl `hvac_modes` und Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`.
+9. Bubble-Klima-Karte auf die Template-Klima-Entity, mit Auswahl `hvac_modes` und Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`. Der Name auf der Karte bleibt der Raumname.
 10. Prüfen: Soll auf der Karte ändern, nach 10 Sekunden steht es im Sensor. Fenster auf → Ventil aus, zu → Heizen mit altem Soll. Aus auf der Karte, Fenster auf und zu → bleibt Aus.
 
 ## Offen

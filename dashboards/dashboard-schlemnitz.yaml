@@ -764,6 +764,7 @@ views:
                 slider_value_position: right
               - type: custom:bubble-card
                 card_type: climate
+                name: Leon Thermostat
                 sub_button:
                   main:
                     - entity: binary_sensor.leon_fenstersensor_contact
@@ -780,7 +781,7 @@ views:
                       show_arrow: false
                       sub_button_type: select
                   bottom: []
-                entity: climate.leon_thermostat
+                entity: climate.leon_heizung
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
