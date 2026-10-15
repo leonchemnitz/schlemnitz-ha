@@ -41,7 +41,7 @@ In Jinja ist `e` die Eulersche Zahl, deshalb `e ** x` statt `exp(x)`.
 
 Schwellen für `sensor.ems_rh_wand_kategorie`: Sicher unter 70, Erhöht von 70 bis unter 80, Kritisch ab 80.
 
-Auf dem Dashboard Schlemnitz zeigt die Luftreiniger-Karte eine kompakte Blase mit `sensor.ems_rh_wand`. Die Hintergrundfarbe folgt der Kategorie (grün, orange, rot). Ein Tipp öffnet die Subview `wandfeuchte` (`/dashboard-schlemnitz/wandfeuchte`) mit Wandtemperatur, Raumtemperatur, Wandfeuchte, Raumfeuchte und Risiko.
+Im Popup Ems sitzt `sensor.ems_rh_wand` neben der Raumfeuchte. Die Hintergrundfarbe folgt der Kategorie (grün, orange, rot). Ein Tipp öffnet die Subview `wandfeuchte` (`/dashboard-schlemnitz/wandfeuchte`) mit Wandtemperatur, Raumtemperatur, Wandfeuchte, Raumfeuchte und Risiko. `sensor.ems_pm25` sitzt als Blase an der Luftreiniger-Karte, grün unter 20, orange bis 120, rot darüber.
 
 Filter des Luftreinigers am 5. Oktober 2026 zurückgesetzt (`xiaomi_miot.call_action`, siid 4, aiid 1, `params: [0]`). Danach 100 %, 0 h, 291 Tage Rest.
 

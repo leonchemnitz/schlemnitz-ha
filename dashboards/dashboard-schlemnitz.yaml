@@ -164,12 +164,11 @@ views:
             styles: |
               .bubble-sub-button-2 {
                 background-color: ${(() => {
-                  const raw = hass.states['sensor.ems_pm25'] && hass.states['sensor.ems_pm25'].state;
-                  const n = parseFloat(raw);
-                  if (raw == null || raw === '' || raw === 'unavailable' || raw === 'unknown' || isNaN(n)) return '#8b919a';
-                  if (n < 20) return '#2e9d4b';
-                  if (n <= 120) return '#ef8b1a';
-                  return '#d32f2f';
+                  const raw = hass.states['sensor.ems_rh_wand_kategorie'] && hass.states['sensor.ems_rh_wand_kategorie'].state;
+                  if (raw === 'Sicher') return '#2e9d4b';
+                  if (raw === 'Erhöht') return '#ef8b1a';
+                  if (raw === 'Kritisch') return '#d32f2f';
+                  return '#8b919a';
                 })()} !important;
               }
             sub_button:
@@ -178,10 +177,14 @@ views:
                   show_state: true
                   show_icon: true
                   icon: mdi:water-percent
-                - entity: sensor.ems_pm25
+                - entity: sensor.ems_rh_wand
                   show_state: true
+                  show_name: false
                   show_icon: true
-                  icon: mdi:air-filter
+                  icon: mdi:water-percent
+                  tap_action:
+                    action: navigate
+                    navigation_path: /dashboard-schlemnitz/wandfeuchte
               bottom: []
             slider_fill_orientation: left
             slider_value_position: right
@@ -207,23 +210,20 @@ views:
                       show_background: true
                       slider_fill_orientation: left
                       slider_value_position: right
-                    - entity: sensor.ems_rh_wand
+                    - entity: sensor.ems_pm25
                       show_state: true
-                      show_name: false
                       show_icon: true
-                      icon: mdi:water-percent
-                      tap_action:
-                        action: navigate
-                        navigation_path: /dashboard-schlemnitz/wandfeuchte
+                      icon: mdi:air-filter
                   bottom: []
                 styles: |
                   .bubble-sub-button-2 {
                     background-color: ${(() => {
-                      const raw = hass.states['sensor.ems_rh_wand_kategorie'] && hass.states['sensor.ems_rh_wand_kategorie'].state;
-                      if (raw === 'Sicher') return '#2e9d4b';
-                      if (raw === 'Erhöht') return '#ef8b1a';
-                      if (raw === 'Kritisch') return '#d32f2f';
-                      return '#8b919a';
+                      const raw = hass.states['sensor.ems_pm25'] && hass.states['sensor.ems_pm25'].state;
+                      const n = parseFloat(raw);
+                      if (raw == null || raw === '' || raw === 'unavailable' || raw === 'unknown' || isNaN(n)) return '#8b919a';
+                      if (n < 20) return '#2e9d4b';
+                      if (n <= 120) return '#ef8b1a';
+                      return '#d32f2f';
                     })()} !important;
                   }
                 show_icon: true
