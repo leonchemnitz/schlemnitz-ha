@@ -45,7 +45,7 @@ Erweitert, pro Ventil:
 | Option | Wert |
 |---|---|
 | Kalibrierungstyp (`calibration`) | Target Temperature Based (`target_temp_based`) |
-| Kalibrierungsmodus (`calibration_mode`) | External Sensor Offset Only (`default`) |
+| Kalibrierungsmodus (`calibration_mode`) | No Calibration (`no_calibration`) |
 | Überhitzungsschutz | aus |
 | Kein Aus-Modus (`no_off_system_mode`) | aus |
 | Kindersicherung (`child_lock`) | aus |
@@ -58,7 +58,7 @@ Am Ventil:
 - `local_temperature_calibration` = 0. Better Thermostat schreibt ihn im Modus Target Temperature Based nicht.
 - Tastensperre aus.
 
-So regelt es: Better Thermostat rechnet `Ventil-Soll = Raum-Soll − Raum-Ist + Ventil-Ist` und schreibt das als Sollwert ans Ventil. Ist der Raum zu warm, landet der Wert am Minimum (4 °C) und das Ventil schließt. Der Schieber der Karte zeigt diesen Ventil-Soll, nicht den Raum-Soll.
+So regelt es: Better Thermostat schreibt die Solltemperatur unverändert ans Ventil, 21° ab 04:00 und 19,5° ab 20:00. Den Offset fasst es nicht an. Der Raumfühler geht über „Leon - TRV follower“ an `number.leon_thermostat_external_temperature_input`, das Ventil regelt damit selbst. Der Modus External Sensor Offset Only hat den Ventil-Soll alle paar Minuten um 0,5° neben 21° und 19,5° geschoben, weil die Rundung auf das 0,5°-Raster bei jeder Messung neu fiel.
 
 Fenster: `on` am Sensor ist offen, `off` ist zu. Zigbee2MQTT meldet `contact: true`, solange der Kontakt geschlossen ist. Better Thermostat schaltet das Ventil sofort aus, solange der Sensor `on`, `unknown` oder `unavailable` ist, und heizt wieder, sobald er `off` ist. Die Klima-Karte zeigt dafür ein Fenster-Icon. Der Hintergrund färbt sich, wenn der Sensor `on` ist.
 
@@ -109,7 +109,7 @@ Das Ventil meldet `external_3`. Zigbee2MQTT 2.14 kennt nur noch `local_temperatu
 1. Ventil in Zigbee2MQTT anlernen, Entity-IDs notieren und hier eintragen. Keine IDs raten.
 2. Raumfühler wählen. Er sollte nicht direkt am Heizkörper hängen.
 3. Optional den Fühler als externen Eingang ans Ventil schicken (wie „Leon - TRV follower“). Dabei nichts schicken, wenn der Fühler `unavailable` ist, siehe Offen.
-4. Better Thermostat anlegen mit den Werten oben: Target Temperature Based, External Sensor Offset Only, Schritt 0,5, Kindersicherung aus.
+4. Better Thermostat anlegen mit den Werten oben: Target Temperature Based, No Calibration, Schritt 0,5, Kindersicherung aus.
 5. `local_temperature_calibration` am Ventil auf 0.
 6. Zeitpläne auf die Better-Thermostat-Entity, nicht aufs Ventil.
 7. Bubble-Klima-Karte auf das Ventil, mit Auswahl `hvac_modes` und Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`. Fenstersensor in Better Thermostat eintragen, Verzögerung 0.
