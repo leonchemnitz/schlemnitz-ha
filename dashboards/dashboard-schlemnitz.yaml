@@ -1698,19 +1698,6 @@ views:
             cards:
               - type: custom:bubble-card
                 card_type: button
-                button_type: name
-                name: Zurück
-                icon: mdi:arrow-left
-                show_icon: true
-                scrolling_effect: false
-                sub_button:
-                  main: []
-                  bottom: []
-                tap_action:
-                  action: navigate
-                  navigation_path: /dashboard-schlemnitz
-              - type: custom:bubble-card
-                card_type: button
                 button_type: state
                 entity: sensor.ems_sensor_wand_temperature
                 name: Wandtemperatur
