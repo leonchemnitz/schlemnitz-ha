@@ -69,15 +69,17 @@ Temperatur steht im Popup-Kopf, Feuchte als Sub-Button daneben.
 
 Aufbau, Einstellungen, gefundene Fehler und Checkliste für weitere Räume: `docs/heizung.md`.
 
-Sonoff TRVZB `climate.leon_thermostat`, Raumfühler `sensor.leon_sensor_env_temperature`, Better Thermostat `climate.leon_thermostat_2`. Schritt 0,5°. Kalibrierungstyp Target Temperature Based (`target_temp_based`), Modus No Calibration (`no_calibration`). `number.leon_thermostat_local_temperature_calibration` bleibt 0. Better Thermostat schreibt die Solltemperatur unverändert ans Ventil.
+Ohne Better Thermostat seit 15. Oktober 2026. Sonoff TRVZB `climate.leon_thermostat` regelt selbst nach dem Raumfühler `sensor.leon_temperatur` (Gruppe um `sensor.leon_sensor_env_temperature`), den „Leon - TRV follower“ an `number.leon_thermostat_external_temperature_input` schreibt. `number.leon_thermostat_local_temperature_calibration` bleibt 0.
 
-`switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen nur `climate.set_temperature` auf `climate.leon_thermostat_2` auf. Diese Raum-Solltemperatur in den ersten ein bis zwei Tagen nach der Umstellung nicht von Hand ändern. Das Einpendeln dauert 24 bis 48 Stunden.
+Raum-Soll: `sensor.leon_heizung_soll` (Template, Attribut `fenster_aus`), gesetzt über `script.leon_heizung_soll` (Feld `temperatur`). Die Automation „Leon - Heizung“ (`leon_heizung`) hält ihn und das Ventil-Soll gleich, schaltet bei offenem Fenster (`binary_sensor.leon_fenstersensor_contact`) aus und danach wieder auf Heizen.
 
-Die Karte im Popup Leon ist die Klima-Karte auf `climate.leon_thermostat` mit dem HVAC-Modus-Auswahlfeld und einem Fenster-Icon für `binary_sensor.leon_fenstersensor_contact`. Orange und Flamme kommen von `hvac_action` des Ventils. Der Schieber zeigt dieselbe Solltemperatur wie Better Thermostat. Better Thermostat schaltet das Ventil aus, solange der Fenstersensor offen ist.
+`switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen `script.turn_on` auf `script.leon_heizung_soll` mit `variables: {temperatur: …}`.
+
+Die Karte im Popup Leon ist die Klima-Karte auf `climate.leon_thermostat` mit dem HVAC-Modus-Auswahlfeld und einem Fenster-Icon für `binary_sensor.leon_fenstersensor_contact`. Was sie zeigt und einstellt, ist das Ventil selbst. Orange und Flamme kommen von `hvac_action` des Ventils.
 
 `hvac_action` des Ventils ist kein Beleg für ein offenes Ventil. Es meldet `heating` auch im Modus Aus und bei Soll 7° unter Ist 21,7° (Verlauf 1. bis 14. Oktober 2026).
 
-Die Kindersicherung von Better Thermostat (`switch.leon_leon_thermostat_kindersicherung`) und die Gerätesperre (`switch.leon_thermostat_child_lock`) bleiben aus. Mit Kindersicherung schaltet Better Thermostat ein Aus am Ventil sofort zurück. Ohne sie übernimmt es ein Aus am Ventil als Aus. Es gibt keine Automation, die Heat wiederherstellt. `call_for_heat` ist aus, wenn die Außentemperatur die `off_temperature` von 20° erreicht; dann schaltet Better Thermostat das Ventil aus.
+Die Gerätesperre (`switch.leon_thermostat_child_lock`) bleibt aus. Ein Aus am Ventil oder auf der Karte bleibt Aus. Es gibt keine Automation, die Heat erzwingt, nur das Wiedereinschalten nach dem Fenster.
 
 ## Offen
 
