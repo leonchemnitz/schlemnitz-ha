@@ -203,20 +203,13 @@ views:
                 button_type: switch
                 sub_button:
                   main:
-                    - entity: fan.zhimi_mb5_c00e_air_purifier
-                      sub_button_type: slider
-                      select_attribute: preset_modes
-                      scrolling_effect: false
-                      show_background: true
-                      slider_fill_orientation: left
-                      slider_value_position: right
                     - entity: sensor.ems_pm25
                       show_state: true
                       show_icon: true
                       icon: mdi:air-filter
                   bottom: []
                 styles: |
-                  .bubble-sub-button-2 {
+                  .bubble-sub-button-1 {
                     background-color: ${(() => {
                       const raw = hass.states['sensor.ems_pm25'] && hass.states['sensor.ems_pm25'].state;
                       const n = parseFloat(raw);
