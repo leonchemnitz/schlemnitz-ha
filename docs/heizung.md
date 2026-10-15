@@ -104,7 +104,7 @@ Im Modus External Sensor Offset Only hat Better Thermostat das Ventil-Soll alle 
 6. „Leon - Heizung“ kopieren, Ventil, Fenstersensor, Sensor und Event tauschen.
 7. `local_temperature_calibration` am Ventil auf 0, Tastensperre aus.
 8. Zeitpläne: `script.turn_on` auf das neue Skript mit `variables: {temperatur: …}`.
-9. Bubble-Klima-Karte auf die Template-Klima-Entity, mit Auswahl `hvac_modes` und Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`. Der Name auf der Karte bleibt der Raumname.
+9. Bubble-Klima-Karte auf die Template-Klima-Entity, Name „Heizung“, nur mit Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`.
 10. Prüfen: Soll auf der Karte ändern, nach 10 Sekunden steht es im Sensor. Fenster auf → Ventil aus, zu → Heizen mit altem Soll. Aus auf der Karte, Fenster auf und zu → bleibt Aus.
 
 ## Offen

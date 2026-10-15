@@ -75,7 +75,7 @@ Raum-Soll: `sensor.leon_heizung_soll` (Template, Attribut `fenster_aus`), gesetz
 
 `switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen `script.turn_on` auf `script.leon_heizung_soll` mit `variables: {temperatur: …}`.
 
-Die Karte im Popup Leon ist die Klima-Karte auf `climate.leon_heizung` mit dem HVAC-Modus-Auswahlfeld und einem Fenster-Icon für `binary_sensor.leon_fenstersensor_contact`. Der Schieber zeigt `sensor.leon_heizung_soll`, nicht die 7°, die das Ventil im Modus Aus meldet. Eine Änderung am Schieber setzt den Raum-Soll. Der Modus-Schalter steuert das Ventil. Orange und Flamme kommen von `hvac_action` des Ventils.
+Die Karte im Popup Leon heißt „Heizung“ und liegt auf `climate.leon_heizung`. Daneben nur das Fenster-Icon für `binary_sensor.leon_fenstersensor_contact`. Der Schieber zeigt `sensor.leon_heizung_soll`, nicht die 7°, die das Ventil im Modus Aus meldet. Eine Änderung am Schieber setzt den Raum-Soll. Den Modus schaltet man am Ventil. Orange kommt von `hvac_action` des Ventils.
 
 `hvac_action` des Ventils ist kein Beleg für ein offenes Ventil. Es meldet `heating` auch im Modus Aus und bei Soll 7° unter Ist 21,7° (Verlauf 1. bis 14. Oktober 2026).
 

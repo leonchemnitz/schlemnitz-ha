@@ -764,7 +764,7 @@ views:
                 slider_value_position: right
               - type: custom:bubble-card
                 card_type: climate
-                name: Leon Thermostat
+                name: Heizung
                 sub_button:
                   main:
                     - entity: binary_sensor.leon_fenstersensor_contact
@@ -775,11 +775,6 @@ views:
                       show_icon: true
                       show_background: true
                       state_background: true
-                    - name: HVAC modes menu
-                      select_attribute: hvac_modes
-                      state_background: false
-                      show_arrow: false
-                      sub_button_type: select
                   bottom: []
                 entity: climate.leon_heizung
               - type: custom:bubble-card
