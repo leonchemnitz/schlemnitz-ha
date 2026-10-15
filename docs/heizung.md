@@ -25,6 +25,7 @@ Leon:
 | Tastensperre am Ventil | `switch.leon_thermostat_child_lock` |
 | Zeitplan 04:00 auf 21° | `switch.schedule_3a20f1` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_f66468` |
+| Fenstersensor | `binary_sensor.leon_fenstersensor_contact` |
 
 Better-Thermostat-Eintrag: `01KGER4032KFCDN0HQHBXM6Q2M`.
 
@@ -34,6 +35,7 @@ Allgemein:
 
 - Temperaturfühler: Raumfühler
 - Wetter: `weather.forecast_home`
+- Fenstersensor: `binary_sensor.leon_fenstersensor_contact`. Verzögerung beim Öffnen und Schließen: 0
 - Außentemperatur für Aus (`off_temperature`): 20
 - Toleranz: 0
 - Schritt (`target_temp_step`): 0,5 °C. Entspricht dem Raster des TRVZB.
@@ -57,6 +59,8 @@ Am Ventil:
 - Tastensperre aus.
 
 So regelt es: Better Thermostat rechnet `Ventil-Soll = Raum-Soll − Raum-Ist + Ventil-Ist` und schreibt das als Sollwert ans Ventil. Ist der Raum zu warm, landet der Wert am Minimum (4 °C) und das Ventil schließt. Der Schieber der Karte zeigt diesen Ventil-Soll, nicht den Raum-Soll.
+
+Fenster: `on` am Sensor ist offen, `off` ist zu. Zigbee2MQTT meldet `contact: true`, solange der Kontakt geschlossen ist. Better Thermostat schaltet das Ventil sofort aus, solange der Sensor `on`, `unknown` oder `unavailable` ist, und heizt wieder, sobald er `off` ist. Die Klima-Karte zeigt dafür ein Fenster-Icon. Der Hintergrund färbt sich, wenn der Sensor `on` ist.
 
 Einstellungen ändern: Einstellungen → Geräte & Dienste → Better Thermostat → Konfigurieren. Die Optionen lassen sich nicht in YAML setzen. Better Thermostat lädt sich nach dem Speichern neu.
 
@@ -108,7 +112,7 @@ Das Ventil meldet `external_3`. Zigbee2MQTT 2.14 kennt nur noch `local_temperatu
 4. Better Thermostat anlegen mit den Werten oben: Target Temperature Based, External Sensor Offset Only, Schritt 0,5, Kindersicherung aus.
 5. `local_temperature_calibration` am Ventil auf 0.
 6. Zeitpläne auf die Better-Thermostat-Entity, nicht aufs Ventil.
-7. Bubble-Klima-Karte auf das Ventil, mit Auswahl `hvac_modes`, im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`.
+7. Bubble-Klima-Karte auf das Ventil, mit Auswahl `hvac_modes` und Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`. Fenstersensor in Better Thermostat eintragen, Verzögerung 0.
 8. Prüfen: Raum über Soll → Ventil-Soll fällt auf 4 °C, Ventil meldet `idle`. Modus Aus auf der Karte bleibt Aus.
 9. 24 bis 48 Stunden nicht nachstellen.
 

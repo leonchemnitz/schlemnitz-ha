@@ -765,6 +765,14 @@ views:
                 card_type: climate
                 sub_button:
                   main:
+                    - entity: binary_sensor.leon_fenstersensor_contact
+                      name: Fenster
+                      icon: mdi:window-closed-variant
+                      show_name: false
+                      show_state: false
+                      show_icon: true
+                      show_background: true
+                      state_background: true
                     - name: HVAC modes menu
                       select_attribute: hvac_modes
                       state_background: false

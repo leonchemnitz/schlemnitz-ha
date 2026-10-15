@@ -63,7 +63,7 @@ Sonoff TRVZB `climate.leon_thermostat`, Raumfühler `sensor.leon_sensor_env_temp
 
 `switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen nur `climate.set_temperature` auf `climate.leon_thermostat_2` auf. Diese Raum-Solltemperatur in den ersten ein bis zwei Tagen nach der Umstellung nicht von Hand ändern. Das Einpendeln dauert 24 bis 48 Stunden.
 
-Die Karte im Popup Leon ist die Klima-Karte auf `climate.leon_thermostat` mit dem HVAC-Modus-Auswahlfeld. Orange und Flamme kommen von `hvac_action` des Ventils. Der Schieber zeigt den temporären Ventil-Soll, nicht die 19,5° oder 21° von Better Thermostat.
+Die Karte im Popup Leon ist die Klima-Karte auf `climate.leon_thermostat` mit dem HVAC-Modus-Auswahlfeld und einem Fenster-Icon für `binary_sensor.leon_fenstersensor_contact`. Orange und Flamme kommen von `hvac_action` des Ventils. Der Schieber zeigt den temporären Ventil-Soll, nicht die 19,5° oder 21° von Better Thermostat. Better Thermostat schaltet das Ventil aus, solange der Fenstersensor offen ist.
 
 `hvac_action` des Ventils ist kein Beleg für ein offenes Ventil. Es meldet `heating` auch im Modus Aus und bei Soll 7° unter Ist 21,7° (Verlauf 1. bis 14. Oktober 2026).
 
