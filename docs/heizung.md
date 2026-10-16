@@ -45,6 +45,8 @@ Wohnzimmer:
 | Karte | `climate.wohnzimmer_heizung` |
 | Fühler-Automation | `wohnzimmer_trv_follower` |
 | Fenster und Soll | `wohnzimmer_heizung` |
+| Zeitplan 04:00 auf 21° | `switch.schedule_wohnzimmer_04_00` |
+| Zeitplan 20:00 auf 19,5° | `switch.schedule_wohnzimmer_20_00` |
 
 Bad:
 
@@ -62,8 +64,10 @@ Bad:
 | Karte | `climate.bad_heizung` |
 | Fühler-Automation | `bad_trv_follower` |
 | Fenster und Soll | `bad_heizung` |
+| Zeitplan 04:00 auf 21° | `switch.schedule_bad_04_00` |
+| Zeitplan 20:00 auf 19,5° | `switch.schedule_bad_20_00` |
 
-Zeitpläne gibt es nur für Leon. Wohnzimmer und Bad behalten den Soll, der am Ventil stand, bis er an der Karte geändert wird. Beim Einrichten waren das 21° im Wohnzimmer und 19° im Bad. `temperature_accuracy` ist an allen drei Ventilen −0,2°.
+Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` ist an allen drei Ventilen −0,2°.
 
 ## Bausteine
 
