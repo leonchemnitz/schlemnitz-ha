@@ -176,6 +176,12 @@
         fenster_aus: >
           {% set aus = trigger.event.data.fenster_aus | default(none) %}
           {{ aus if aus in [true, false] else this.attributes.get('fenster_aus', false) }}
+        trocknen: >
+          {% set an = trigger.event.data.trocknen | default(none) %}
+          {{ an if an in [true, false] else this.attributes.get('trocknen', false) }}
+        zeitplan_soll: >
+          {% set z = trigger.event.data.zeitplan_soll | default(none) %}
+          {{ z | float | round(1) if z is number else this.attributes.get('zeitplan_soll') }}
 
 - climate:
     - unique_id: bad_heizung_karte

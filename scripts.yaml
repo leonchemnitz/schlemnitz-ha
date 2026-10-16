@@ -41,7 +41,8 @@ wohnzimmer_heizung_soll:
 bad_heizung_soll:
   alias: Bad Heizung Soll setzen
   description: Raum-Soll fürs Bad. Ist das Ventil auf Heizen, übernimmt "Bad - Heizung"
-    den Wert sofort, sonst beim nächsten Einschalten.
+    den Wert sofort, sonst beim nächsten Einschalten. Ein Zeitplan-Aufruf während des
+    Wäschetrocknens wird nur gemerkt und gilt danach.
   icon: mdi:thermostat
   fields:
     temperatur:
@@ -53,10 +54,27 @@ bad_heizung_soll:
           max: 35
           step: 0.5
           unit_of_measurement: °C
+    zeitplan:
+      name: Vom Zeitplan
+      required: false
+      selector:
+        boolean: {}
   sequence:
-  - event: bad_heizung
-    event_data:
-      soll: '{{ temperatur | float }}'
+  - if:
+    - condition: template
+      value_template: '{{ zeitplan | default(false) | bool }}'
+    then:
+    - event: bad_heizung
+      event_data:
+        zeitplan_soll: '{{ temperatur | float }}'
+  - if:
+    - condition: template
+      value_template: '{{ not (zeitplan | default(false) | bool and state_attr(''sensor.bad_heizung_soll'',
+        ''trocknen'') == true) }}'
+    then:
+    - event: bad_heizung
+      event_data:
+        soll: '{{ temperatur | float }}'
   mode: queued
 ems_heizung_soll:
   alias: Ems Heizung Soll setzen

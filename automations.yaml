@@ -950,6 +950,53 @@
           soll: '{{ trigger.to_state.attributes.temperature }}'
   mode: queued
   max: 10
+- id: bad_waesche_trocknen
+  alias: Bad - Wäsche trocknen
+  description: Über 70 % Feuchte heizt das Bad auf 25°. Unter 60 % gilt wieder der Wert
+    des Zeitplans, ohne Zeitplanwert 21°.
+  triggers:
+  - trigger: numeric_state
+    entity_id: sensor.bad_sensor_env_humidity
+    above: 70
+    for:
+      minutes: 5
+    id: feucht
+  - trigger: numeric_state
+    entity_id: sensor.bad_sensor_env_humidity
+    below: 60
+    for:
+      minutes: 5
+    id: trocken
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: feucht
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: sensor.bad_heizung_soll
+          attribute: trocknen
+          state: true
+      sequence:
+      - event: bad_heizung
+        event_data:
+          trocknen: true
+          soll: 25
+    - conditions:
+      - condition: trigger
+        id: trocken
+      - condition: state
+        entity_id: sensor.bad_heizung_soll
+        attribute: trocknen
+        state: true
+      sequence:
+      - event: bad_heizung
+        event_data:
+          trocknen: false
+          soll: '{{ state_attr(''sensor.bad_heizung_soll'', ''zeitplan_soll'') | float(21) }}'
+  mode: queued
 - id: ems_trv_follower
   alias: Ems - TRV follower
   description: Sendet die Luftreiniger-Temperatur an den externen Eingang des TRV. Alle
