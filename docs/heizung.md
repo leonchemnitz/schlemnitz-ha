@@ -1,6 +1,6 @@
 # Heizung: Sonoff TRVZB mit externem Fühler, ohne Better Thermostat
 
-Stand 16. Oktober 2026. Läuft in Leons Zimmer, im Wohnzimmer und im Bad.
+Stand 16. Oktober 2026. Läuft in Leons Zimmer, im Wohnzimmer, im Bad und bei Ems.
 
 ## Aufbau
 
@@ -67,7 +67,26 @@ Bad:
 | Zeitplan 04:00 auf 21° | `switch.schedule_bad_04_00` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_bad_20_00` |
 
-Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` ist an allen drei Ventilen −0,2°.
+Ems:
+
+| Rolle | Entity |
+|---|---|
+| Ventil | `climate.ems_thermostat` |
+| Raumfühler | `sensor.zhimi_mb5_c00e_temperature` (Luftreiniger) |
+| Feuchte | `sensor.zhimi_mb5_c00e_relative_humidity` |
+| Externer Eingang am Ventil | `number.ems_thermostat_external_temperature_input` |
+| Offset am Ventil | `number.ems_thermostat_local_temperature_calibration` |
+| Tastensperre am Ventil | `switch.ems_thermostat_child_lock` |
+| Fenstersensor | `binary_sensor.ems_fenstersensor_contact` |
+| Raum-Soll | `sensor.ems_heizung_soll` |
+| Soll setzen | `script.ems_heizung_soll` |
+| Karte | `climate.ems_heizung` |
+| Fühler-Automation | `ems_trv_follower` |
+| Fenster und Soll | `ems_heizung` |
+| Zeitplan 04:00 auf 21° | `switch.schedule_ems_04_00` |
+| Zeitplan 20:00 auf 19,5° | `switch.schedule_ems_20_00` |
+
+Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` ist an allen vier Ventilen −0,2°. Bei Ems ist der Raumfühler der Luftreiniger, nicht ein eigener Umweltsensor.
 
 ## Bausteine
 

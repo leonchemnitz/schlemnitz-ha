@@ -58,3 +58,23 @@ bad_heizung_soll:
     event_data:
       soll: '{{ temperatur | float }}'
   mode: queued
+ems_heizung_soll:
+  alias: Ems Heizung Soll setzen
+  description: Raum-Soll für Ems. Ist das Ventil auf Heizen, übernimmt "Ems - Heizung"
+    den Wert sofort, sonst beim nächsten Einschalten.
+  icon: mdi:thermostat
+  fields:
+    temperatur:
+      name: Temperatur
+      required: true
+      selector:
+        number:
+          min: 4
+          max: 35
+          step: 0.5
+          unit_of_measurement: °C
+  sequence:
+  - event: ems_heizung
+    event_data:
+      soll: '{{ temperatur | float }}'
+  mode: queued

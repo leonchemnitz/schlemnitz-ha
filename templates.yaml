@@ -214,3 +214,60 @@
             entity_id: climate.bad_thermostat
           data:
             hvac_mode: "{{ hvac_mode }}"
+
+# Ems Heizung. Raumfühler ist der Luftreiniger.
+- triggers:
+    - trigger: event
+      event_type: ems_heizung
+  sensor:
+    - unique_id: ems_heizung_soll
+      default_entity_id: sensor.ems_heizung_soll
+      name: Ems Heizung Soll
+      unit_of_measurement: "°C"
+      device_class: temperature
+      icon: mdi:thermostat
+      state: >
+        {% set soll = trigger.event.data.soll | default(none) %}
+        {{ soll | float | round(1) if soll is number else this.state }}
+      attributes:
+        fenster_aus: >
+          {% set aus = trigger.event.data.fenster_aus | default(none) %}
+          {{ aus if aus in [true, false] else this.attributes.get('fenster_aus', false) }}
+
+- climate:
+    - unique_id: ems_heizung_karte
+      default_entity_id: climate.ems_heizung
+      name: Ems Heizung
+      icon: mdi:thermostat
+      availability: "{{ states('climate.ems_thermostat') not in ['unknown', 'unavailable'] }}"
+      optimistic: true
+      temperature_unit: "°C"
+      precision: 0.5
+      min_temperature: 4
+      max_temperature: 35
+      target_temperature_step: 0.5
+      hvac_modes: "{{ ['off', 'auto', 'heat'] }}"
+      hvac_mode: >
+        {% set mode = states('climate.ems_thermostat') %}
+        {{ mode if mode in ['off', 'auto', 'heat'] else 'off' }}
+      hvac_action: >
+        {% set action = state_attr('climate.ems_thermostat', 'hvac_action') %}
+        {{ action if action in ['cooling', 'defrosting', 'drying', 'fan', 'heating', 'idle', 'off', 'preheating'] else 'idle' }}
+      current_temperature: >
+        {% if states('sensor.zhimi_mb5_c00e_temperature') | is_number %}
+          {{ states('sensor.zhimi_mb5_c00e_temperature') }}
+        {% endif %}
+      target_temperature: >
+        {% if states('sensor.ems_heizung_soll') | is_number %}
+          {{ states('sensor.ems_heizung_soll') }}
+        {% endif %}
+      set_temperature:
+        - action: script.ems_heizung_soll
+          data:
+            temperatur: "{{ temperature }}"
+      set_hvac_mode:
+        - action: climate.set_hvac_mode
+          target:
+            entity_id: climate.ems_thermostat
+          data:
+            hvac_mode: "{{ hvac_mode }}"
