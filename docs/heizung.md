@@ -1,6 +1,6 @@
 # Heizung: Sonoff TRVZB mit externem Fühler, ohne Better Thermostat
 
-Stand 15. Oktober 2026. Läuft in Leons Zimmer. Vorlage für weitere Räume.
+Stand 16. Oktober 2026. Läuft in Leons Zimmer, im Wohnzimmer und im Bad.
 
 ## Aufbau
 
@@ -28,6 +28,42 @@ Leon:
 | Karte | `climate.leon_heizung` |
 | Zeitplan 04:00 auf 21° | `switch.schedule_3a20f1` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_f66468` |
+
+Wohnzimmer:
+
+| Rolle | Entity |
+|---|---|
+| Ventil | `climate.wohnzimmer_thermostat` |
+| Raumfühler | `sensor.wohnzimmer_sensor_env_temperature` |
+| Feuchte | `sensor.wohnzimmer_sensor_env_humidity` |
+| Externer Eingang am Ventil | `number.wohnzimmer_thermostat_external_temperature_input` |
+| Offset am Ventil | `number.wohnzimmer_thermostat_local_temperature_calibration` |
+| Tastensperre am Ventil | `switch.wohnzimmer_thermostat_child_lock` |
+| Fenstersensor | `binary_sensor.wohnzimmer_fenstersensor_contact` |
+| Raum-Soll | `sensor.wohnzimmer_heizung_soll` |
+| Soll setzen | `script.wohnzimmer_heizung_soll` |
+| Karte | `climate.wohnzimmer_heizung` |
+| Fühler-Automation | `wohnzimmer_trv_follower` |
+| Fenster und Soll | `wohnzimmer_heizung` |
+
+Bad:
+
+| Rolle | Entity |
+|---|---|
+| Ventil | `climate.bad_thermostat` |
+| Raumfühler | `sensor.bad_sensor_env_temperature` |
+| Feuchte | `sensor.bad_sensor_env_humidity` |
+| Externer Eingang am Ventil | `number.bad_thermostat_external_temperature_input` |
+| Offset am Ventil | `number.bad_thermostat_local_temperature_calibration` |
+| Tastensperre am Ventil | `switch.bad_thermostat_child_lock` |
+| Fenstersensor | `binary_sensor.bad_fenstersensor_contact` |
+| Raum-Soll | `sensor.bad_heizung_soll` |
+| Soll setzen | `script.bad_heizung_soll` |
+| Karte | `climate.bad_heizung` |
+| Fühler-Automation | `bad_trv_follower` |
+| Fenster und Soll | `bad_heizung` |
+
+Zeitpläne gibt es nur für Leon. Wohnzimmer und Bad behalten den Soll, der am Ventil stand, bis er an der Karte geändert wird. Beim Einrichten waren das 21° im Wohnzimmer und 19° im Bad. `temperature_accuracy` ist an allen drei Ventilen −0,2°.
 
 ## Bausteine
 

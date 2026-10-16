@@ -100,3 +100,117 @@
             entity_id: climate.leon_thermostat
           data:
             hvac_mode: "{{ hvac_mode }}"
+
+# Wohnzimmer Heizung. Gleiches Muster wie Leon.
+- triggers:
+    - trigger: event
+      event_type: wohnzimmer_heizung
+  sensor:
+    - unique_id: wohnzimmer_heizung_soll
+      default_entity_id: sensor.wohnzimmer_heizung_soll
+      name: Wohnzimmer Heizung Soll
+      unit_of_measurement: "°C"
+      device_class: temperature
+      icon: mdi:thermostat
+      state: >
+        {% set soll = trigger.event.data.soll | default(none) %}
+        {{ soll | float | round(1) if soll is number else this.state }}
+      attributes:
+        fenster_aus: >
+          {% set aus = trigger.event.data.fenster_aus | default(none) %}
+          {{ aus if aus in [true, false] else this.attributes.get('fenster_aus', false) }}
+
+- climate:
+    - unique_id: wohnzimmer_heizung_karte
+      default_entity_id: climate.wohnzimmer_heizung
+      name: Wohnzimmer Heizung
+      icon: mdi:thermostat
+      availability: "{{ states('climate.wohnzimmer_thermostat') not in ['unknown', 'unavailable'] }}"
+      optimistic: true
+      temperature_unit: "°C"
+      precision: 0.5
+      min_temperature: 4
+      max_temperature: 35
+      target_temperature_step: 0.5
+      hvac_modes: "{{ ['off', 'auto', 'heat'] }}"
+      hvac_mode: >
+        {% set mode = states('climate.wohnzimmer_thermostat') %}
+        {{ mode if mode in ['off', 'auto', 'heat'] else 'off' }}
+      hvac_action: >
+        {% set action = state_attr('climate.wohnzimmer_thermostat', 'hvac_action') %}
+        {{ action if action in ['cooling', 'defrosting', 'drying', 'fan', 'heating', 'idle', 'off', 'preheating'] else 'idle' }}
+      current_temperature: >
+        {% if states('sensor.wohnzimmer_sensor_env_temperature') | is_number %}
+          {{ states('sensor.wohnzimmer_sensor_env_temperature') }}
+        {% endif %}
+      target_temperature: >
+        {% if states('sensor.wohnzimmer_heizung_soll') | is_number %}
+          {{ states('sensor.wohnzimmer_heizung_soll') }}
+        {% endif %}
+      set_temperature:
+        - action: script.wohnzimmer_heizung_soll
+          data:
+            temperatur: "{{ temperature }}"
+      set_hvac_mode:
+        - action: climate.set_hvac_mode
+          target:
+            entity_id: climate.wohnzimmer_thermostat
+          data:
+            hvac_mode: "{{ hvac_mode }}"
+
+# Bad Heizung. Gleiches Muster wie Leon.
+- triggers:
+    - trigger: event
+      event_type: bad_heizung
+  sensor:
+    - unique_id: bad_heizung_soll
+      default_entity_id: sensor.bad_heizung_soll
+      name: Bad Heizung Soll
+      unit_of_measurement: "°C"
+      device_class: temperature
+      icon: mdi:thermostat
+      state: >
+        {% set soll = trigger.event.data.soll | default(none) %}
+        {{ soll | float | round(1) if soll is number else this.state }}
+      attributes:
+        fenster_aus: >
+          {% set aus = trigger.event.data.fenster_aus | default(none) %}
+          {{ aus if aus in [true, false] else this.attributes.get('fenster_aus', false) }}
+
+- climate:
+    - unique_id: bad_heizung_karte
+      default_entity_id: climate.bad_heizung
+      name: Bad Heizung
+      icon: mdi:thermostat
+      availability: "{{ states('climate.bad_thermostat') not in ['unknown', 'unavailable'] }}"
+      optimistic: true
+      temperature_unit: "°C"
+      precision: 0.5
+      min_temperature: 4
+      max_temperature: 35
+      target_temperature_step: 0.5
+      hvac_modes: "{{ ['off', 'auto', 'heat'] }}"
+      hvac_mode: >
+        {% set mode = states('climate.bad_thermostat') %}
+        {{ mode if mode in ['off', 'auto', 'heat'] else 'off' }}
+      hvac_action: >
+        {% set action = state_attr('climate.bad_thermostat', 'hvac_action') %}
+        {{ action if action in ['cooling', 'defrosting', 'drying', 'fan', 'heating', 'idle', 'off', 'preheating'] else 'idle' }}
+      current_temperature: >
+        {% if states('sensor.bad_sensor_env_temperature') | is_number %}
+          {{ states('sensor.bad_sensor_env_temperature') }}
+        {% endif %}
+      target_temperature: >
+        {% if states('sensor.bad_heizung_soll') | is_number %}
+          {{ states('sensor.bad_heizung_soll') }}
+        {% endif %}
+      set_temperature:
+        - action: script.bad_heizung_soll
+          data:
+            temperatur: "{{ temperature }}"
+      set_hvac_mode:
+        - action: climate.set_hvac_mode
+          target:
+            entity_id: climate.bad_thermostat
+          data:
+            hvac_mode: "{{ hvac_mode }}"

@@ -656,6 +656,300 @@
           soll: '{{ trigger.to_state.attributes.temperature }}'
   mode: queued
   max: 10
+- id: wohnzimmer_trv_follower
+  alias: Wohnzimmer - TRV follower
+  description: Sendet die Raumtemperatur an den externen Eingang des TRV. Alle 30 Minuten
+    auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
+    Fühler.
+  triggers:
+  - entity_id: sensor.wohnzimmer_sensor_env_temperature
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+    trigger: state
+  - trigger: time_pattern
+    minutes: /30
+  - trigger: state
+    entity_id: select.wohnzimmer_thermostat_temperature_sensor_select
+    to:
+    - remote_source_offline
+    - local_temperature
+  conditions:
+  - condition: template
+    value_template: '{{ states(''sensor.wohnzimmer_sensor_env_temperature'') | is_number }}'
+  actions:
+  - variables:
+      raum: '{{ states(''sensor.wohnzimmer_sensor_env_temperature'') | float | round(1) }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ (states(''number.wohnzimmer_thermostat_external_temperature_input'')
+          | float(-99)) | round(1) == raum | float }}'
+      sequence:
+      - action: number.set_value
+        target:
+          entity_id: number.wohnzimmer_thermostat_external_temperature_input
+        data:
+          value: '{{ (raum | float + 0.1) | round(1) }}'
+      - delay:
+          seconds: 2
+  - action: number.set_value
+    target:
+      entity_id: number.wohnzimmer_thermostat_external_temperature_input
+    data:
+      value: '{{ raum }}'
+  - condition: template
+    value_template: '{{ states(''select.wohnzimmer_thermostat_temperature_sensor_select'')
+      != ''remote_temperature'' }}'
+  - action: select.select_option
+    target:
+      entity_id: select.wohnzimmer_thermostat_temperature_sensor_select
+    data:
+      option: remote_temperature
+  mode: single
+- id: wohnzimmer_heizung
+  alias: Wohnzimmer - Heizung
+  description: Fenster auf schaltet das Ventil aus, Fenster zu wieder auf Heizen, wenn
+    das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.wohnzimmer_heizung_soll
+    gleich, in beide Richtungen.
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.wohnzimmer_fenstersensor_contact
+    to: 'on'
+    id: fenster_auf
+  - trigger: state
+    entity_id: binary_sensor.wohnzimmer_fenstersensor_contact
+    from: 'on'
+    to: 'off'
+    id: fenster_zu
+  - trigger: state
+    entity_id: sensor.wohnzimmer_heizung_soll
+    id: soll_zum_ventil
+  - trigger: state
+    entity_id: climate.wohnzimmer_thermostat
+    to: heat
+    id: soll_zum_ventil
+  - trigger: state
+    entity_id: climate.wohnzimmer_thermostat
+    attribute: temperature
+    for:
+      seconds: 10
+    id: ventil_zum_soll
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: fenster_auf
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: climate.wohnzimmer_thermostat
+          state: 'off'
+      sequence:
+      - event: wohnzimmer_heizung
+        event_data:
+          fenster_aus: true
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.wohnzimmer_thermostat
+        data:
+          hvac_mode: 'off'
+    - conditions:
+      - condition: trigger
+        id: fenster_zu
+      - condition: state
+        entity_id: sensor.wohnzimmer_heizung_soll
+        attribute: fenster_aus
+        state: true
+      sequence:
+      - event: wohnzimmer_heizung
+        event_data:
+          fenster_aus: false
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.wohnzimmer_thermostat
+        data:
+          hvac_mode: heat
+    - conditions:
+      - condition: trigger
+        id: soll_zum_ventil
+      - condition: state
+        entity_id: climate.wohnzimmer_thermostat
+        state: heat
+      - condition: template
+        value_template: '{{ states(''sensor.wohnzimmer_heizung_soll'') | is_number and states(''sensor.wohnzimmer_heizung_soll'')
+          | float != state_attr(''climate.wohnzimmer_thermostat'', ''temperature'') | float(0)
+          }}'
+      sequence:
+      - action: climate.set_temperature
+        target:
+          entity_id: climate.wohnzimmer_thermostat
+        data:
+          temperature: '{{ states(''sensor.wohnzimmer_heizung_soll'') | float }}'
+    - conditions:
+      - condition: trigger
+        id: ventil_zum_soll
+      - condition: state
+        entity_id: climate.wohnzimmer_thermostat
+        state: heat
+      - condition: template
+        value_template: '{{ trigger.to_state.attributes.temperature is number and trigger.to_state.attributes.temperature
+          != states(''sensor.wohnzimmer_heizung_soll'') | float(0) }}'
+      sequence:
+      - event: wohnzimmer_heizung
+        event_data:
+          soll: '{{ trigger.to_state.attributes.temperature }}'
+  mode: queued
+  max: 10
+- id: bad_trv_follower
+  alias: Bad - TRV follower
+  description: Sendet die Raumtemperatur an den externen Eingang des TRV. Alle 30 Minuten
+    auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
+    Fühler.
+  triggers:
+  - entity_id: sensor.bad_sensor_env_temperature
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+    trigger: state
+  - trigger: time_pattern
+    minutes: /30
+  - trigger: state
+    entity_id: select.bad_thermostat_temperature_sensor_select
+    to:
+    - remote_source_offline
+    - local_temperature
+  conditions:
+  - condition: template
+    value_template: '{{ states(''sensor.bad_sensor_env_temperature'') | is_number }}'
+  actions:
+  - variables:
+      raum: '{{ states(''sensor.bad_sensor_env_temperature'') | float | round(1) }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ (states(''number.bad_thermostat_external_temperature_input'')
+          | float(-99)) | round(1) == raum | float }}'
+      sequence:
+      - action: number.set_value
+        target:
+          entity_id: number.bad_thermostat_external_temperature_input
+        data:
+          value: '{{ (raum | float + 0.1) | round(1) }}'
+      - delay:
+          seconds: 2
+  - action: number.set_value
+    target:
+      entity_id: number.bad_thermostat_external_temperature_input
+    data:
+      value: '{{ raum }}'
+  - condition: template
+    value_template: '{{ states(''select.bad_thermostat_temperature_sensor_select'')
+      != ''remote_temperature'' }}'
+  - action: select.select_option
+    target:
+      entity_id: select.bad_thermostat_temperature_sensor_select
+    data:
+      option: remote_temperature
+  mode: single
+- id: bad_heizung
+  alias: Bad - Heizung
+  description: Fenster auf schaltet das Ventil aus, Fenster zu wieder auf Heizen, wenn
+    das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.bad_heizung_soll
+    gleich, in beide Richtungen.
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.bad_fenstersensor_contact
+    to: 'on'
+    id: fenster_auf
+  - trigger: state
+    entity_id: binary_sensor.bad_fenstersensor_contact
+    from: 'on'
+    to: 'off'
+    id: fenster_zu
+  - trigger: state
+    entity_id: sensor.bad_heizung_soll
+    id: soll_zum_ventil
+  - trigger: state
+    entity_id: climate.bad_thermostat
+    to: heat
+    id: soll_zum_ventil
+  - trigger: state
+    entity_id: climate.bad_thermostat
+    attribute: temperature
+    for:
+      seconds: 10
+    id: ventil_zum_soll
+  conditions: []
+  actions:
+  - choose:
+    - conditions:
+      - condition: trigger
+        id: fenster_auf
+      - condition: not
+        conditions:
+        - condition: state
+          entity_id: climate.bad_thermostat
+          state: 'off'
+      sequence:
+      - event: bad_heizung
+        event_data:
+          fenster_aus: true
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.bad_thermostat
+        data:
+          hvac_mode: 'off'
+    - conditions:
+      - condition: trigger
+        id: fenster_zu
+      - condition: state
+        entity_id: sensor.bad_heizung_soll
+        attribute: fenster_aus
+        state: true
+      sequence:
+      - event: bad_heizung
+        event_data:
+          fenster_aus: false
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.bad_thermostat
+        data:
+          hvac_mode: heat
+    - conditions:
+      - condition: trigger
+        id: soll_zum_ventil
+      - condition: state
+        entity_id: climate.bad_thermostat
+        state: heat
+      - condition: template
+        value_template: '{{ states(''sensor.bad_heizung_soll'') | is_number and states(''sensor.bad_heizung_soll'')
+          | float != state_attr(''climate.bad_thermostat'', ''temperature'') | float(0)
+          }}'
+      sequence:
+      - action: climate.set_temperature
+        target:
+          entity_id: climate.bad_thermostat
+        data:
+          temperature: '{{ states(''sensor.bad_heizung_soll'') | float }}'
+    - conditions:
+      - condition: trigger
+        id: ventil_zum_soll
+      - condition: state
+        entity_id: climate.bad_thermostat
+        state: heat
+      - condition: template
+        value_template: '{{ trigger.to_state.attributes.temperature is number and trigger.to_state.attributes.temperature
+          != states(''sensor.bad_heizung_soll'') | float(0) }}'
+      sequence:
+      - event: bad_heizung
+        event_data:
+          soll: '{{ trigger.to_state.attributes.temperature }}'
+  mode: queued
+  max: 10
 - id: '1770139158588'
   alias: Lavalampen Auto-Off Steuerung
   description: Startet Timer bei Licht-An und schaltet Licht bei Timer-Ende aus.

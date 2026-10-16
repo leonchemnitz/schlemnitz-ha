@@ -512,6 +512,29 @@ views:
               rows: auto
             cards:
               - type: custom:bubble-card
+                card_type: climate
+                name: Heizung
+                sub_button:
+                  main:
+                    - entity: binary_sensor.wohnzimmer_fenstersensor_contact
+                      name: Fenster
+                      icon: mdi:window-closed-variant
+                      show_name: false
+                      show_state: false
+                      show_icon: true
+                      show_background: true
+                      state_background: true
+                  bottom: []
+                entity: climate.wohnzimmer_heizung
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
                 card_type: media-player
                 sub_button:
                   main: []
@@ -988,6 +1011,29 @@ views:
             slider_value_position: right
             title: Bad
             cards:
+              - type: custom:bubble-card
+                card_type: climate
+                name: Heizung
+                sub_button:
+                  main:
+                    - entity: binary_sensor.bad_fenstersensor_contact
+                      name: Fenster
+                      icon: mdi:window-closed-variant
+                      show_name: false
+                      show_state: false
+                      show_icon: true
+                      show_background: true
+                      state_background: true
+                  bottom: []
+                entity: climate.bad_heizung
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
               - type: horizontal-stack
                 cards:
                   - type: custom:bubble-card

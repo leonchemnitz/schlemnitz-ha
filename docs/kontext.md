@@ -81,6 +81,8 @@ Die Karte im Popup Leon heißt „Heizung“ und liegt auf `climate.leon_heizung
 
 Die Gerätesperre (`switch.leon_thermostat_child_lock`) bleibt aus. Ein Aus am Ventil oder auf der Karte bleibt Aus. Es gibt keine Automation, die Heat erzwingt, nur das Wiedereinschalten nach dem Fenster.
 
+Wohnzimmer und Bad seit 16. Oktober 2026 dasselbe Muster. Ventile `climate.wohnzimmer_thermostat` und `climate.bad_thermostat`, Fenster `binary_sensor.wohnzimmer_fenstersensor_contact` und `binary_sensor.bad_fenstersensor_contact`, Raumfühler `sensor.wohnzimmer_sensor_env_temperature` und `sensor.bad_sensor_env_temperature`. Karten `climate.wohnzimmer_heizung` und `climate.bad_heizung`, Name „Heizung“, im jeweiligen Popup. Geräte liegen in den Bereichen Wohnzimmer und Bad. Zeitpläne gibt es dort nicht. Details in `docs/heizung.md`.
+
 ## Offen
 
 - SigNoz ist nicht installiert. Plan und Vorschläge stehen in `docs/signoz.md`. Leon hat die Defaults noch nicht angenommen. Dafür HA nicht anfassen.

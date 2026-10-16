@@ -18,3 +18,43 @@ leon_heizung_soll:
     event_data:
       soll: '{{ temperatur | float }}'
   mode: queued
+wohnzimmer_heizung_soll:
+  alias: Wohnzimmer Heizung Soll setzen
+  description: Raum-Soll fürs Wohnzimmer. Ist das Ventil auf Heizen, übernimmt
+    "Wohnzimmer - Heizung" den Wert sofort, sonst beim nächsten Einschalten.
+  icon: mdi:thermostat
+  fields:
+    temperatur:
+      name: Temperatur
+      required: true
+      selector:
+        number:
+          min: 4
+          max: 35
+          step: 0.5
+          unit_of_measurement: °C
+  sequence:
+  - event: wohnzimmer_heizung
+    event_data:
+      soll: '{{ temperatur | float }}'
+  mode: queued
+bad_heizung_soll:
+  alias: Bad Heizung Soll setzen
+  description: Raum-Soll fürs Bad. Ist das Ventil auf Heizen, übernimmt "Bad - Heizung"
+    den Wert sofort, sonst beim nächsten Einschalten.
+  icon: mdi:thermostat
+  fields:
+    temperatur:
+      name: Temperatur
+      required: true
+      selector:
+        number:
+          min: 4
+          max: 35
+          step: 0.5
+          unit_of_measurement: °C
+  sequence:
+  - event: bad_heizung
+    event_data:
+      soll: '{{ temperatur | float }}'
+  mode: queued
