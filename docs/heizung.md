@@ -67,7 +67,7 @@ Bad:
 | Zeitplan 04:00 auf 21° | `switch.schedule_bad_04_00` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_bad_20_00` |
 
-Wäsche trocknen im Bad (`bad_waesche_trocknen`): Liegt `sensor.bad_sensor_env_humidity` 5 Minuten über 70 %, geht der Raum-Soll auf 25° und `sensor.bad_heizung_soll` bekommt `trocknen: true`. Liegt die Feuchte 5 Minuten unter 60 %, gilt wieder der letzte Zeitplanwert (Attribut `zeitplan_soll`, ohne Wert 21°). Die Bad-Zeitpläne rufen `script.bad_heizung_soll` mit `zeitplan: true` auf. Während des Trocknens merkt sich das Skript diesen Wert nur. Eine Änderung an der Karte gilt sofort, auch beim Trocknen. Fenster auf schaltet das Ventil weiterhin aus. Auch Duschen kann die 70 % auslösen.
+Wäsche trocknen im Bad (`bad_waesche_trocknen`): Steigt `sensor.bad_sensor_env_humidity` über 70 %, geht der Raum-Soll sofort auf 25° und `sensor.bad_heizung_soll` bekommt `trocknen: true`. Das Ende misst `sensor.bad_absolute_feuchte` (g/m³ aus Temperatur und relativer Feuchte), weil das Aufheizen allein die relative Feuchte von 70 % auf etwa 55 % drückt. Fällt die absolute Feuchte unter 11 g/m³ (60 % bei 21°), gilt sofort wieder der letzte Zeitplanwert (Attribut `zeitplan_soll`, ohne Wert 21°). Die Bad-Zeitpläne rufen `script.bad_heizung_soll` mit `zeitplan: true` auf. Während des Trocknens merkt sich das Skript diesen Wert nur. Eine Änderung an der Karte gilt sofort, auch beim Trocknen. Fenster auf schaltet das Ventil weiterhin aus. Auch Duschen kann die 70 % auslösen. Der Start braucht zusätzlich mehr als 11 g/m³, sonst käme das Ende nie, etwa bei 70 % in einem kalten Bad.
 
 Ems:
 

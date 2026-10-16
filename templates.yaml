@@ -39,6 +39,23 @@
         {% set rh = states('sensor.ems_rh_wand') | float %}
         {% if rh < 70 %}Sicher{% elif rh < 80 %}Erhöht{% else %}Kritisch{% endif %}
 
+    # Wasser in g/m³. Bleibt beim Aufheizen gleich, sinkt nur durch echtes Trocknen.
+    # 11 g/m³ entsprechen 60 % bei 21°.
+    - unique_id: bad_absolute_feuchte
+      default_entity_id: sensor.bad_absolute_feuchte
+      name: Bad absolute Feuchte
+      unit_of_measurement: "g/m³"
+      state_class: measurement
+      icon: mdi:water
+      availability: >
+        {{ states('sensor.bad_sensor_env_temperature') | is_number
+           and states('sensor.bad_sensor_env_humidity') | is_number }}
+      state: >
+        {% set t = states('sensor.bad_sensor_env_temperature') | float %}
+        {% set rh = states('sensor.bad_sensor_env_humidity') | float %}
+        {% set es = 6.112 * e ** ((17.67 * t) / (t + 243.5)) %}
+        {{ (216.7 * es * rh / 100 / (273.15 + t)) | round(1) }}
+
 # Leon Heizung: Raum-Soll und ob das Fenster das Ventil ausgeschaltet hat.
 # Gesetzt nur über das Event leon_heizung (Skript leon_heizung_soll und
 # Automation "Leon - Heizung"). Bleibt über Neustarts erhalten.

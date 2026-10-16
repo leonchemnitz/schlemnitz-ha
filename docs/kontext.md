@@ -83,7 +83,7 @@ Die Gerätesperre (`switch.leon_thermostat_child_lock`) bleibt aus. Ein Aus am V
 
 Wohnzimmer und Bad seit 16. Oktober 2026 dasselbe Muster. Ventile `climate.wohnzimmer_thermostat` und `climate.bad_thermostat`, Fenster `binary_sensor.wohnzimmer_fenstersensor_contact` und `binary_sensor.bad_fenstersensor_contact`, Raumfühler `sensor.wohnzimmer_sensor_env_temperature` und `sensor.bad_sensor_env_temperature`. Karten `climate.wohnzimmer_heizung` und `climate.bad_heizung`, Name „Heizung“, im jeweiligen Popup. Geräte liegen in den Bereichen Wohnzimmer und Bad. Zeitpläne wie bei Leon: `switch.schedule_wohnzimmer_04_00` und `switch.schedule_bad_04_00` täglich 04:00 auf 21°, `switch.schedule_wohnzimmer_20_00` und `switch.schedule_bad_20_00` täglich 20:00 auf 19,5°. Die Bad-Zeitpläne übergeben `zeitplan: true`.
 
-Bad - Wäsche trocknen (`bad_waesche_trocknen`): über 70 % Feuchte (5 Minuten) auf 25°, unter 60 % (5 Minuten) zurück auf den Zeitplanwert, ohne Wert 21°. Zustand in `sensor.bad_heizung_soll`, Attribute `trocknen` und `zeitplan_soll`.
+Bad - Wäsche trocknen (`bad_waesche_trocknen`): über 70 % Feuchte (und über 11 g/m³) sofort auf 25°, unter 11 g/m³ absoluter Feuchte (`sensor.bad_absolute_feuchte`) sofort zurück auf den Zeitplanwert, ohne Wert 21°. Zustand in `sensor.bad_heizung_soll`, Attribute `trocknen` und `zeitplan_soll`.
 
 Ems seit 16. Oktober 2026 dasselbe Muster. Ventil `climate.ems_thermostat`, Fenster `binary_sensor.ems_fenstersensor_contact`, Raumfühler ist der Luftreiniger `sensor.zhimi_mb5_c00e_temperature`. Karte `climate.ems_heizung`, Name „Heizung“. Zeitpläne `switch.schedule_ems_04_00` (04:00 auf 21°) und `switch.schedule_ems_20_00` (20:00 auf 19,5°). Gerät im Bereich Ems. Details in `docs/heizung.md`.
 
