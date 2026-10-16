@@ -528,11 +528,28 @@
   - condition: template
     value_template: '{{ states(''sensor.leon_temperatur'') | is_number }}'
   actions:
+  - variables:
+      raum: '{{ states(''sensor.leon_temperatur'') | float | round(1) }}'
+  # Dieselbe Zahl schickt Zigbee2MQTT nicht erneut. Ohne neue Meldung fällt das
+  # Ventil nach zwei Stunden auf den Gehäusefühler zurück.
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ (states(''number.leon_thermostat_external_temperature_input'')
+          | float(-99)) | round(1) == raum | float }}'
+      sequence:
+      - action: number.set_value
+        target:
+          entity_id: number.leon_thermostat_external_temperature_input
+        data:
+          value: '{{ (raum | float + 0.1) | round(1) }}'
+      - delay:
+          seconds: 2
   - action: number.set_value
     target:
       entity_id: number.leon_thermostat_external_temperature_input
     data:
-      value: '{{ states(''sensor.leon_temperatur'') | float | round(1) }}'
+      value: '{{ raum }}'
   - condition: template
     value_template: '{{ states(''select.leon_thermostat_temperature_sensor_select'')
       != ''remote_temperature'' }}'
