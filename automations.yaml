@@ -952,12 +952,12 @@
   max: 10
 - id: bad_waesche_trocknen
   alias: Bad - Wäsche trocknen
-  description: Über 70 % Feuchte heizt das Bad auf 25°. Fällt die absolute Feuchte unter
+  description: Über 68 % Feuchte heizt das Bad auf 25°. Fällt die absolute Feuchte unter
     11 g/m³ (60 % bei 21°), gilt wieder der Wert des Zeitplans, ohne Zeitplanwert 21°.
   triggers:
   - trigger: numeric_state
     entity_id: sensor.bad_sensor_env_humidity
-    above: 70
+    above: 68
     id: feucht
   - trigger: numeric_state
     entity_id: sensor.bad_absolute_feuchte
@@ -975,7 +975,7 @@
         id: feucht
       - condition: numeric_state
         entity_id: sensor.bad_sensor_env_humidity
-        above: 70
+        above: 68
       - condition: numeric_state
         entity_id: sensor.bad_absolute_feuchte
         above: 11
