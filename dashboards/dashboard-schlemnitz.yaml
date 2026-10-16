@@ -208,20 +208,6 @@ views:
                   bottom: []
                 entity: climate.ems_heizung
               - type: custom:bubble-card
-                card_type: separator
-                name: ''
-                icon: ''
-                sub_button:
-                  main: []
-                  bottom: []
-                rows: '0.4'
-              - type: custom:bubble-card
-                card_type: media-player
-                sub_button:
-                  main: []
-                  bottom: []
-                entity: media_player.ems_tv
-              - type: custom:bubble-card
                 card_type: button
                 button_type: switch
                 sub_button:
@@ -253,6 +239,20 @@ views:
                 show_state: true
                 slider_fill_orientation: left
                 slider_value_position: right
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: media-player
+                sub_button:
+                  main: []
+                  bottom: []
+                entity: media_player.ems_tv
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
