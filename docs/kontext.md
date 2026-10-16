@@ -69,7 +69,7 @@ Temperatur steht im Popup-Kopf, Feuchte als Sub-Button daneben.
 
 Aufbau, Einstellungen, gefundene Fehler und Checkliste für weitere Räume: `docs/heizung.md`.
 
-Ohne Better Thermostat seit 15. Oktober 2026. Sonoff TRVZB `climate.leon_thermostat` regelt selbst nach dem Raumfühler `sensor.leon_temperatur` (Gruppe um `sensor.leon_sensor_env_temperature`), den „Leon - TRV follower“ an `number.leon_thermostat_external_temperature_input` schreibt. `number.leon_thermostat_local_temperature_calibration` bleibt 0.
+Ohne Better Thermostat seit 15. Oktober 2026. Sonoff TRVZB `climate.leon_thermostat` regelt nach dem Raumfühler `sensor.leon_temperatur` (Gruppe um `sensor.leon_sensor_env_temperature`), den „Leon - TRV follower“ an `number.leon_thermostat_external_temperature_input` schreibt, bei Änderung und alle 30 Minuten. Sonst fällt das Ventil nach zwei Stunden auf den Gehäusefühler zurück. `number.leon_thermostat_local_temperature_calibration` bleibt 0.
 
 Raum-Soll: `sensor.leon_heizung_soll` (Template, Attribut `fenster_aus`), gesetzt über `script.leon_heizung_soll` (Feld `temperatur`). Die Automation „Leon - Heizung“ (`leon_heizung`) hält ihn und das Ventil-Soll gleich, schaltet bei offenem Fenster (`binary_sensor.leon_fenstersensor_contact`) aus und danach wieder auf Heizen.
 

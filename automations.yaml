@@ -507,7 +507,9 @@
   max: 50
 - id: '1770107769590'
   alias: Leon - TRV follower
-  description: Sendet die Env-Temperatur als externen Eingang an das TRV
+  description: Sendet die Raumtemperatur an den externen Eingang des TRV. Alle 30 Minuten
+    auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
+    Fühler.
   triggers:
   - entity_id: sensor.leon_temperatur
     for:
@@ -515,6 +517,13 @@
       minutes: 0
       seconds: 1
     trigger: state
+  - trigger: time_pattern
+    minutes: /30
+  - trigger: state
+    entity_id: select.leon_thermostat_temperature_sensor_select
+    to:
+    - remote_source_offline
+    - local_temperature
   conditions:
   - condition: template
     value_template: '{{ states(''sensor.leon_temperatur'') | is_number }}'
@@ -524,6 +533,14 @@
       entity_id: number.leon_thermostat_external_temperature_input
     data:
       value: '{{ states(''sensor.leon_temperatur'') | float | round(1) }}'
+  - condition: template
+    value_template: '{{ states(''select.leon_thermostat_temperature_sensor_select'')
+      != ''remote_temperature'' }}'
+  - action: select.select_option
+    target:
+      entity_id: select.leon_thermostat_temperature_sensor_select
+    data:
+      option: remote_temperature
   mode: single
 - id: leon_heizung
   alias: Leon - Heizung

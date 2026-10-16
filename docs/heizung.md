@@ -33,7 +33,7 @@ Leon:
 
 `automations.yaml`:
 
-- „Leon - TRV follower“: schreibt `sensor.leon_temperatur` an `number.leon_thermostat_external_temperature_input`, nur wenn der Fühler eine Zahl liefert. Ohne neue Werte fällt das Ventil nach etwa zwei Stunden auf den eigenen Fühler zurück (`remote_source_offline`).
+- „Leon - TRV follower“: schreibt `sensor.leon_temperatur` an `number.leon_thermostat_external_temperature_input`, nur wenn der Fühler eine Zahl liefert. Zusätzlich alle 30 Minuten, auch wenn sich der Wert nicht ändert. Ohne neue Meldung fällt das Ventil nach zwei Stunden auf den eigenen Fühler zurück (`remote_source_offline`) und regelt dann nach `sensor.leon_thermostat_local_temperature`. Die Automation stellt danach `select.leon_thermostat_temperature_sensor_select` wieder auf `remote_temperature` und schickt die Raumtemperatur erneut.
 - „Leon - Heizung“ (`leon_heizung`):
   - Fenster auf (`on`) und Ventil nicht aus: merkt `fenster_aus`, schaltet das Ventil aus.
   - Fenster zu (`off`) und `fenster_aus` gesetzt: löscht es, schaltet auf Heizen. Ein Aus, das schon vor dem Öffnen galt, bleibt Aus.
@@ -80,9 +80,11 @@ Mit der Kindersicherung von Better Thermostat galt jede Änderung am Ventil als 
 
 Bei vielen HA-Neustarts hintereinander fiel das Ventil auf Aus, und Better Thermostat übernahm das. Im Modus Aus schickte es keine Solltemperatur ans Ventil, die Zeitpläne liefen ins Leere. Jetzt: Fällt das Ventil auf Aus, bleibt es aus, bis jemand Heizen wählt. Dann bekommt es sofort das aktuelle Raum-Soll.
 
-### 5. `temperature_sensor_select` zeigt `unknown`
+### 5. Ventil fällt auf den eigenen Fühler zurück
 
-Das Ventil meldet `external_3`. Zigbee2MQTT 2.14 kennt nur noch `local_temperature`, `remote_temperature`, `remote_source_offline`. `external_3` bedeutet: externer Fühler ist wieder da, das Ventil nutzt ihn. HA zeigt deshalb `unknown`. Kein Fehler in der Regelung.
+`select.leon_thermostat_temperature_sensor_select` = `remote_temperature` heißt: das Ventil regelt nach dem Raumfühler. `remote_source_offline` heißt: zwei Stunden keine neue Meldung, das Ventil nutzt den Fühler im Gehäuse. Der sitzt am Heizkörper und liegt über der Raumtemperatur. Am 16. Oktober 2026 stand der Raum auf 21°, der Gehäusefühler auf 22,5°. Soll 22° hat nichts geöffnet, Soll 23° schon.
+
+`temperature_accuracy` ist −0,2°. Damit öffnet das Ventil, sobald die gemessene Temperatur mindestens 0,2° unter dem Soll liegt, und schließt, wenn sie den Soll erreicht. Die Spanne von 1° kam nicht daher, sondern vom Gehäusefühler.
 
 ### 6. Soll flattert um 0,5° (Better Thermostat)
 
