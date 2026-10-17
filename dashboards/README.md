@@ -27,6 +27,8 @@ Hue-style light screen (every color light and every room group in the room
 pop-ups): the Bubble button keeps its look, its icon tap is `fire-dom-event` with
 `hue_licht: <light entity>`. For a room, `hue_licht` is a list of all lights
 and `hue_gruppe` the group light. On/off-only lights keep their toggle tap.
+`hue_live: true` sends color and brightness while dragging, every 300 ms
+(test: Ems Kugelständer).
 `www/hue-licht.js` (Lovelace resource `/local/hue-licht.js?v=N`, module)
 opens the light detail of Hue-like Light Card directly, without its overview.
 It uses card internals of v1.11, so check it after a HACS update. Bump `?v=`
