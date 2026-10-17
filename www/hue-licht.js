@@ -8,7 +8,7 @@
 //     hue_licht: [light.a, light.b]
 //     hue_gruppe: light.ab
 // hue_live: true sends color and brightness while dragging (every LIVE_MS),
-// not only on release.
+// not only on release, with a short transition (LIVE_TRANSITION_S).
 // Relies on internals of Hue-like Light Card v1.11 (api(), _ctrl, hue-dialog,
 // _lightDetailElement, hue-dialog-tile-light.tileClicked, clearSelectedLights,
 // onDialogClose, _colorPicker, _brightnessRollup, onColorChanged).
@@ -32,6 +32,26 @@ async function waitFor(fn, timeoutMs = 3000) {
 
 // Zigbee drops commands when flooded, so keep this at a few per second.
 const LIVE_MS = 200;
+// Slightly longer than LIVE_MS, so the light is still fading when the next
+// value arrives and never stops between steps.
+const LIVE_TRANSITION_S = 0.3;
+
+function withTransition(hass) {
+  return {
+    ...hass,
+    callService: (domain, service, data, ...rest) => {
+      const isLevel =
+        data &&
+        ["brightness", "color_temp_kelvin", "hs_color", "rgb_color", "xy_color"].some(
+          (k) => data[k] !== undefined
+        );
+      if (domain === "light" && service === "turn_on" && isLevel && data.transition === undefined) {
+        data = { ...data, transition: LIVE_TRANSITION_S };
+      }
+      return hass.callService(domain, service, data, ...rest);
+    },
+  };
+}
 
 function throttle(fn, ms) {
   let last = 0;
@@ -88,7 +108,8 @@ async function openLight(lights, group, live) {
         ? { entities: lights, groupEntity: group, scenes: [] }
         : { entity: lights[0], scenes: [] }
     );
-    card.hass = ha.hass;
+    const hassFor = (h) => (live ? withTransition(h) : h);
+    card.hass = hassFor(ha.hass);
     card.style.display = "none";
     document.body.appendChild(card);
     await card.updateComplete;
@@ -109,7 +130,7 @@ async function openLight(lights, group, live) {
       }
       if (ha.hass !== lastHass) {
         lastHass = ha.hass;
-        card.hass = lastHass;
+        card.hass = hassFor(lastHass);
       }
     }, 250);
 
