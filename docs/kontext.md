@@ -87,6 +87,16 @@ Bad - Wäsche trocknen (`bad_waesche_trocknen`): über 68 % Feuchte (und über 1
 
 Ems seit 16. Oktober 2026 dasselbe Muster. Ventil `climate.ems_thermostat`, Fenster `binary_sensor.ems_fenstersensor_contact`, Raumfühler ist der Luftreiniger `sensor.zhimi_mb5_c00e_temperature`. Karte `climate.ems_heizung`, Name „Heizung“. Zeitpläne `switch.schedule_ems_04_00` (04:00 auf 21°) und `switch.schedule_ems_20_00` (20:00 auf 19,5°). Gerät im Bereich Ems. Details in `docs/heizung.md`.
 
+## Naddel
+
+Assist-Pipeline „Naddel“ (`01kgg5hg4rtrztgqyah5k7q169`), Agent „Google AI Conversation“ der Integration Google Generative AI (Eintrag `01KGG555YV29BXK9GNY9QMVNTY`, Subentry `01KGG555YVXVJXY7DFDBT9ZP89`), empfohlene Modelleinstellungen.
+
+Der Prompt steht in `custom_templates/naddel.jinja`. In den Anweisungen des Agenten steht nur `{% from 'naddel.jinja' import naddel_prompt %}{{ naddel_prompt(user_name) }}`. Eine Änderung an der Datei lädt `ha-push` über `homeassistant.reload_custom_templates`. Der Prompt wird bei jeder Anfrage neu gerendert. `user_name` ist der angemeldete HA-Benutzer und bei Sprachsatelliten leer.
+
+Personen: `person.leon`, `person.ems`, `person.kitty`, `person.andi`, `person.dustin`, `person.sisi`, jeweils mit eigenem HA-Benutzer. Benutzer und Bereich mit gleichem Namen (Leon, EMS/Ems) gelten im Prompt als „mein Zimmer“.
+
+Chatkarte `custom:naddel-chat-card` aus `www/naddel-chat.js`, im Popup `#naddel` auf der Startseite unter dem Tageszeit-Select.
+
 ## Offen
 
 - SigNoz ist nicht installiert. Plan und Vorschläge stehen in `docs/signoz.md`. Leon hat die Defaults noch nicht angenommen. Dafür HA nicht anfassen.
