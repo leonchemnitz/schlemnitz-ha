@@ -255,6 +255,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.ems_decke
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.ems_decke
                     show_state: false
                     sub_button:
                       main: []
@@ -268,6 +271,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.ems_kugelstaender
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.ems_kugelstaender
                     show_state: false
                     sub_button:
                       main: []
@@ -281,6 +287,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.ems_diskokugel_spot
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.ems_diskokugel_spot
                     show_state: false
                     sub_button:
                       main: []
@@ -297,6 +306,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.ems_heizung
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.ems_heizung
                     show_state: false
                     sub_button:
                       main: []
@@ -327,6 +339,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.ems_saeule
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.ems_saeule
                     show_state: false
                     sub_button:
                       main: []
@@ -409,6 +424,18 @@ views:
                 slider_fill_orientation: left
                 slider_value_position: right
                 entity: light.ems_lichter
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht:
+                    - light.ems_decke
+                    - light.ems_kugelstaender
+                    - light.ems_diskokugel_spot
+                    - light.ems_heizung
+                    - light.ems_sonnenlampe
+                    - light.ems_saeule
+                    - light.ems_lichterkette
+                    - light.ems_projektor
+                  hue_gruppe: light.ems_lichter
                 light_slider_type: brightness
           - type: custom:bubble-card
             card_type: pop-up
@@ -849,6 +876,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.leon_decke
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.leon_decke
                     show_state: false
                     sub_button:
                       main: []
@@ -866,6 +896,9 @@ views:
                       main: []
                       bottom: []
                     entity: light.leon_regal
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.leon_regal
                     name: Regal
                     icon: mdi:dresser
               - type: horizontal-stack
@@ -874,6 +907,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.leon_palme
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.leon_palme
                     show_state: false
                     sub_button:
                       main: []
@@ -903,6 +939,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.leon_bild
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.leon_bild
                     show_state: false
                     sub_button:
                       main: []
@@ -929,6 +968,15 @@ views:
                   main: []
                   bottom: []
                 entity: light.leon_alle_lichter
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht:
+                    - light.leon_decke
+                    - light.leon_regal
+                    - light.leon_palme
+                    - light.leon_lavalampen
+                    - light.leon_bild
+                  hue_gruppe: light.leon_alle_lichter
                 name: Alle Lichter
           - type: custom:bubble-card
             card_type: pop-up
@@ -1080,6 +1128,9 @@ views:
                     scrolling_effect: false
                     icon: mdi:ceiling-light
                     entity: light.bad_decke
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.bad_decke
                     slider_fill_orientation: left
                     slider_value_position: right
                     light_slider_type: brightness
@@ -1089,6 +1140,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.bad_spiegel_2
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.bad_spiegel_2
                     show_state: false
                     sub_button:
                       main: []
@@ -1104,6 +1158,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.bad_spiegel_1
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.bad_spiegel_1
                     name: Spiegel R
                     icon: mdi:mirror-rectangle
                     show_state: false
@@ -1129,6 +1186,13 @@ views:
                 slider_fill_orientation: left
                 slider_value_position: right
                 entity: light.bad_lichter
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht:
+                    - light.bad_decke
+                    - light.bad_spiegel_2
+                    - light.bad_spiegel_1
+                  hue_gruppe: light.bad_lichter
                 light_slider_type: brightness
                 name: Alle Lichter
                 scrolling_effect: false
@@ -1258,6 +1322,9 @@ views:
                     scrolling_effect: false
                     icon: mdi:ceiling-light
                     entity: light.kueche_decke
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.kueche_decke
                     slider_fill_orientation: left
                     slider_value_position: right
                     light_slider_type: brightness
@@ -1267,6 +1334,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.kueche_arbeitsflaeche
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.kueche_arbeitsflaeche
                     show_state: false
                     sub_button:
                       main: []
@@ -1295,6 +1365,9 @@ views:
                     slider_value_position: right
                     light_slider_type: brightness
                     entity: light.kueche_konsole
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.kueche_konsole
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
@@ -1312,6 +1385,13 @@ views:
                 slider_fill_orientation: left
                 slider_value_position: right
                 entity: light.kueche_lichter
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht:
+                    - light.kueche_decke
+                    - light.kueche_arbeitsflaeche
+                    - light.kueche_konsole
+                  hue_gruppe: light.kueche_lichter
                 light_slider_type: brightness
                 name: Alle Lichter
                 scrolling_effect: false
@@ -1429,6 +1509,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.flur_decke_1
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.flur_decke_1
                     show_state: false
                     sub_button:
                       main: []
@@ -1444,6 +1527,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.flur_kommode
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.flur_kommode
                     name: Kommode
                     icon: mdi:dresser
                     show_state: false
@@ -1461,6 +1547,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.flur_kronenleuchter_1
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.flur_kronenleuchter_1
                     show_state: false
                     sub_button:
                       main: []
@@ -1476,6 +1565,9 @@ views:
                     card_type: button
                     button_type: slider
                     entity: light.flur_kronenleuchter_2
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.flur_kronenleuchter_2
                     name: KL 2
                     icon: mdi:chandelier
                     show_state: false
@@ -1496,6 +1588,9 @@ views:
                     slider_fill_orientation: left
                     slider_value_position: right
                     entity: light.flur_kronenleuchter_3
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.flur_kronenleuchter_3
                     light_slider_type: brightness
                     scrolling_effect: false
                     name: KL 3
@@ -1517,6 +1612,15 @@ views:
                 slider_fill_orientation: left
                 slider_value_position: right
                 entity: light.flur_alle_lichter
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht:
+                    - light.flur_decke_1
+                    - light.flur_kommode
+                    - light.flur_kronenleuchter_1
+                    - light.flur_kronenleuchter_2
+                    - light.flur_kronenleuchter_3
+                  hue_gruppe: light.flur_alle_lichter
                 light_slider_type: brightness
                 scrolling_effect: false
                 name: Alle Lichter
@@ -1643,6 +1747,9 @@ views:
                     scrolling_effect: false
                     icon: mdi:ceiling-light
                     entity: light.waschkueche_decke
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.waschkueche_decke
                     slider_fill_orientation: left
                     slider_value_position: right
                     light_slider_type: brightness
@@ -1663,6 +1770,9 @@ views:
                 slider_fill_orientation: left
                 slider_value_position: right
                 entity: light.waschkueche_decke
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht: light.waschkueche_decke
                 light_slider_type: brightness
                 name: Alle Lichter
                 scrolling_effect: false
