@@ -457,12 +457,13 @@ class NaddelChatCard extends HTMLElement {
 
   async _startListening() {
     if (this._busy) return;
+    // Without HTTPS the browser blocks getUserMedia, also in the Companion App. The keyboard's dictation still works.
     if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      this._add({
-        who: "hass",
-        error: true,
-        text: "Das Mikrofon geht nur über eine sichere Verbindung (HTTPS) oder in der Companion App.",
-      });
+      const { input } = this._els;
+      input.placeholder = "Mikrofon der Tastatur antippen und sprechen …";
+      input.focus();
+      clearTimeout(this._hintTimer);
+      this._hintTimer = setTimeout(() => (input.placeholder = `Frag ${this._config.name} …`), 8000);
       return;
     }
     this._stopAudio();
