@@ -78,9 +78,13 @@ async function openLight(lights, group) {
     await tile.updateComplete;
 
     // Leaving the detail screen closes the whole dialog instead of showing the overview.
+    // onDialogClose also steps back in history, so it must run only once.
     const clear = dialog.clearSelectedLights.bind(dialog);
+    let closing = false;
     dialog.clearSelectedLights = () => {
       clear();
+      if (closing) return;
+      closing = true;
       setTimeout(() => dialog.onDialogClose(), 0);
     };
     if (several) {
