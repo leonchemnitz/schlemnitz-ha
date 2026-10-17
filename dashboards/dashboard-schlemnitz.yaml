@@ -44,6 +44,7 @@ views:
             icon: mdi:robot-happy-outline
             hash: '#naddel'
             show_state: false
+            show_name: true
             sub_button:
               main: []
               bottom: []

@@ -376,8 +376,10 @@ class NaddelChatCard extends HTMLElement {
           const speech = out.response && out.response.speech && out.response.speech.plain
             ? out.response.speech.plain.speech
             : "";
-          if (speech) reply.text = speech;
-          if (out.response && out.response.response_type === "error") reply.error = true;
+          const isError = out.response && out.response.response_type === "error";
+          // The final speech is stripped of Markdown, so the streamed text wins.
+          if (speech && (isError || !reply.text.trim())) reply.text = speech;
+          if (isError) reply.error = true;
           reply.pending = false;
           update();
           this._save();
