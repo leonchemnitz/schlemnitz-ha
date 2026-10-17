@@ -23,6 +23,38 @@ views:
             attribute: editable
             show_state: true
           - type: custom:bubble-card
+            card_type: button
+            button_type: name
+            name: Naddel
+            icon: mdi:robot-happy-outline
+            show_state: false
+            sub_button:
+              main: []
+              bottom: []
+            tap_action:
+              action: navigate
+              navigation_path: '#naddel'
+            button_action:
+              tap_action:
+                action: navigate
+                navigation_path: '#naddel'
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Naddel
+            icon: mdi:robot-happy-outline
+            hash: '#naddel'
+            show_state: false
+            sub_button:
+              main: []
+              bottom: []
+            grid_options:
+              rows: auto
+            cards:
+              - type: custom:naddel-chat-card
+                name: Naddel
+                pipeline_id: 01kgg5hg4rtrztgqyah5k7q169
+                height: 65vh
+          - type: custom:bubble-card
             card_type: horizontal-buttons-stack
             1_link: '#ems'
             1_name: Ems
