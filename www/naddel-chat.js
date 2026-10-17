@@ -180,6 +180,14 @@ class NaddelChatCard extends HTMLElement {
     };
     const { input, send, mic, speak, newBtn } = this._els;
     input.addEventListener("input", () => this._autosize());
+    input.addEventListener("focus", () => {
+      this._hideStacks(true);
+      this._watchKeyboard(true);
+    });
+    input.addEventListener("blur", () => {
+      this._hideStacks(false);
+      this._watchKeyboard(false);
+    });
     input.addEventListener("keydown", (ev) => {
       if (ev.key === "Enter" && !ev.shiftKey && !ev.isComposing) {
         ev.preventDefault();
@@ -554,8 +562,44 @@ class NaddelChatCard extends HTMLElement {
     this._renderBar();
   }
 
+  // The fixed Bubble Card room bar sits right above the on-screen keyboard and covers the input.
+  _hideStacks(hide) {
+    if (!hide) {
+      for (const el of this._hiddenStacks || []) el.style.removeProperty("display");
+      this._hiddenStacks = [];
+      return;
+    }
+    const found = [];
+    const walk = (root) => {
+      for (const el of root.querySelectorAll("*")) {
+        if (el.classList.contains("horizontal-buttons-stack-card")) found.push(el);
+        if (el.shadowRoot) walk(el.shadowRoot);
+      }
+    };
+    walk(document);
+    for (const el of found) el.style.setProperty("display", "none", "important");
+    this._hiddenStacks = found;
+  }
+
+  // Android's back button closes the keyboard but keeps the focus, so blur once the viewport grows back.
+  _watchKeyboard(on) {
+    const vv = window.visualViewport;
+    if (this._vvListener) vv.removeEventListener("resize", this._vvListener);
+    this._vvListener = null;
+    if (!on || !vv) return;
+    const base = vv.height;
+    let opened = false;
+    this._vvListener = () => {
+      if (vv.height < base * 0.8) opened = true;
+      else if (opened && vv.height > base * 0.95) this._els.input.blur();
+    };
+    vv.addEventListener("resize", this._vvListener);
+  }
+
   disconnectedCallback() {
     if (this._rec) this._stopListening();
+    this._hideStacks(false);
+    this._watchKeyboard(false);
   }
 }
 
