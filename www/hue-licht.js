@@ -31,7 +31,7 @@ async function waitFor(fn, timeoutMs = 3000) {
 }
 
 // Zigbee drops commands when flooded, so keep this at a few per second.
-const LIVE_MS = 300;
+const LIVE_MS = 200;
 
 function throttle(fn, ms) {
   let last = 0;
