@@ -28,8 +28,8 @@ pop-ups): the Bubble button keeps its look, its icon tap is `fire-dom-event` wit
 `hue_licht: <light entity>`. For a room, `hue_licht` is a list of all lights
 and `hue_gruppe` the group light. On/off-only lights keep their toggle tap.
 `hue_live: true` sends color and brightness while dragging, every 200 ms with
-a 0.3 s transition
-(test: Ems Kugelständer).
+a 0.3 s transition. Set on every Hue button. Group brightness steps every
+200 ms per 3 lights (4-6 lights: 400 ms) to keep Zigbee from dropping commands.
 `www/hue-licht.js` (Lovelace resource `/local/hue-licht.js?v=N`, module)
 opens the light detail of Hue-like Light Card directly, without its overview.
 It uses card internals of v1.11, so check it after a HACS update. Bump `?v=`

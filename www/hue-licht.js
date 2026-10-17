@@ -35,6 +35,8 @@ const LIVE_MS = 200;
 // Slightly longer than LIVE_MS, so the light is still fading when the next
 // value arrives and never stops between steps.
 const LIVE_TRANSITION_S = 0.3;
+// Group brightness: lights per LIVE_MS step, more lights stretch the interval.
+const LIGHTS_PER_STEP = 3;
 
 function withTransition(hass) {
   return {
@@ -53,13 +55,14 @@ function withTransition(hass) {
   };
 }
 
+// ms is a number or a function returning the current interval.
 function throttle(fn, ms) {
   let last = 0;
   let timer = null;
   let args = null;
   return (...a) => {
     args = a;
-    const wait = last + ms - Date.now();
+    const wait = last + (typeof ms === "function" ? ms() : ms) - Date.now();
     if (wait <= 0) {
       last = Date.now();
       fn(...args);
@@ -101,18 +104,22 @@ async function enableLive(detail) {
 
   let start = null;
   let lastSent = null;
+  // Every light is its own Zigbee command, so groups get a longer interval.
+  const groupMs = () =>
+    LIVE_MS * Math.max(1, Math.ceil((start ? start.lights.length : 1) / LIGHTS_PER_STEP));
   const sendBrightness = throttle(() => {
     if (!dragging() || !start || rollup.immediateValue === lastSent) return;
     lastSent = rollup.immediateValue;
     const hass = document.querySelector("home-assistant").hass;
+    const transition = LIVE_TRANSITION_S + (groupMs() - LIVE_MS) / 1000;
     for (const [entity_id, b] of brightnessTargets(start, rollup.immediateValue)) {
       hass.callService("light", "turn_on", {
         entity_id,
         brightness: Math.round((b / 100) * 255),
-        transition: LIVE_TRANSITION_S,
+        transition,
       });
     }
-  }, LIVE_MS);
+  }, groupMs);
   const reset = () => {
     start = null;
     lastSent = null;
