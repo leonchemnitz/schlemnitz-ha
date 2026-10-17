@@ -23,8 +23,8 @@ Frontend cards used here are installed with HACS and are not in git
 (`www/community/`): Bubble Card, Card Mod, Hue-like Light Card, Mushroom,
 Scheduler Card, Universal Remote Card.
 
-Hue-style light screen (Wohnzimmer: Decke, Bar, Revolver, Alle Lichter): the
-Bubble button keeps its look, its icon tap is `fire-dom-event` with
+Hue-style light screen (every color light and every room group in the room
+pop-ups): the Bubble button keeps its look, its icon tap is `fire-dom-event` with
 `hue_licht: <light entity>`. For a room, `hue_licht` is a list of all lights
 and `hue_gruppe` the group light. On/off-only lights keep their toggle tap.
 `www/hue-licht.js` (Lovelace resource `/local/hue-licht.js?v=N`, module)
