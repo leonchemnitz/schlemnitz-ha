@@ -274,6 +274,7 @@ views:
                     tap_action:
                       action: fire-dom-event
                       hue_licht: light.ems_kugelstaender
+                      hue_live: true
                     show_state: false
                     sub_button:
                       main: []

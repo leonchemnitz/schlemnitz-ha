@@ -7,9 +7,12 @@
 // wheel. hue_gruppe is the group light used for the on/off switch:
 //     hue_licht: [light.a, light.b]
 //     hue_gruppe: light.ab
+// hue_live: true sends color and brightness while dragging (every LIVE_MS),
+// not only on release.
 // Relies on internals of Hue-like Light Card v1.11 (api(), _ctrl, hue-dialog,
 // _lightDetailElement, hue-dialog-tile-light.tileClicked, clearSelectedLights,
-// onDialogClose). Check after HACS updates.
+// onDialogClose, _colorPicker, _brightnessRollup, onColorChanged).
+// Check after HACS updates.
 
 const CARD_TAG = "hue-like-light-card";
 const DIALOG_TAG = "hue-dialog";
@@ -27,9 +30,48 @@ async function waitFor(fn, timeoutMs = 3000) {
   return null;
 }
 
+// Zigbee drops commands when flooded, so keep this at a few per second.
+const LIVE_MS = 300;
+
+function throttle(fn, ms) {
+  let last = 0;
+  let timer = null;
+  let args = null;
+  return (...a) => {
+    args = a;
+    const wait = last + ms - Date.now();
+    if (wait <= 0) {
+      last = Date.now();
+      fn(...args);
+    } else if (!timer) {
+      timer = setTimeout(() => {
+        timer = null;
+        last = Date.now();
+        fn(...args);
+      }, wait);
+    }
+  };
+}
+
+async function enableLive(detail) {
+  await detail.updateComplete;
+  const ready = await waitFor(() => detail._colorPicker && detail._brightnessRollup);
+  if (!ready) return;
+  const picker = detail._colorPicker;
+  const rollup = detail._brightnessRollup;
+  picker.addEventListener(
+    "immediate-value-change",
+    throttle((ev) => detail.onColorChanged(ev), LIVE_MS)
+  );
+  rollup.addEventListener(
+    "immediate-value-change",
+    throttle(() => rollup.setValue(rollup.immediateValue, true), LIVE_MS)
+  );
+}
+
 let busy = false;
 
-async function openLight(lights, group) {
+async function openLight(lights, group, live) {
   if (busy) return;
   busy = true;
   let card = null;
@@ -87,6 +129,7 @@ async function openLight(lights, group) {
       closing = true;
       setTimeout(() => dialog.onDialogClose(), 0);
     };
+    if (live) await enableLive(detail);
     if (several) {
       dialog.setSelectedLights(...card._ctrl.getLights());
       detail.lightContainer = card._ctrl;
@@ -107,5 +150,5 @@ window.addEventListener("ll-custom", (ev) => {
   const d = ev.detail || {};
   if (!d.hue_licht) return;
   const lights = Array.isArray(d.hue_licht) ? d.hue_licht : [d.hue_licht];
-  openLight(lights, d.hue_gruppe);
+  openLight(lights, d.hue_gruppe, d.hue_live === true);
 });
