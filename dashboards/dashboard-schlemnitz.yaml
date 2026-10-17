@@ -567,20 +567,14 @@ views:
                 rows: '0.4'
               - type: horizontal-stack
                 cards:
-                  - type: custom:bubble-card
-                    card_type: button
-                    button_type: slider
+                  - type: custom:hue-like-light-card
                     entity: light.wohnzimmer_decke
-                    show_state: false
-                    sub_button:
-                      main: []
-                      bottom: []
-                    slider_fill_orientation: left
-                    slider_value_position: right
-                    light_slider_type: brightness
-                    name: Decke
+                    title: Decke
                     icon: mdi:ceiling-light
-                    scrolling_effect: false
+                    scenes:
+                      - scene.wohnzimmer_hell
+                      - scene.wohnzimmer_chillo
+                      - scene.wohnzimmer_ciao
                   - type: custom:bubble-card
                     card_type: button
                     button_type: slider

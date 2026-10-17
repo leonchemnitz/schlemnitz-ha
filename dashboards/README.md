@@ -20,5 +20,8 @@ folder: Übersicht (`/lovelace`, original-states) and Karte (`/map`).
 | Zeitsteuerung | `/dashboard-zeitsteuerung` | shown | `mdi:calendar-clock` | `dashboard-zeitsteuerung.yaml` | 1 |
 
 Frontend cards used here are installed with HACS and are not in git
-(`www/community/`): Bubble Card, Card Mod, Mushroom, Scheduler Card,
-Universal Remote Card.
+(`www/community/`): Bubble Card, Card Mod, Hue-like Light Card, Mushroom,
+Scheduler Card, Universal Remote Card.
+
+Wohnzimmer Decke is a Hue-like Light Card (test). A tap opens its Hue-style
+screen with scenes, color and color temperature.
