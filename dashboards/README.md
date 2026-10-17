@@ -23,5 +23,9 @@ Frontend cards used here are installed with HACS and are not in git
 (`www/community/`): Bubble Card, Card Mod, Hue-like Light Card, Mushroom,
 Scheduler Card, Universal Remote Card.
 
-Wohnzimmer Decke is a Hue-like Light Card (test). A tap opens its Hue-style
-screen with scenes, color and color temperature.
+Hue-style light screen (test on Wohnzimmer Decke): the Bubble button keeps its
+look, its icon tap is `fire-dom-event` with `hue_licht: <light entity>`.
+`www/hue-licht.js` (Lovelace resource `/local/hue-licht.js?v=N`, module)
+opens the light detail of Hue-like Light Card directly, without its overview.
+It uses card internals of v1.11, so check it after a HACS update. Bump `?v=`
+in the resource after editing the file.
