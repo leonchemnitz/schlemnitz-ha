@@ -598,6 +598,9 @@ views:
                     name: Bar
                     icon: mdi:glass-cocktail
                     scrolling_effect: false
+                    tap_action:
+                      action: fire-dom-event
+                      hue_licht: light.wohnzimmer_bar
               - type: horizontal-stack
                 cards:
                   - type: custom:bubble-card
@@ -640,6 +643,9 @@ views:
                 slider_fill_orientation: left
                 slider_value_position: right
                 light_slider_type: brightness
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht: light.wohnzimmer_revolver
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
@@ -660,6 +666,15 @@ views:
                 light_slider_type: brightness
                 scrolling_effect: false
                 name: Alle Lichter
+                tap_action:
+                  action: fire-dom-event
+                  hue_licht:
+                    - light.wohnzimmer_decke
+                    - light.wohnzimmer_bar
+                    - light.wohnzimmer_revolver
+                    - light.wohnzimmer_kerzenstander
+                    - light.wohnzimmer_hinter_fernseher
+                  hue_gruppe: light.wohnzimmer_lichter
           - type: custom:bubble-card
             card_type: pop-up
             entity: sensor.leon_sensor_env_temperature

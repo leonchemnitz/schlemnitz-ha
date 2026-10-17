@@ -3,9 +3,13 @@
 //   tap_action:
 //     action: fire-dom-event
 //     hue_licht: light.wohnzimmer_decke
-// Relies on internals of Hue-like Light Card v1.11 (api(), hue-dialog,
-// hue-dialog-tile-light.tileClicked, clearSelectedLights, onDialogClose).
-// Check after HACS updates.
+// A list of lights opens all of them at once, one marker each on the color
+// wheel. hue_gruppe is the group light used for the on/off switch:
+//     hue_licht: [light.a, light.b]
+//     hue_gruppe: light.ab
+// Relies on internals of Hue-like Light Card v1.11 (api(), _ctrl, hue-dialog,
+// _lightDetailElement, hue-dialog-tile-light.tileClicked, clearSelectedLights,
+// onDialogClose). Check after HACS updates.
 
 const CARD_TAG = "hue-like-light-card";
 const DIALOG_TAG = "hue-dialog";
@@ -25,7 +29,7 @@ async function waitFor(fn, timeoutMs = 3000) {
 
 let busy = false;
 
-async function openLight(entity) {
+async function openLight(lights, group) {
   if (busy) return;
   busy = true;
   let card = null;
@@ -35,8 +39,13 @@ async function openLight(entity) {
     const ha = document.querySelector("home-assistant");
     if (!ha || !ha.hass) return;
 
+    const several = lights.length > 1;
     card = document.createElement(CARD_TAG);
-    card.setConfig({ entity, scenes: [] });
+    card.setConfig(
+      several
+        ? { entities: lights, groupEntity: group, scenes: [] }
+        : { entity: lights[0], scenes: [] }
+    );
     card.hass = ha.hass;
     card.style.display = "none";
     document.body.appendChild(card);
@@ -64,7 +73,8 @@ async function openLight(entity) {
 
     await dialog.updateComplete;
     const tile = await waitFor(() => dialog.renderRoot.querySelector(TILE_TAG));
-    if (!tile) return;
+    const detail = await waitFor(() => dialog._lightDetailElement);
+    if (!tile || !detail) return;
     await tile.updateComplete;
 
     // Leaving the detail screen closes the whole dialog instead of showing the overview.
@@ -73,7 +83,13 @@ async function openLight(entity) {
       clear();
       setTimeout(() => dialog.onDialogClose(), 0);
     };
-    tile.tileClicked();
+    if (several) {
+      dialog.setSelectedLights(...card._ctrl.getLights());
+      detail.lightContainer = card._ctrl;
+      detail.show();
+    } else {
+      tile.tileClicked();
+    }
   } catch (err) {
     console.error("[hue-licht]", err);
     if (timer) clearInterval(timer);
@@ -84,6 +100,8 @@ async function openLight(entity) {
 }
 
 window.addEventListener("ll-custom", (ev) => {
-  const entity = ev.detail && ev.detail.hue_licht;
-  if (entity) openLight(entity);
+  const d = ev.detail || {};
+  if (!d.hue_licht) return;
+  const lights = Array.isArray(d.hue_licht) ? d.hue_licht : [d.hue_licht];
+  openLight(lights, d.hue_gruppe);
 });
