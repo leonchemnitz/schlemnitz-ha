@@ -4,11 +4,12 @@
 //     action: fire-dom-event
 //     hue_licht: light.wohnzimmer_decke
 // Relies on internals of Hue-like Light Card v1.11 (api(), hue-dialog,
-// hue-dialog-tile.tileClicked, clearSelectedLights). Check after HACS updates.
+// hue-dialog-tile-light.tileClicked, clearSelectedLights, onDialogClose).
+// Check after HACS updates.
 
 const CARD_TAG = "hue-like-light-card";
 const DIALOG_TAG = "hue-dialog";
-const TILE_TAG = "hue-dialog-tile";
+const TILE_TAG = "hue-dialog-tile-light";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -70,7 +71,7 @@ async function openLight(entity) {
     const clear = dialog.clearSelectedLights.bind(dialog);
     dialog.clearSelectedLights = () => {
       clear();
-      setTimeout(() => dialog.close(), 0);
+      setTimeout(() => dialog.onDialogClose(), 0);
     };
     tile.tileClicked();
   } catch (err) {
