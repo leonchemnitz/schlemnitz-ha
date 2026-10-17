@@ -83,10 +83,80 @@ async function enableLive(detail) {
     "immediate-value-change",
     throttle((ev) => detail.onColorChanged(ev), LIVE_MS)
   );
-  rollup.addEventListener(
-    "immediate-value-change",
-    throttle(() => rollup.setValue(rollup.immediateValue, true), LIVE_MS)
-  );
+
+  // The rollup computes drag values as value + drag distance. Changing value
+  // mid-drag (by us or by state updates from the fading light) compounds the
+  // distance, so value stays frozen until release and live brightness is sent
+  // straight to HA. On release the card applies the final value as usual.
+  const dragging = () => rollup._isMouseDown && rollup._hasMouseMoved;
+  Object.defineProperty(rollup, "value", {
+    configurable: true,
+    get() {
+      return this._value;
+    },
+    set(v) {
+      if (!dragging()) this.setValue(v, false);
+    },
+  });
+
+  let start = null;
+  let lastSent = null;
+  const sendBrightness = throttle(() => {
+    if (!dragging() || !start || rollup.immediateValue === lastSent) return;
+    lastSent = rollup.immediateValue;
+    const hass = document.querySelector("home-assistant").hass;
+    for (const [entity_id, b] of brightnessTargets(start, rollup.immediateValue)) {
+      hass.callService("light", "turn_on", {
+        entity_id,
+        brightness: Math.round((b / 100) * 255),
+        transition: LIVE_TRANSITION_S,
+      });
+    }
+  }, LIVE_MS);
+  const reset = () => {
+    start = null;
+    lastSent = null;
+  };
+  rollup.addEventListener("close", reset);
+  rollup.addEventListener("change", reset);
+  rollup.addEventListener("immediate-value-change", () => {
+    if (!dragging()) {
+      reset();
+      return;
+    }
+    if (!start) start = brightnessSnapshot(detail.lightContainer);
+    sendBrightness();
+  });
+}
+
+function brightnessSnapshot(container) {
+  const states = document.querySelector("home-assistant").hass.states;
+  const dimmable = container.getLights().filter((l) => {
+    const st = states[l.getEntityId()];
+    const modes = (st && st.attributes.supported_color_modes) || [];
+    return modes.some((m) => m !== "onoff");
+  });
+  const lit = dimmable.filter((l) => l.isOn());
+  const lights = (lit.length ? lit : dimmable).map((l) => [l.getEntityId(), l.brightnessValue]);
+  const avg = lights.length ? lights.reduce((s, [, b]) => s + b, 0) / lights.length : 0;
+  return { lights, avg, anyLit: lit.length > 0 };
+}
+
+// Same relative scaling as the card's group brightness setter, but always
+// from the brightness at drag start.
+function brightnessTargets(start, target) {
+  const { lights, avg, anyLit } = start;
+  if (lights.length <= 1 || !anyLit) return lights.map(([id]) => [id, target]);
+  const diff = target - avg;
+  const room = diff > 0 ? 100 - avg : avg;
+  const factor = room ? diff / room : 0;
+  return lights.map(([id, b]) => {
+    if (b === avg) return [id, target];
+    const own = diff > 0 ? 100 - b : b;
+    let v = b + Math.round(own * factor);
+    if (v < 1 && target > 0) v = 1;
+    return [id, Math.min(100, v)];
+  });
 }
 
 let busy = false;
