@@ -96,3 +96,23 @@ ems_heizung_soll:
     event_data:
       soll: '{{ temperatur | float }}'
   mode: queued
+kueche_heizung_soll:
+  alias: Küche Heizung Soll setzen
+  description: Raum-Soll für die Küche. Ist das Ventil auf Heizen, übernimmt
+    "Küche - Heizung" den Wert sofort, sonst beim nächsten Einschalten.
+  icon: mdi:thermostat
+  fields:
+    temperatur:
+      name: Temperatur
+      required: true
+      selector:
+        number:
+          min: 4
+          max: 35
+          step: 0.5
+          unit_of_measurement: °C
+  sequence:
+  - event: kueche_heizung
+    event_data:
+      soll: '{{ temperatur | float }}'
+  mode: queued
