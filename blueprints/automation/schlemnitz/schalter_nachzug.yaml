@@ -1,0 +1,50 @@
+blueprint:
+  name: Hue-Wandschalter Nachzug
+  description: >-
+    Hue-Wandmodule (RDM004) senden über die Zigbee-Bindung abwechselnd On und
+    OffWithEffect statt Toggle. Passt das nicht zum Zustand des Lichts, bewirkt
+    ein Druck nichts. Hat ein Druck nach 400 ms nichts bewirkt, schaltet HA das
+    Licht um. Lampen außerhalb der Gruppe folgen über ihre eigene Automation.
+  domain: automation
+  input:
+    schalter:
+      name: Schalter
+      description: Zigbee2MQTT-Namen der Wandmodule, die an das Licht gebunden sind.
+      selector:
+        text:
+          multiple: true
+    licht:
+      name: Licht
+      description: Zigbee-Gruppe oder Lampe, an die die Schalter gebunden sind.
+      selector:
+        entity:
+          domain: light
+
+variables:
+  schalter: !input schalter
+  licht: !input licht
+
+triggers:
+  - trigger: mqtt
+    topic: zigbee2mqtt/+/action
+    payload: left_press
+
+conditions:
+  - condition: template
+    value_template: "{{ trigger.topic.split('/')[1] in schalter and states(licht) in ['on', 'off'] }}"
+
+actions:
+  - variables:
+      zustand_vorher: "{{ states(licht) }}"
+      sekunden_seit_aenderung: "{{ (now() - states[licht].last_changed).total_seconds() }}"
+  - delay:
+      milliseconds: 400
+  # Eine Lampenmeldung, die knapp vor dem left_press ankam, zählt als Wirkung dieses Drucks.
+  - condition: template
+    value_template: "{{ states(licht) == zustand_vorher and sekunden_seit_aenderung | float(0) > 1 }}"
+  - action: light.toggle
+    target:
+      entity_id: "{{ licht }}"
+
+mode: single
+max_exceeded: silent

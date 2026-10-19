@@ -1716,38 +1716,67 @@
   mode: single
 - id: flur_schalter_nachzug
   alias: Flur Schalter Nachzug
-  description: Die Hue-Wandschalter (RDM004) senden über die Zigbee-Bindung abwechselnd
-    On/OffWithEffect statt Toggle. Hat ein Druck nach 400 ms nichts bewirkt, schaltet
-    HA die Z2M-Gruppe flur_lichter um; die IKEA-Lampen folgen über "Flur Licht Synchronisation".
-  triggers:
-  - trigger: mqtt
-    topic: zigbee2mqtt/flur_wallswitch_1/action
-    payload: left_press
-  - trigger: mqtt
-    topic: zigbee2mqtt/flur_wallswitch_2/action
-    payload: left_press
-  - trigger: mqtt
-    topic: zigbee2mqtt/flur_wallswitch_3/action
-    payload: left_press
-  conditions:
-  - condition: state
-    entity_id: light.flur_lichter
-    state:
-    - 'on'
-    - 'off'
-  actions:
-  - variables:
-      zustand_vorher: '{{ states(''light.flur_lichter'') }}'
-      sekunden_seit_aenderung: '{{ (now() - states.light.flur_lichter.last_changed).total_seconds()
-        }}'
-  - delay:
-      milliseconds: 400
-  # Eine Lampenmeldung, die knapp vor dem left_press ankam, zählt als Wirkung dieses Drucks.
-  - condition: template
-    value_template: '{{ states(''light.flur_lichter'') == zustand_vorher and sekunden_seit_aenderung
-      | float(0) > 1 }}'
-  - action: light.toggle
-    target:
-      entity_id: light.flur_lichter
-  mode: single
-  max_exceeded: silent
+  description: 'Hat ein Druck auf den Hue-Wandschalter nach 400 ms nichts bewirkt, schaltet HA light.flur_lichter um. Die IKEA-Lampen folgen über "Flur Licht Synchronisation".'
+  use_blueprint:
+    path: schlemnitz/schalter_nachzug.yaml
+    input:
+      schalter:
+      - flur_wallswitch_1
+      - flur_wallswitch_2
+      - flur_wallswitch_3
+      licht: light.flur_lichter
+- id: wohnzimmer_schalter_nachzug
+  alias: Wohnzimmer Schalter Nachzug
+  description: 'Hat ein Druck auf den Hue-Wandschalter nach 400 ms nichts bewirkt, schaltet HA light.wohnzimmer_lichter um.'
+  use_blueprint:
+    path: schlemnitz/schalter_nachzug.yaml
+    input:
+      schalter:
+      - wohnzimmer_wallswitch_1
+      - wohnzimmer_wallswitch_2
+      licht: light.wohnzimmer_lichter
+- id: kueche_schalter_nachzug
+  alias: Küche Schalter Nachzug
+  description: 'Hat ein Druck auf den Hue-Wandschalter nach 400 ms nichts bewirkt, schaltet HA light.kueche_lichter um.'
+  use_blueprint:
+    path: schlemnitz/schalter_nachzug.yaml
+    input:
+      schalter:
+      - kueche_wallswitch_1
+      licht: light.kueche_lichter
+- id: leon_schalter_nachzug
+  alias: Leon Schalter Nachzug
+  description: 'Hat ein Druck auf den Hue-Wandschalter nach 400 ms nichts bewirkt, schaltet HA light.leon_lichter um. Die Palme folgt über "Neue Automation".'
+  use_blueprint:
+    path: schlemnitz/schalter_nachzug.yaml
+    input:
+      schalter:
+      - leon_wallswitch_1
+      licht: light.leon_lichter
+- id: ems_schalter_nachzug
+  alias: Ems Schalter Nachzug
+  description: 'Hat ein Druck auf den Hue-Wandschalter nach 400 ms nichts bewirkt, schaltet HA light.ems_lichter um.'
+  use_blueprint:
+    path: schlemnitz/schalter_nachzug.yaml
+    input:
+      schalter:
+      - ems_wallswitch_1
+      licht: light.ems_lichter
+- id: bad_schalter_nachzug
+  alias: Bad Schalter Nachzug
+  description: 'Hat ein Druck auf den Hue-Wandschalter nach 400 ms nichts bewirkt, schaltet HA light.bad_lichter um.'
+  use_blueprint:
+    path: schlemnitz/schalter_nachzug.yaml
+    input:
+      schalter:
+      - bad_wallswitch
+      licht: light.bad_lichter
+- id: waschkueche_schalter_nachzug
+  alias: Waschküche Schalter Nachzug
+  description: 'Hat ein Druck auf den Hue-Wandschalter nach 400 ms nichts bewirkt, schaltet HA light.waschkueche_decke um. Der Schalter ist direkt an die Lampe gebunden, nicht an eine Gruppe.'
+  use_blueprint:
+    path: schlemnitz/schalter_nachzug.yaml
+    input:
+      schalter:
+      - waschkueche_wallswitch
+      licht: light.waschkueche_decke
