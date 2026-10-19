@@ -51,6 +51,20 @@ Hue-Wandmodule (RDM004 im Flur) sind per OnOff an die Zigbee-Gruppe des Raums ge
 
 Flur: Gruppe `flur_lichter` sind zwei innr-Deckenlampen. Die IKEA-Lampen bleiben draußen und folgen über „Flur Licht Synchronisation“. „Flur Schalter Nachzug“ (`flur_schalter_nachzug`) schaltet `light.flur_lichter` nur, wenn ein `left_press` innerhalb von 400 ms nichts geändert hat. Leon hat das am 29. September 2026 bestätigt.
 
+Schalter-Nachzug seit 19. Oktober 2026 in jedem Raum mit Hue-Wandmodul, alle über den Blueprint `blueprints/automation/schlemnitz/schalter_nachzug.yaml` (Eingaben: Z2M-Namen der Schalter, Licht). Er hört auf `zigbee2mqtt/+/action` mit `left_press` und filtert nach Schaltername.
+
+| Automation | Schalter (Z2M) | Gebunden an |
+|---|---|---|
+| `flur_schalter_nachzug` | `flur_wallswitch_1`, `_2`, `_3` | `light.flur_lichter` |
+| `wohnzimmer_schalter_nachzug` | `wohnzimmer_wallswitch_1`, `_2` | `light.wohnzimmer_lichter` |
+| `kueche_schalter_nachzug` | `kueche_wallswitch_1` | `light.kueche_lichter` |
+| `leon_schalter_nachzug` | `leon_wallswitch_1` | `light.leon_lichter` |
+| `ems_schalter_nachzug` | `ems_wallswitch_1` | `light.ems_lichter` |
+| `bad_schalter_nachzug` | `bad_wallswitch` | `light.bad_lichter` |
+| `waschkueche_schalter_nachzug` | `waschkueche_wallswitch` | `light.waschkueche_decke` (direkt, keine Gruppe) |
+
+Ein neues Wandmodul: an die Raumgruppe binden und den Z2M-Namen in die passende Automation eintragen.
+
 Leon: Zigbee-Gruppe `leon_lichter` enthält Decke (Hue), Regal (innr), Bild (innr) und Lavalampen (SONOFF S60ZBTPF). Die Palme (IKEA) bleibt draußen und folgt über „Neue Automation“. Das Tap-Dial RDM002 ist nur an den Coordinator gebunden. Der Wandschalter RDM001 ist an die Gruppe gebunden. Gruppe-aus schaltet die Steckdose. `OffWithEffect` an der Steckdose ist noch nicht mit einem echten Tastendruck geprüft.
 
 Lichtwecker: die Automation liest die Weckzeit live. Ein Alarm um 08:00 startet das Licht um 07:35.
