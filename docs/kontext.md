@@ -43,6 +43,8 @@ Schwellen für `sensor.ems_rh_wand_kategorie`: Sicher unter 70, Erhöht von 70 b
 
 Im Popup Ems sitzt `sensor.ems_rh_wand` neben der Raumfeuchte. Die Hintergrundfarbe folgt der Kategorie (grün, orange, rot). Ein Tipp öffnet die Subview `wandfeuchte` (`/dashboard-schlemnitz/wandfeuchte`) mit Wandtemperatur, Raumtemperatur, Wandfeuchte, Raumfeuchte und Risiko. `sensor.ems_pm25` sitzt als Blase an der Luftreiniger-Karte, grün unter 20, orange bis 120, rot darüber.
 
+Ems TV (Google TV): `media_player.ems_tv` (Cast, die Bubble im Popup), `media_player.ems_tv_3` und `remote.ems_tv` (Android TV Remote), `media_player.ems_tv_2` (Music Assistant). Das Fernbedienungs-Icon an der Bubble öffnet das Popup `#ems-fernbedienung` mit der Universal Remote Card (HACS, Plattform Android TV). App-Tasten starten Apps über `remote.turn_on` mit dem Paketnamen, RTL+ ist `de.rtli.tvnow`.
+
 Filter des Luftreinigers am 5. Oktober 2026 zurückgesetzt (`xiaomi_miot.call_action`, siid 4, aiid 1, `params: [0]`). Danach 100 %, 0 h, 291 Tage Rest.
 
 ## Licht
