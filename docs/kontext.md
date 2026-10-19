@@ -87,6 +87,8 @@ Bad - Wäsche trocknen (`bad_waesche_trocknen`): über 68 % Feuchte (und über 1
 
 Ems seit 16. Oktober 2026 dasselbe Muster. Ventil `climate.ems_thermostat`, Fenster `binary_sensor.ems_fenstersensor_contact`, Raumfühler ist der Luftreiniger `sensor.zhimi_mb5_c00e_temperature`. Karte `climate.ems_heizung`, Name „Heizung“. Zeitpläne `switch.schedule_ems_04_00` (04:00 auf 21°) und `switch.schedule_ems_20_00` (20:00 auf 19,5°). Gerät im Bereich Ems. Details in `docs/heizung.md`.
 
+Küche seit 19. Oktober 2026 dasselbe Muster. Ventil `climate.kueche_thermostat`, Fenster `binary_sensor.kueche_fenstersensor_contact`, Raumfühler `sensor.kueche_sensor_env_temperature`. Karte `climate.kueche_heizung`, Name „Heizung“, oben im Popup Küche. Zeitpläne `switch.schedule_kueche_04_00` (04:00 auf 21°) und `switch.schedule_kueche_20_00` (20:00 auf 19,5°). Ventil und Fenstersensor im Bereich Küche (`kuche`). Für das Ventil meldet Zigbee2MQTT ein OTA-Update, nicht eingespielt.
+
 ## Naddel
 
 Assist-Pipeline „Naddel“ (`01kgg5hg4rtrztgqyah5k7q169`), Agent „Google AI Conversation“ der Integration Google Generative AI (Eintrag `01KGG555YV29BXK9GNY9QMVNTY`, Subentry `01KGG555YVXVJXY7DFDBT9ZP89`), empfohlene Modelleinstellungen.

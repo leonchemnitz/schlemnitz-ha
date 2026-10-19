@@ -1,6 +1,6 @@
 # Heizung: Sonoff TRVZB mit externem Fühler, ohne Better Thermostat
 
-Stand 16. Oktober 2026. Läuft in Leons Zimmer, im Wohnzimmer, im Bad und bei Ems.
+Stand 19. Oktober 2026. Läuft in Leons Zimmer, im Wohnzimmer, im Bad, bei Ems und in der Küche.
 
 ## Aufbau
 
@@ -88,7 +88,26 @@ Ems:
 | Zeitplan 04:00 auf 21° | `switch.schedule_ems_04_00` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_ems_20_00` |
 
-Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` ist an allen vier Ventilen −0,2°. Bei Ems ist der Raumfühler der Luftreiniger, nicht ein eigener Umweltsensor.
+Küche (seit 19. Oktober 2026):
+
+| Rolle | Entity |
+|---|---|
+| Ventil | `climate.kueche_thermostat` |
+| Raumfühler | `sensor.kueche_sensor_env_temperature` |
+| Feuchte | `sensor.kueche_sensor_env_humidity` |
+| Externer Eingang am Ventil | `number.kueche_thermostat_external_temperature_input` |
+| Offset am Ventil | `number.kueche_thermostat_local_temperature_calibration` |
+| Tastensperre am Ventil | `switch.kueche_thermostat_child_lock` |
+| Fenstersensor | `binary_sensor.kueche_fenstersensor_contact` |
+| Raum-Soll | `sensor.kueche_heizung_soll` |
+| Soll setzen | `script.kueche_heizung_soll` |
+| Karte | `climate.kueche_heizung` |
+| Fühler-Automation | `kueche_trv_follower` (`automation.kuche_trv_follower`) |
+| Fenster und Soll | `kueche_heizung` (`automation.kuche_heizung`) |
+| Zeitplan 04:00 auf 21° | `switch.schedule_kueche_04_00` |
+| Zeitplan 20:00 auf 19,5° | `switch.schedule_kueche_20_00` |
+
+Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` soll an allen Ventilen −0,2° sein. Ein neues Ventil kommt mit −1,0°. Das Wohnzimmer steht seit 16. Oktober 2026, 22:43, wieder auf −1,0°, Ursache unbekannt. Bei Ems ist der Raumfühler der Luftreiniger, nicht ein eigener Umweltsensor.
 
 ## Bausteine
 
@@ -165,7 +184,7 @@ Im Modus External Sensor Offset Only hat Better Thermostat das Ventil-Soll alle 
 4. Template-Sensor in `templates.yaml` kopieren, mit eigenem Event (`<raum>_heizung`) und eigener ID.
 5. Skript in `scripts.yaml` kopieren, Event tauschen.
 6. „Leon - Heizung“ kopieren, Ventil, Fenstersensor, Sensor und Event tauschen.
-7. `local_temperature_calibration` am Ventil auf 0, Tastensperre aus.
+7. `local_temperature_calibration` am Ventil auf 0, Tastensperre aus, `temperature_accuracy` auf −0,2. Ventil und Fenstersensor in den Bereich des Raums.
 8. Zeitpläne: `script.turn_on` auf das neue Skript mit `variables: {temperatur: …}`.
 9. Bubble-Klima-Karte auf die Template-Klima-Entity, Name „Heizung“, nur mit Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`.
 10. Prüfen: Soll auf der Karte ändern, nach 10 Sekunden steht es im Sensor. Fenster auf → Ventil aus, zu → Heizen mit altem Soll. Aus auf der Karte, Fenster auf und zu → bleibt Aus.
