@@ -122,7 +122,9 @@ views:
                     - netflix
                     - primevideo
                     - disney
-                    - rtlplus
+                  - - rtlplus
+                    - joyn
+                    - zdf
                 custom_actions:
                   - type: button
                     name: rtlplus
@@ -131,6 +133,20 @@ views:
                     tap_action:
                       action: source
                       source: https://plus.rtl.de
+                  - type: button
+                    name: joyn
+                    icon: mdi:alpha-j-box
+                    label: Joyn
+                    tap_action:
+                      action: source
+                      source: https://www.joyn.de
+                  - type: button
+                    name: zdf
+                    icon: mdi:alpha-z-box
+                    label: ZDF
+                    tap_action:
+                      action: source
+                      source: https://www.zdf.de
                 styles: |-
                   #circlepad {
                     width: 240px;
