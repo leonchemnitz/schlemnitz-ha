@@ -130,7 +130,7 @@ views:
                     label: RTL+
                     tap_action:
                       action: source
-                      source: de.rtli.tvnow
+                      source: https://plus.rtl.de
                 styles: |-
                   #circlepad {
                     width: 240px;
