@@ -87,6 +87,52 @@ views:
             2_entity: light.wohnzimmer_lichter
           - type: custom:bubble-card
             card_type: pop-up
+            name: Ems TV
+            icon: mdi:remote-tv
+            hash: '#ems-fernbedienung'
+            entity: media_player.ems_tv_3
+            show_state: false
+            show_name: true
+            sub_button:
+              main: []
+              bottom: []
+            grid_options:
+              rows: auto
+            cards:
+              - type: custom:universal-remote-card
+                platform: Android TV
+                remote_id: remote.ems_tv
+                media_player_id: media_player.ems_tv_3
+                rows:
+                  - - power
+                    - keyboard
+                    - settings
+                  - - circlepad
+                  - - back
+                    - home
+                    - volume_mute
+                  - - volume_down
+                    - play_pause
+                    - volume_up
+                  - - rewind
+                    - previous
+                    - next
+                    - fast_forward
+                  - - youtube
+                    - netflix
+                    - primevideo
+                    - disney
+                    - rtlplus
+                custom_actions:
+                  - type: button
+                    name: rtlplus
+                    icon: mdi:alpha-r-box
+                    label: RTL+
+                    tap_action:
+                      action: source
+                      source: de.rtli.tvnow
+          - type: custom:bubble-card
+            card_type: pop-up
             name: Ems
             icon: mdi:bed-king
             hash: '#ems'
@@ -184,7 +230,16 @@ views:
               - type: custom:bubble-card
                 card_type: media-player
                 sub_button:
-                  main: []
+                  main:
+                    - name: Fernbedienung
+                      icon: mdi:remote-tv
+                      show_name: false
+                      show_state: false
+                      show_icon: true
+                      show_background: true
+                      tap_action:
+                        action: navigate
+                        navigation_path: '#ems-fernbedienung'
                   bottom: []
                 entity: media_player.ems_tv
               - type: custom:bubble-card
