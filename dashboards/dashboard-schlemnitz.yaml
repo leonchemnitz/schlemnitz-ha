@@ -131,6 +131,11 @@ views:
                     tap_action:
                       action: source
                       source: de.rtli.tvnow
+                styles: |-
+                  #circlepad {
+                    width: 240px;
+                    margin: 0 auto;
+                  }
           - type: custom:bubble-card
             card_type: pop-up
             name: Ems
