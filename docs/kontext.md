@@ -53,7 +53,9 @@ Wohnzimmer Arylic H50 (im Geräteregister „Generic Generic“, fw Linkplay.4.6
 
 Multiroom läuft über Linkplay (`media_player.join`/`unjoin`), nicht über Music Assistant, weil nur so Line In, Optical und ARC an das Mitglied gehen. Linkplay meldet `group_members` nur am Mitglied, der Leiter zeigt `[]`. `binary_sensor.multiroom_wohnzimmer_kueche` fasst beide zusammen (Attribut `leiter`), `script.multiroom_umschalten` (Felder `hier`, `dort`) koppelt oder trennt. Beim Koppeln schaltet die H50 auf „playing Line In“.
 
-Die Anlagen-Karten in den Popups Wohnzimmer und Küche haben unten Quelle (Select auf `source_list`, zeigt `source`, die S10+ meldet im Leerlauf keine Quelle), den Kopplungs-Knopf und die Lautstärke. Der Regler des anderen Raums erscheint nur, wenn gekoppelt. Die Karten haben `rows: 2.6`, weil Bubble Card im Popup die Höhe nicht selbst berechnet.
+Die Anlagen-Karten in den Popups Wohnzimmer und Küche haben unten Quelle (Select auf `source_list`, zeigt `source`, die S10+ meldet im Leerlauf keine Quelle) und den Kopplungs-Knopf. Die eigene Lautstärke läuft über das Lautsprecher-Icon der Karte, der Regler des anderen Raums erscheint in derselben Zeile nur, wenn gekoppelt. Die Karten haben `rows: 2`, weil Bubble Card im Popup die Höhe nicht selbst berechnet. Nach dem Trennen meldet die S10+ weiter `source: Follower` (Modus 99, `group: 0`), sie ist dann aber in keiner Gruppe. Eine andere Quelle wählen beendet das.
+
+Wohnzimmer TV (Google TV): `media_player.wohnzimmer_tv` (Cast, die Bubble über der Anlage), `media_player.wohnzimmer_tv_2` und `remote.wohnzimmer_tv` (Android TV Remote), `media_player.wohnzimmer_tv_3` (Music Assistant). Das Fernbedienungs-Icon öffnet `#wohnzimmer-fernbedienung`, gleich aufgebaut wie bei Ems.
 
 ## Licht
 
