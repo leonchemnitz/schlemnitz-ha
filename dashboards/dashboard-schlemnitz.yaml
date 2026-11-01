@@ -604,7 +604,7 @@ views:
                 card_type: media-player
                 entity: media_player.wohnzimmer_anlage
                 name: Anlage
-                rows: 3
+                rows: 2.6
                 hide:
                   power_button: true
                 sub_button:
@@ -617,7 +617,8 @@ views:
                           name: Quelle
                           icon: mdi:import
                           show_name: false
-                          show_state: true
+                          show_attribute: true
+                          attribute: source
                         - entity: binary_sensor.multiroom_wohnzimmer_kueche
                           name: Mit Küche
                           icon: mdi:speaker-multiple
@@ -1416,7 +1417,7 @@ views:
                 card_type: media-player
                 entity: media_player.kuche_anlage_2
                 name: Anlage
-                rows: 3
+                rows: 2.6
                 hide:
                   power_button: true
                 sub_button:
@@ -1429,7 +1430,8 @@ views:
                           name: Quelle
                           icon: mdi:import
                           show_name: false
-                          show_state: true
+                          show_attribute: true
+                          attribute: source
                         - entity: binary_sensor.multiroom_wohnzimmer_kueche
                           name: Mit Wohnzimmer
                           icon: mdi:speaker-multiple
