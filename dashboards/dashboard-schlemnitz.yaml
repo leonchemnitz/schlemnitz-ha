@@ -602,10 +602,53 @@ views:
                 rows: '0.4'
               - type: custom:bubble-card
                 card_type: media-player
+                entity: media_player.wohnzimmer_anlage
+                name: Anlage
+                hide:
+                  power_button: true
                 sub_button:
                   main: []
-                  bottom: []
-                entity: media_player.wohnzimmer_anlage
+                  bottom:
+                    - group:
+                        - entity: media_player.wohnzimmer_anlage
+                          sub_button_type: select
+                          select_attribute: source_list
+                          name: Quelle
+                          icon: mdi:import
+                          show_name: false
+                        - entity: binary_sensor.multiroom_wohnzimmer_kueche
+                          name: Mit Küche
+                          icon: mdi:speaker-multiple
+                          show_name: true
+                          show_state: false
+                          tap_action:
+                            action: perform-action
+                            perform_action: script.multiroom_umschalten
+                            data:
+                              hier: media_player.wohnzimmer_anlage
+                              dort: media_player.kuche_anlage_2
+                      buttons_layout: inline
+                    - group:
+                        - entity: media_player.wohnzimmer_anlage
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Wohnzimmer
+                          icon: mdi:volume-high
+                      buttons_layout: inline
+                    - group:
+                        - entity: media_player.kuche_anlage_2
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Küche
+                          icon: mdi:volume-high
+                          visibility:
+                            - condition: state
+                              entity: binary_sensor.multiroom_wohnzimmer_kueche
+                              state: 'on'
+                      buttons_layout: inline
+                  bottom_layout: rows
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
@@ -1371,10 +1414,53 @@ views:
                 rows: '0.4'
               - type: custom:bubble-card
                 card_type: media-player
+                entity: media_player.kuche_anlage_2
+                name: Anlage
+                hide:
+                  power_button: true
                 sub_button:
                   main: []
-                  bottom: []
-                entity: media_player.kuche_anlage_2
+                  bottom:
+                    - group:
+                        - entity: media_player.kuche_anlage_2
+                          sub_button_type: select
+                          select_attribute: source_list
+                          name: Quelle
+                          icon: mdi:import
+                          show_name: false
+                        - entity: binary_sensor.multiroom_wohnzimmer_kueche
+                          name: Mit Wohnzimmer
+                          icon: mdi:speaker-multiple
+                          show_name: true
+                          show_state: false
+                          tap_action:
+                            action: perform-action
+                            perform_action: script.multiroom_umschalten
+                            data:
+                              hier: media_player.kuche_anlage_2
+                              dort: media_player.wohnzimmer_anlage
+                      buttons_layout: inline
+                    - group:
+                        - entity: media_player.kuche_anlage_2
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Küche
+                          icon: mdi:volume-high
+                      buttons_layout: inline
+                    - group:
+                        - entity: media_player.wohnzimmer_anlage
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Wohnzimmer
+                          icon: mdi:volume-high
+                          visibility:
+                            - condition: state
+                              entity: binary_sensor.multiroom_wohnzimmer_kueche
+                              state: 'on'
+                      buttons_layout: inline
+                  bottom_layout: rows
               - type: horizontal-stack
                 cards:
                   - type: custom:bubble-card

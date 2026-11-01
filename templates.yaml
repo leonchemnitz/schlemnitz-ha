@@ -351,3 +351,20 @@
             entity_id: climate.kueche_thermostat
           data:
             hvac_mode: "{{ hvac_mode }}"
+
+# Multiroom der Arylic-Anlagen (Linkplay). Linkplay meldet group_members nur
+# am Mitglied, beim Leiter bleibt die Liste leer. Deshalb beide prüfen.
+- binary_sensor:
+    - unique_id: multiroom_wohnzimmer_kueche
+      default_entity_id: binary_sensor.multiroom_wohnzimmer_kueche
+      name: Multiroom Wohnzimmer Küche
+      icon: mdi:speaker-multiple
+      state: >
+        {% set m = (state_attr('media_player.wohnzimmer_anlage', 'group_members') or [])
+                 + (state_attr('media_player.kuche_anlage_2', 'group_members') or []) %}
+        {{ 'media_player.wohnzimmer_anlage' in m and 'media_player.kuche_anlage_2' in m }}
+      attributes:
+        leiter: >
+          {% set m = (state_attr('media_player.wohnzimmer_anlage', 'group_members') or [])
+                   + (state_attr('media_player.kuche_anlage_2', 'group_members') or []) %}
+          {{ m[0] if m else none }}

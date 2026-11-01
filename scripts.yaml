@@ -116,3 +116,43 @@ kueche_heizung_soll:
     event_data:
       soll: '{{ temperatur | float }}'
   mode: queued
+multiroom_umschalten:
+  alias: Multiroom umschalten
+  description: Koppelt zwei Linkplay-Anlagen oder trennt sie. Beim Koppeln führt
+    "hier", die andere Anlage spielt dieselbe Quelle mit, auch Line In, Optical
+    und ARC.
+  icon: mdi:speaker-multiple
+  fields:
+    hier:
+      name: Hier
+      required: true
+      selector:
+        entity:
+          domain: media_player
+          integration: linkplay
+    dort:
+      name: Dort
+      required: true
+      selector:
+        entity:
+          domain: media_player
+          integration: linkplay
+  sequence:
+  - variables:
+      gruppe: "{{ (state_attr(hier, 'group_members') or []) + (state_attr(dort, 'group_members')\
+        \ or []) }}"
+  - if:
+    - condition: template
+      value_template: '{{ hier in gruppe and dort in gruppe }}'
+    then:
+    - action: media_player.unjoin
+      target:
+        entity_id: "{{ gruppe | reject('equalto', gruppe[0]) | unique | list }}"
+    else:
+    - action: media_player.join
+      target:
+        entity_id: '{{ hier }}'
+      data:
+        group_members:
+        - '{{ dort }}'
+  mode: single
