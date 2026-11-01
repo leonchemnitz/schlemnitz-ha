@@ -154,6 +154,73 @@ views:
                   }
           - type: custom:bubble-card
             card_type: pop-up
+            name: Wohnzimmer TV
+            icon: mdi:remote-tv
+            hash: '#wohnzimmer-fernbedienung'
+            entity: media_player.wohnzimmer_tv_2
+            show_state: false
+            show_name: true
+            sub_button:
+              main: []
+              bottom: []
+            grid_options:
+              rows: auto
+            cards:
+              - type: custom:universal-remote-card
+                platform: Android TV
+                remote_id: remote.wohnzimmer_tv
+                media_player_id: media_player.wohnzimmer_tv_2
+                rows:
+                  - - power
+                    - keyboard
+                    - settings
+                  - - circlepad
+                  - - back
+                    - home
+                    - volume_mute
+                  - - volume_down
+                    - play_pause
+                    - volume_up
+                  - - rewind
+                    - previous
+                    - next
+                    - fast_forward
+                  - - youtube
+                    - netflix
+                    - primevideo
+                    - disney
+                  - - rtlplus
+                    - joyn
+                    - zdf
+                custom_actions:
+                  - type: button
+                    name: rtlplus
+                    icon: mdi:alpha-r-box
+                    label: RTL+
+                    tap_action:
+                      action: source
+                      source: https://plus.rtl.de
+                  - type: button
+                    name: joyn
+                    icon: mdi:alpha-j-box
+                    label: Joyn
+                    tap_action:
+                      action: source
+                      source: https://www.joyn.de
+                  - type: button
+                    name: zdf
+                    icon: mdi:alpha-z-box
+                    label: ZDF
+                    tap_action:
+                      action: source
+                      source: https://www.zdf.de
+                styles: |-
+                  #circlepad {
+                    width: 240px;
+                    margin: 0 auto;
+                  }
+          - type: custom:bubble-card
+            card_type: pop-up
             name: Ems
             icon: mdi:bed-king
             hash: '#ems'
@@ -602,9 +669,24 @@ views:
                 rows: '0.4'
               - type: custom:bubble-card
                 card_type: media-player
+                sub_button:
+                  main:
+                    - name: Fernbedienung
+                      icon: mdi:remote-tv
+                      show_name: false
+                      show_state: false
+                      show_icon: true
+                      show_background: true
+                      tap_action:
+                        action: navigate
+                        navigation_path: '#wohnzimmer-fernbedienung'
+                  bottom: []
+                entity: media_player.wohnzimmer_tv
+              - type: custom:bubble-card
+                card_type: media-player
                 entity: media_player.wohnzimmer_anlage
                 name: Anlage
-                rows: 2.6
+                rows: 2
                 hide:
                   power_button: true
                 sub_button:
@@ -630,14 +712,6 @@ views:
                             data:
                               hier: media_player.wohnzimmer_anlage
                               dort: media_player.kuche_anlage_2
-                      buttons_layout: inline
-                    - group:
-                        - entity: media_player.wohnzimmer_anlage
-                          sub_button_type: slider
-                          always_visible: true
-                          show_button_info: true
-                          name: Wohnzimmer
-                          icon: mdi:volume-high
                         - entity: media_player.kuche_anlage_2
                           sub_button_type: slider
                           always_visible: true
@@ -1417,7 +1491,7 @@ views:
                 card_type: media-player
                 entity: media_player.kuche_anlage_2
                 name: Anlage
-                rows: 2.6
+                rows: 2
                 hide:
                   power_button: true
                 sub_button:
@@ -1443,14 +1517,6 @@ views:
                             data:
                               hier: media_player.kuche_anlage_2
                               dort: media_player.wohnzimmer_anlage
-                      buttons_layout: inline
-                    - group:
-                        - entity: media_player.kuche_anlage_2
-                          sub_button_type: slider
-                          always_visible: true
-                          show_button_info: true
-                          name: Küche
-                          icon: mdi:volume-high
                         - entity: media_player.wohnzimmer_anlage
                           sub_button_type: slider
                           always_visible: true
