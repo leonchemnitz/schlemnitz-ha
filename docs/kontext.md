@@ -47,6 +47,14 @@ Ems TV (Google TV): `media_player.ems_tv` (Cast, die Bubble im Popup), `media_pl
 
 Filter des Luftreinigers am 5. Oktober 2026 zurückgesetzt (`xiaomi_miot.call_action`, siid 4, aiid 1, `params: [0]`). Danach 100 %, 0 h, 291 Tage Rest.
 
+## Audio (Arylic)
+
+Wohnzimmer Arylic H50 (im Geräteregister „Generic Generic“, fw Linkplay.4.6.522143) ist `media_player.wohnzimmer_anlage`, Küche Arylic S10+ (fw 4.6.415145) ist `media_player.kuche_anlage_2`, beide über die Linkplay-Integration. Music Assistant führt sie doppelt als `media_player.wohnzimmer` und `media_player.kuche_anlage`. `media_player.wohnzimmer_2` ist ein toter MA-Rest.
+
+Multiroom läuft über Linkplay (`media_player.join`/`unjoin`), nicht über Music Assistant, weil nur so Line In, Optical und ARC an das Mitglied gehen. Linkplay meldet `group_members` nur am Mitglied, der Leiter zeigt `[]`. `binary_sensor.multiroom_wohnzimmer_kueche` fasst beide zusammen (Attribut `leiter`), `script.multiroom_umschalten` (Felder `hier`, `dort`) koppelt oder trennt. Beim Koppeln schaltet die H50 auf „playing Line In“.
+
+Die Anlagen-Karten in den Popups Wohnzimmer und Küche haben unten Quelle (Select auf `source_list`, zeigt `source`, die S10+ meldet im Leerlauf keine Quelle), den Kopplungs-Knopf und die Lautstärke. Der Regler des anderen Raums erscheint nur, wenn gekoppelt. Die Karten haben `rows: 2.6`, weil Bubble Card im Popup die Höhe nicht selbst berechnet.
+
 ## Licht
 
 Hue-Wandmodule (RDM004 im Flur) sind per OnOff an die Zigbee-Gruppe des Raums gebunden. Sie senden abwechselnd `On` und `OffWithEffect`, nie `Toggle`.
