@@ -604,6 +604,7 @@ views:
                 card_type: media-player
                 entity: media_player.wohnzimmer_anlage
                 name: Anlage
+                rows: 3
                 hide:
                   power_button: true
                 sub_button:
@@ -616,6 +617,7 @@ views:
                           name: Quelle
                           icon: mdi:import
                           show_name: false
+                          show_state: true
                         - entity: binary_sensor.multiroom_wohnzimmer_kueche
                           name: Mit Küche
                           icon: mdi:speaker-multiple
@@ -635,8 +637,6 @@ views:
                           show_button_info: true
                           name: Wohnzimmer
                           icon: mdi:volume-high
-                      buttons_layout: inline
-                    - group:
                         - entity: media_player.kuche_anlage_2
                           sub_button_type: slider
                           always_visible: true
@@ -1416,6 +1416,7 @@ views:
                 card_type: media-player
                 entity: media_player.kuche_anlage_2
                 name: Anlage
+                rows: 3
                 hide:
                   power_button: true
                 sub_button:
@@ -1428,6 +1429,7 @@ views:
                           name: Quelle
                           icon: mdi:import
                           show_name: false
+                          show_state: true
                         - entity: binary_sensor.multiroom_wohnzimmer_kueche
                           name: Mit Wohnzimmer
                           icon: mdi:speaker-multiple
@@ -1447,8 +1449,6 @@ views:
                           show_button_info: true
                           name: Küche
                           icon: mdi:volume-high
-                      buttons_layout: inline
-                    - group:
                         - entity: media_player.wohnzimmer_anlage
                           sub_button_type: slider
                           always_visible: true
