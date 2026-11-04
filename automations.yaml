@@ -511,6 +511,8 @@
     auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
     Fühler.
   triggers:
+  - trigger: state
+    entity_id: number.leon_thermostat_temperature_accuracy
   - entity_id: sensor.leon_temperatur
     for:
       hours: 0
@@ -550,6 +552,15 @@
       entity_id: number.leon_thermostat_external_temperature_input
     data:
       value: '{{ raum }}'
+  - if:
+    - condition: template
+      value_template: '{{ states(''number.leon_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+    then:
+    - action: number.set_value
+      target:
+        entity_id: number.leon_thermostat_temperature_accuracy
+      data:
+        value: -0.2
   - condition: template
     value_template: '{{ states(''select.leon_thermostat_temperature_sensor_select'')
       != ''remote_temperature'' }}'
@@ -565,6 +576,10 @@
     das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.leon_heizung_soll
     gleich, in beide Richtungen.
   triggers:
+  - trigger: state
+    entity_id: climate.leon_thermostat
+    to: auto
+    id: ventil_auto
   - trigger: state
     entity_id: binary_sensor.leon_fenstersensor_contact
     to: 'on'
@@ -592,6 +607,15 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id: ventil_auto
+      sequence:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.leon_thermostat
+        data:
+          hvac_mode: heat
     - conditions:
       - condition: trigger
         id: fenster_auf
@@ -662,6 +686,8 @@
     auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
     Fühler.
   triggers:
+  - trigger: state
+    entity_id: number.wohnzimmer_thermostat_temperature_accuracy
   - entity_id: sensor.wohnzimmer_sensor_env_temperature
     for:
       hours: 0
@@ -699,6 +725,15 @@
       entity_id: number.wohnzimmer_thermostat_external_temperature_input
     data:
       value: '{{ raum }}'
+  - if:
+    - condition: template
+      value_template: '{{ states(''number.wohnzimmer_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+    then:
+    - action: number.set_value
+      target:
+        entity_id: number.wohnzimmer_thermostat_temperature_accuracy
+      data:
+        value: -0.2
   - condition: template
     value_template: '{{ states(''select.wohnzimmer_thermostat_temperature_sensor_select'')
       != ''remote_temperature'' }}'
@@ -714,6 +749,10 @@
     das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.wohnzimmer_heizung_soll
     gleich, in beide Richtungen.
   triggers:
+  - trigger: state
+    entity_id: climate.wohnzimmer_thermostat
+    to: auto
+    id: ventil_auto
   - trigger: state
     entity_id: binary_sensor.wohnzimmer_fenstersensor_contact
     to: 'on'
@@ -739,6 +778,15 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id: ventil_auto
+      sequence:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.wohnzimmer_thermostat
+        data:
+          hvac_mode: heat
     - conditions:
       - condition: trigger
         id: fenster_auf
@@ -809,6 +857,8 @@
     auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
     Fühler.
   triggers:
+  - trigger: state
+    entity_id: number.bad_thermostat_temperature_accuracy
   - entity_id: sensor.bad_sensor_env_temperature
     for:
       hours: 0
@@ -846,6 +896,15 @@
       entity_id: number.bad_thermostat_external_temperature_input
     data:
       value: '{{ raum }}'
+  - if:
+    - condition: template
+      value_template: '{{ states(''number.bad_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+    then:
+    - action: number.set_value
+      target:
+        entity_id: number.bad_thermostat_temperature_accuracy
+      data:
+        value: -0.2
   - condition: template
     value_template: '{{ states(''select.bad_thermostat_temperature_sensor_select'')
       != ''remote_temperature'' }}'
@@ -861,6 +920,10 @@
     das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.bad_heizung_soll
     gleich, in beide Richtungen.
   triggers:
+  - trigger: state
+    entity_id: climate.bad_thermostat
+    to: auto
+    id: ventil_auto
   - trigger: state
     entity_id: binary_sensor.bad_fenstersensor_contact
     to: 'on'
@@ -886,6 +949,15 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id: ventil_auto
+      sequence:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.bad_thermostat
+        data:
+          hvac_mode: heat
     - conditions:
       - condition: trigger
         id: fenster_auf
@@ -1009,6 +1081,8 @@
     30 Minuten auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder
     den eigenen Fühler.
   triggers:
+  - trigger: state
+    entity_id: number.ems_thermostat_temperature_accuracy
   - entity_id: sensor.zhimi_mb5_c00e_temperature
     for:
       hours: 0
@@ -1046,6 +1120,15 @@
       entity_id: number.ems_thermostat_external_temperature_input
     data:
       value: '{{ raum }}'
+  - if:
+    - condition: template
+      value_template: '{{ states(''number.ems_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+    then:
+    - action: number.set_value
+      target:
+        entity_id: number.ems_thermostat_temperature_accuracy
+      data:
+        value: -0.2
   - condition: template
     value_template: '{{ states(''select.ems_thermostat_temperature_sensor_select'')
       != ''remote_temperature'' }}'
@@ -1061,6 +1144,10 @@
     das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.ems_heizung_soll
     gleich, in beide Richtungen.
   triggers:
+  - trigger: state
+    entity_id: climate.ems_thermostat
+    to: auto
+    id: ventil_auto
   - trigger: state
     entity_id: binary_sensor.ems_fenstersensor_contact
     to: 'on'
@@ -1086,6 +1173,15 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id: ventil_auto
+      sequence:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.ems_thermostat
+        data:
+          hvac_mode: heat
     - conditions:
       - condition: trigger
         id: fenster_auf
@@ -1156,6 +1252,8 @@
     auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
     Fühler.
   triggers:
+  - trigger: state
+    entity_id: number.kueche_thermostat_temperature_accuracy
   - entity_id: sensor.kueche_sensor_env_temperature
     for:
       hours: 0
@@ -1193,6 +1291,15 @@
       entity_id: number.kueche_thermostat_external_temperature_input
     data:
       value: '{{ raum }}'
+  - if:
+    - condition: template
+      value_template: '{{ states(''number.kueche_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+    then:
+    - action: number.set_value
+      target:
+        entity_id: number.kueche_thermostat_temperature_accuracy
+      data:
+        value: -0.2
   - condition: template
     value_template: '{{ states(''select.kueche_thermostat_temperature_sensor_select'')
       != ''remote_temperature'' }}'
@@ -1208,6 +1315,10 @@
     das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.kueche_heizung_soll
     gleich, in beide Richtungen.
   triggers:
+  - trigger: state
+    entity_id: climate.kueche_thermostat
+    to: auto
+    id: ventil_auto
   - trigger: state
     entity_id: binary_sensor.kueche_fenstersensor_contact
     to: 'on'
@@ -1233,6 +1344,15 @@
   conditions: []
   actions:
   - choose:
+    - conditions:
+      - condition: trigger
+        id: ventil_auto
+      sequence:
+      - action: climate.set_hvac_mode
+        target:
+          entity_id: climate.kueche_thermostat
+        data:
+          hvac_mode: heat
     - conditions:
       - condition: trigger
         id: fenster_auf
