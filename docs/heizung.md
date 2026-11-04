@@ -107,7 +107,7 @@ Küche (seit 19. Oktober 2026):
 | Zeitplan 04:00 auf 21° | `switch.schedule_kueche_04_00` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_kueche_20_00` |
 
-Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` soll an allen Ventilen −0,2° sein. Ein neues Ventil kommt mit −1,0°. Das Wohnzimmer steht seit 16. Oktober 2026, 22:43, wieder auf −1,0°, Ursache unbekannt. Bei Ems ist der Raumfühler der Luftreiniger, nicht ein eigener Umweltsensor.
+Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` soll an allen Ventilen −0,2° sein. Ein neues Ventil kommt mit −1,0°. Das Wohnzimmer stand vom 16. Oktober 2026, 22:43, bis 4. November wieder auf −1,0°, Ursache unbekannt. Mit −1,0° öffnete es bei Soll 22° erst bei 21,0° Raum. Die Fühler-Automation jedes Raums setzt den Wert seitdem auf −0,2° zurück, sobald er abweicht. Bei Ems ist der Raumfühler der Luftreiniger, nicht ein eigener Umweltsensor.
 
 ## Bausteine
 
@@ -119,7 +119,8 @@ Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:0
   - Fenster zu (`off`) und `fenster_aus` gesetzt: löscht es, schaltet auf Heizen. Ein Aus, das schon vor dem Öffnen galt, bleibt Aus.
   - Raum-Soll geändert oder Ventil auf Heizen: schreibt das Raum-Soll ans Ventil, wenn es abweicht.
   - Ventil-Soll steht 10 Sekunden auf einem neuen Wert (Karte, Taste am Ventil): übernimmt es als Raum-Soll. Die 10 Sekunden überbrücken die 7°, die das Ventil direkt nach dem Einschalten meldet.
-  - Nur im Modus Heizen. Im Modus Aus oder Auto (Zeitplan im Ventil) gleicht sie nichts ab.
+  - Ventil springt auf Auto (Taste am Ventil, eingebauter Wochenplan): stellt es auf Heizen zurück. Danach greift der Zweig „Ventil auf Heizen“ und schreibt das Raum-Soll. Am 3. November 2026 stand die Küche so mit 16° im Wochenplan, während die Karte 22° zeigte.
+  - Sonst nur im Modus Heizen. Im Modus Aus gleicht sie nichts ab.
 
 `templates.yaml`: `sensor.leon_heizung_soll`, Trigger auf das Event `leon_heizung`. Daten `soll` (Zahl) und `fenster_aus` (true/false), jeweils optional. Behält den Wert über Neustarts.
 
@@ -133,6 +134,7 @@ Am Ventil:
 
 - `local_temperature_calibration` = 0.
 - Tastensperre aus.
+- `temperature_accuracy` = −0,2, hält die Fühler-Automation.
 
 Fenster: `on` am Sensor ist offen, `off` ist zu. Zigbee2MQTT meldet `contact: true`, solange der Kontakt geschlossen ist. `unknown` und `unavailable` schalten nichts. Die Klima-Karte zeigt ein Fenster-Icon. Der Hintergrund färbt sich, wenn der Sensor `on` ist.
 
