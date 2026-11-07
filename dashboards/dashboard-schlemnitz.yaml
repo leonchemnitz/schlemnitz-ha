@@ -23,6 +23,11 @@ views:
             sub_button:
               main: []
               bottom: []
+            styles: |
+              .bubble-button-background {
+                opacity: ${(hass.states['sensor.radio_sender']?.state || 'Aus') !== 'Aus' && ['media_player.wohnzimmer_anlage', 'media_player.kuche_anlage_2'].some(e => hass.states[e]?.state === 'playing') ? '1' : '0'} !important;
+                background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+              }
             tap_action:
               action: navigate
               navigation_path: '#radio'
@@ -270,6 +275,11 @@ views:
                 name: Stopp
                 icon: mdi:stop
                 show_state: false
+                styles: |
+                  .bubble-button-background {
+                    opacity: 1 !important;
+                    background-color: #d32f2f !important;
+                  }
                 sub_button:
                   main: []
                   bottom: []
