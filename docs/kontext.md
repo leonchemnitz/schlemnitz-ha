@@ -64,6 +64,7 @@ Radio: Bubble „Radio“ über dem Tageszeit-Modus öffnet `#radio`. Oben die P
 | radioeins | `https://dispatcher.rndfnk.com/rbb/radioeins/live/mp3/128/stream.mp3` |
 | BRF 91,4 (Berliner Rundfunk) | `https://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/` |
 | Antenne (Antenne Brandenburg) | `https://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3` |
+| NTS Poolside | `https://stream-mixtape-geo.ntslive.net/mixtape4` (NTS Infinite Mixtapes, Liste unter `https://www.nts.live/api/v2/mixtapes`) |
 
 Neue Sender: URL über `https://de1.api.radio-browser.info/json/stations/search?name=…` suchen, mit `curl` prüfen, Kachel im Popup `#radio` kopieren.
 
