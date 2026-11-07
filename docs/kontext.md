@@ -62,8 +62,8 @@ Radio: Bubble „Radio“ über dem Tageszeit-Modus öffnet `#radio`. Oben die P
 | Jazzradio 106,8 | `https://streaming.radio.co/s774887f7b/listen` |
 | ByteFM | `https://bytefm.stream14.radiohost.de/bytefm-mainhq_mp3-192` |
 | radioeins | `https://dispatcher.rndfnk.com/rbb/radioeins/live/mp3/128/stream.mp3` |
-| Berliner Rundfunk 91,4 | `https://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/` |
-| Antenne Brandenburg | `https://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3` |
+| BRF 91,4 (Berliner Rundfunk) | `https://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/` |
+| Antenne (Antenne Brandenburg) | `https://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3` |
 
 Neue Sender: URL über `https://de1.api.radio-browser.info/json/stations/search?name=…` suchen, mit `curl` prüfen, Kachel im Popup `#radio` kopieren.
 
