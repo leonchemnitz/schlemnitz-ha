@@ -368,3 +368,33 @@
           {% set m = (state_attr('media_player.wohnzimmer_anlage', 'group_members') or [])
                    + (state_attr('media_player.kuche_anlage_2', 'group_members') or []) %}
           {{ m[0] if m else none }}
+
+# Radio-Popup. Das Event "radio" mit "umschalten: wohnzimmer" oder
+# "umschalten: kueche" wechselt die Player-Auswahl, mit "sender" merkt es den
+# zuletzt gestarteten Sender. Ohne gespeicherten Zustand ist Wohnzimmer an.
+- triggers:
+    - trigger: event
+      event_type: radio
+  binary_sensor:
+    - unique_id: radio_wohnzimmer
+      default_entity_id: binary_sensor.radio_wohnzimmer
+      name: Radio Wohnzimmer
+      icon: mdi:sofa
+      state: >
+        {% set an = this.state == 'on' if this.state in ['on', 'off'] else true %}
+        {{ not an if trigger.event.data.umschalten | default('') == 'wohnzimmer' else an }}
+    - unique_id: radio_kueche
+      default_entity_id: binary_sensor.radio_kueche
+      name: Radio Küche
+      icon: mdi:stove
+      state: >
+        {% set an = this.state == 'on' %}
+        {{ not an if trigger.event.data.umschalten | default('') == 'kueche' else an }}
+  sensor:
+    - unique_id: radio_sender
+      default_entity_id: sensor.radio_sender
+      name: Radio Sender
+      icon: mdi:radio
+      state: >
+        {% set alt = this.state if this.state not in ['unknown', 'unavailable'] else 'Aus' %}
+        {{ trigger.event.data.sender | default(alt) }}

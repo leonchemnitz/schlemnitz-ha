@@ -156,3 +156,105 @@ multiroom_umschalten:
         group_members:
         - '{{ dort }}'
   mode: single
+radio_player_umschalten:
+  alias: Radio Player umschalten
+  description: Wählt eine Anlage für das Radio-Popup an oder ab.
+  icon: mdi:speaker
+  fields:
+    player:
+      name: Player
+      required: true
+      selector:
+        select:
+          options:
+          - wohnzimmer
+          - kueche
+  sequence:
+  - event: radio
+    event_data:
+      umschalten: '{{ player }}'
+  mode: queued
+radio_abspielen:
+  alias: Radio abspielen
+  description: Spielt einen Sender auf den im Radio-Popup gewählten Anlagen. Bei
+    beiden koppelt es sie über Linkplay, ist nur eine gewählt, trennt es eine
+    bestehende Kopplung.
+  icon: mdi:radio
+  fields:
+    sender:
+      name: Sender
+      required: true
+      selector:
+        text: {}
+    url:
+      name: Stream-URL
+      required: true
+      selector:
+        text: {}
+  sequence:
+  - variables:
+      alle:
+      - media_player.wohnzimmer_anlage
+      - media_player.kuche_anlage_2
+      auswahl: "{{ (['media_player.wohnzimmer_anlage'] if is_state('binary_sensor.radio_wohnzimmer',\
+        \ 'on') else []) + (['media_player.kuche_anlage_2'] if is_state('binary_sensor.radio_kueche',\
+        \ 'on') else []) }}"
+      gekoppelt: "{{ is_state('binary_sensor.multiroom_wohnzimmer_kueche', 'on') }}"
+      leiter_alt: "{{ state_attr('binary_sensor.multiroom_wohnzimmer_kueche', 'leiter')\
+        \ or 'media_player.wohnzimmer_anlage' }}"
+  - condition: template
+    value_template: '{{ auswahl | count > 0 }}'
+  - if:
+    - condition: template
+      value_template: '{{ gekoppelt and auswahl | count == 1 }}'
+    then:
+    - action: media_player.unjoin
+      target:
+        entity_id: "{{ alle | reject('equalto', leiter_alt) | list }}"
+    - delay:
+        seconds: 2
+  - variables:
+      leiter: "{{ leiter_alt if gekoppelt and auswahl | count == 2 else auswahl[0] }}"
+  - if:
+    - condition: template
+      value_template: '{{ not gekoppelt and auswahl | count == 2 }}'
+    then:
+    - action: media_player.join
+      target:
+        entity_id: '{{ leiter }}'
+      data:
+        group_members: "{{ auswahl | reject('equalto', leiter) | list }}"
+    - delay:
+        seconds: 2
+  - action: media_player.play_media
+    target:
+      entity_id: '{{ leiter }}'
+    data:
+      media_content_id: '{{ url }}'
+      media_content_type: music
+  - event: radio
+    event_data:
+      sender: '{{ sender }}'
+  mode: restart
+radio_stopp:
+  alias: Radio stoppen
+  description: Stoppt die im Radio-Popup gewählten Anlagen, bei Kopplung auch
+    den Leiter.
+  icon: mdi:stop
+  sequence:
+  - variables:
+      auswahl: "{{ (['media_player.wohnzimmer_anlage'] if is_state('binary_sensor.radio_wohnzimmer',\
+        \ 'on') else []) + (['media_player.kuche_anlage_2'] if is_state('binary_sensor.radio_kueche',\
+        \ 'on') else []) }}"
+      leiter: "{{ state_attr('binary_sensor.multiroom_wohnzimmer_kueche', 'leiter') }}"
+      ziel: "{{ (auswahl + ([leiter] if is_state('binary_sensor.multiroom_wohnzimmer_kueche',\
+        \ 'on') and leiter else [])) | unique | list }}"
+  - condition: template
+    value_template: '{{ ziel | count > 0 }}'
+  - action: media_player.media_stop
+    target:
+      entity_id: '{{ ziel }}'
+  - event: radio
+    event_data:
+      sender: Aus
+  mode: restart

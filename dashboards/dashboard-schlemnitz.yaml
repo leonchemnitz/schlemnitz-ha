@@ -14,6 +14,270 @@ views:
             allow_open_top_navigation: true
             hide_background: true
           - type: custom:bubble-card
+            card_type: button
+            button_type: name
+            entity: sensor.radio_sender
+            name: Radio
+            icon: mdi:radio
+            show_state: true
+            sub_button:
+              main: []
+              bottom: []
+            tap_action:
+              action: navigate
+              navigation_path: '#radio'
+            button_action:
+              tap_action:
+                action: navigate
+                navigation_path: '#radio'
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Radio
+            icon: mdi:radio
+            hash: '#radio'
+            entity: sensor.radio_sender
+            show_state: true
+            show_name: true
+            sub_button:
+              main: []
+              bottom: []
+            grid_options:
+              rows: auto
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: binary_sensor.radio_wohnzimmer
+                    name: Wohnzimmer
+                    icon: mdi:sofa
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: script.radio_player_umschalten
+                      data:
+                        player: wohnzimmer
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_player_umschalten
+                        data:
+                          player: wohnzimmer
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: state
+                    entity: binary_sensor.radio_kueche
+                    name: Küche
+                    icon: mdi:stove
+                    show_state: false
+                    sub_button:
+                      main: []
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: script.radio_player_umschalten
+                      data:
+                        player: kueche
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_player_umschalten
+                        data:
+                          player: kueche
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: horizontal-stack
+                cards:
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: name
+                      name: Jazzradio
+                      icon: mdi:saxophone
+                      show_state: false
+                      sub_button:
+                        main: []
+                        bottom: []
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_abspielen
+                        data:
+                          sender: Jazzradio
+                          url: https://streaming.radio.co/s774887f7b/listen
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.radio_abspielen
+                          data:
+                            sender: Jazzradio
+                            url: https://streaming.radio.co/s774887f7b/listen
+                      styles: |
+                        .bubble-button-background {
+                          opacity: ${hass.states['sensor.radio_sender']?.state === 'Jazzradio' ? '1' : '0'} !important;
+                          background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                        }
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: name
+                      name: ByteFM
+                      icon: mdi:radio
+                      show_state: false
+                      sub_button:
+                        main: []
+                        bottom: []
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_abspielen
+                        data:
+                          sender: ByteFM
+                          url: https://bytefm.stream14.radiohost.de/bytefm-mainhq_mp3-192
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.radio_abspielen
+                          data:
+                            sender: ByteFM
+                            url: https://bytefm.stream14.radiohost.de/bytefm-mainhq_mp3-192
+                      styles: |
+                        .bubble-button-background {
+                          opacity: ${hass.states['sensor.radio_sender']?.state === 'ByteFM' ? '1' : '0'} !important;
+                          background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                        }
+              - type: horizontal-stack
+                cards:
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: name
+                      name: radioeins
+                      icon: mdi:numeric-1-circle
+                      show_state: false
+                      sub_button:
+                        main: []
+                        bottom: []
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_abspielen
+                        data:
+                          sender: radioeins
+                          url: https://dispatcher.rndfnk.com/rbb/radioeins/live/mp3/128/stream.mp3
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.radio_abspielen
+                          data:
+                            sender: radioeins
+                            url: https://dispatcher.rndfnk.com/rbb/radioeins/live/mp3/128/stream.mp3
+                      styles: |
+                        .bubble-button-background {
+                          opacity: ${hass.states['sensor.radio_sender']?.state === 'radioeins' ? '1' : '0'} !important;
+                          background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                        }
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: name
+                      name: Berliner Rundfunk 91,4
+                      icon: mdi:radio-tower
+                      show_state: false
+                      sub_button:
+                        main: []
+                        bottom: []
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_abspielen
+                        data:
+                          sender: Berliner Rundfunk 91,4
+                          url: https://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.radio_abspielen
+                          data:
+                            sender: Berliner Rundfunk 91,4
+                            url: https://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/
+                      styles: |
+                        .bubble-button-background {
+                          opacity: ${hass.states['sensor.radio_sender']?.state === 'Berliner Rundfunk 91,4' ? '1' : '0'} !important;
+                          background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                        }
+              - type: horizontal-stack
+                cards:
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: name
+                      name: Antenne Brandenburg
+                      icon: mdi:antenna
+                      show_state: false
+                      sub_button:
+                        main: []
+                        bottom: []
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_abspielen
+                        data:
+                          sender: Antenne Brandenburg
+                          url: https://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.radio_abspielen
+                          data:
+                            sender: Antenne Brandenburg
+                            url: https://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3
+                      styles: |
+                        .bubble-button-background {
+                          opacity: ${hass.states['sensor.radio_sender']?.state === 'Antenne Brandenburg' ? '1' : '0'} !important;
+                          background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                        }
+                    - type: custom:bubble-card
+                      card_type: button
+                      button_type: name
+                      name: Stopp
+                      icon: mdi:stop
+                      show_state: false
+                      sub_button:
+                        main: []
+                        bottom: []
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_stopp
+                      button_action:
+                        tap_action:
+                          action: perform-action
+                          perform_action: script.radio_stopp
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: media-player
+                entity: media_player.wohnzimmer_anlage
+                hide:
+                  power_button: true
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: media-player
+                entity: media_player.kuche_anlage_2
+                hide:
+                  power_button: true
+                sub_button:
+                  main: []
+                  bottom: []
+          - type: custom:bubble-card
             card_type: select
             sub_button:
               main: []
