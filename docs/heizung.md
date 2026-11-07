@@ -134,7 +134,8 @@ Am Ventil:
 
 - `local_temperature_calibration` = 0.
 - Tastensperre aus.
-- `temperature_accuracy` = −0,2, hält die Fühler-Automation.
+- `temperature_accuracy` = −0,2, hält die Fühler-Automation, solange `smart_temperature_control` aus ist.
+- `smart_temperature_control` (PID-Regelung im Ventil): im Wohnzimmer seit 7. November 2026, 21:47, an, sonst aus. Ist sie an, gelten Genauigkeit und Öffnungsweite nicht, und die Fühler-Automation lässt die Genauigkeit in Ruhe.
 
 Fenster: `on` am Sensor ist offen, `off` ist zu. Zigbee2MQTT meldet `contact: true`, solange der Kontakt geschlossen ist. `unknown` und `unavailable` schalten nichts. Die Klima-Karte zeigt ein Fenster-Icon. Der Hintergrund färbt sich, wenn der Sensor `on` ist.
 
@@ -172,7 +173,11 @@ Bei vielen HA-Neustarts hintereinander fiel das Ventil auf Aus, und Better Therm
 
 Im Modus External Sensor Offset Only hat Better Thermostat das Ventil-Soll alle paar Minuten um 0,5° neben 21° und 19,5° geschoben, weil die Rundung auf das 0,5°-Raster bei jeder Messung neu fiel. Ohne Better Thermostat rechnet niemand am Soll.
 
-### 7. Sonst beobachtet
+### 7. Raum pendelt um 0,8°
+
+Mit Genauigkeit −0,2 arbeitet der TRVZB als Zweipunktregler: ganz auf bei 0,3° unter Soll, ganz zu bei 0,1° darüber. Der Heizkörper gibt danach noch etwa zehn Minuten Wärme ab. Wohnzimmer am 7. November 2026 bei Soll 21°: auf bei 20,7°, nach etwa 10 Minuten zu bei 21,1°, Spitze 21,5°, dann knapp zwei Stunden Abkühlen bis 20,7°. Seit 21:47 läuft dort `smart_temperature_control` als Versuch. Vergleich nach zwei, drei Tagen, danach entscheiden, ob die anderen Räume folgen. Ausweichlösung: `valve_opening_degree` auf etwa 40 %.
+
+### 8. Sonst beobachtet
 
 - `temporary_mode_select: boost` mit Dauer 0 steht seit Mai so und ist kein aktiver Boost.
 - `valve_opening_degree` und `valve_closing_degree` = 100 sind die Grenzen, nicht die aktuelle Stellung. Der TRVZB meldet keine Stellung.
@@ -193,5 +198,6 @@ Im Modus External Sensor Offset Only hat Better Thermostat das Ventil-Soll alle 
 
 ## Offen
 
+- PID-Versuch im Wohnzimmer (Fehler 7) ab 10. November 2026 auswerten.
 - Ob Fehler 2 wiederkommt. Morgens nach 04:00 sollte das Ventil öffnen, wenn der Raum unter 21° liegt.
 - Better Thermostat ist als HACS-Integration noch installiert, aber ohne Eintrag. Entfernen über HACS, danach Neustart.
