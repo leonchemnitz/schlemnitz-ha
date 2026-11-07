@@ -55,6 +55,18 @@ Multiroom läuft über Linkplay (`media_player.join`/`unjoin`), nicht über Musi
 
 Die Anlagen-Karten in den Popups Wohnzimmer und Küche haben unten Quelle (Select auf `source_list`, zeigt `source`, die S10+ meldet im Leerlauf keine Quelle) und den Kopplungs-Knopf. Die eigene Lautstärke läuft über das Lautsprecher-Icon der Karte, der Regler des anderen Raums erscheint in derselben Zeile nur, wenn gekoppelt. Die Karten haben `rows: 2`, weil Bubble Card im Popup die Höhe nicht selbst berechnet. Nach dem Trennen meldet die S10+ weiter `source: Follower` (Modus 99, `group: 0`), sie ist dann aber in keiner Gruppe. Eine andere Quelle wählen beendet das.
 
+Radio: Bubble „Radio“ über dem Tageszeit-Modus öffnet `#radio`. Oben die Player-Auswahl `binary_sensor.radio_wohnzimmer` und `binary_sensor.radio_kueche` (Trigger-Template auf Event `radio`, `script.radio_player_umschalten`), darunter die Sender-Kacheln. `script.radio_abspielen` (Felder `sender`, `url`) koppelt bei zwei gewählten Anlagen über Linkplay, trennt bei einer und spielt die URL per `media_player.play_media` auf dem Leiter. `script.radio_stopp` stoppt. `sensor.radio_sender` merkt den zuletzt gestarteten Sender, die Kachel dazu ist hervorgehoben. Kein Music Assistant. Stream-URLs (am 7. November 2026 geprüft, alle MP3):
+
+| Sender | URL |
+|---|---|
+| Jazzradio 106,8 | `https://streaming.radio.co/s774887f7b/listen` |
+| ByteFM | `https://bytefm.stream14.radiohost.de/bytefm-mainhq_mp3-192` |
+| radioeins | `https://dispatcher.rndfnk.com/rbb/radioeins/live/mp3/128/stream.mp3` |
+| Berliner Rundfunk 91,4 | `https://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/` |
+| Antenne Brandenburg | `https://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3` |
+
+Neue Sender: URL über `https://de1.api.radio-browser.info/json/stations/search?name=…` suchen, mit `curl` prüfen, Kachel im Popup `#radio` kopieren.
+
 Wohnzimmer TV (Google TV): `media_player.wohnzimmer_tv` (Cast, die Bubble über der Anlage), `media_player.wohnzimmer_tv_2` und `remote.wohnzimmer_tv` (Android TV Remote), `media_player.wohnzimmer_tv_3` (Music Assistant). Das Fernbedienungs-Icon öffnet `#wohnzimmer-fernbedienung`, gleich aufgebaut wie bei Ems.
 
 ## Licht
