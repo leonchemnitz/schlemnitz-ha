@@ -554,7 +554,7 @@
       value: '{{ raum }}'
   - if:
     - condition: template
-      value_template: '{{ states(''number.leon_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+      value_template: '{{ states(''number.leon_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 and not is_state(''switch.leon_thermostat_smart_temperature_control'', ''on'') }}'
     then:
     - action: number.set_value
       target:
@@ -727,7 +727,7 @@
       value: '{{ raum }}'
   - if:
     - condition: template
-      value_template: '{{ states(''number.wohnzimmer_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+      value_template: '{{ states(''number.wohnzimmer_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 and not is_state(''switch.wohnzimmer_thermostat_smart_temperature_control'', ''on'') }}'
     then:
     - action: number.set_value
       target:
@@ -898,7 +898,7 @@
       value: '{{ raum }}'
   - if:
     - condition: template
-      value_template: '{{ states(''number.bad_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+      value_template: '{{ states(''number.bad_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 and not is_state(''switch.bad_thermostat_smart_temperature_control'', ''on'') }}'
     then:
     - action: number.set_value
       target:
@@ -1122,7 +1122,7 @@
       value: '{{ raum }}'
   - if:
     - condition: template
-      value_template: '{{ states(''number.ems_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+      value_template: '{{ states(''number.ems_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 and not is_state(''switch.ems_thermostat_smart_temperature_control'', ''on'') }}'
     then:
     - action: number.set_value
       target:
@@ -1293,7 +1293,7 @@
       value: '{{ raum }}'
   - if:
     - condition: template
-      value_template: '{{ states(''number.kueche_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
+      value_template: '{{ states(''number.kueche_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 and not is_state(''switch.kueche_thermostat_smart_temperature_control'', ''on'') }}'
     then:
     - action: number.set_value
       target:
