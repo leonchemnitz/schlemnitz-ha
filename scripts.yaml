@@ -119,8 +119,8 @@ kueche_heizung_soll:
 multiroom_umschalten:
   alias: Multiroom umschalten
   description: Koppelt zwei Linkplay-Anlagen oder trennt sie. Beim Koppeln führt
-    "hier", die andere Anlage spielt dieselbe Quelle mit, auch Line In, Optical
-    und ARC.
+    die Anlage, die gerade spielt, sonst "hier". Die andere spielt dieselbe Quelle
+    mit, auch Line In, Optical und ARC.
   icon: mdi:speaker-multiple
   fields:
     hier:
@@ -149,16 +149,20 @@ multiroom_umschalten:
       target:
         entity_id: "{{ gruppe | reject('equalto', gruppe[0]) | unique | list }}"
     else:
+    - variables:
+        leiter: "{{ dort if is_state(dort, 'playing') and not is_state(hier, 'playing')\
+          \ else hier }}"
     - action: media_player.join
       target:
-        entity_id: '{{ hier }}'
+        entity_id: '{{ leiter }}'
       data:
-        group_members:
-        - '{{ dort }}'
+        group_members: "{{ [hier, dort] | reject('equalto', leiter) | list }}"
   mode: single
 radio_player_umschalten:
   alias: Radio Player umschalten
-  description: Wählt eine Anlage für das Radio-Popup an oder ab.
+  description: Wählt eine Anlage für das Radio-Popup an oder ab. Läuft gerade ein
+    Sender, steigt die Anlage sofort ein oder hört auf. Hört das Hauptgerät auf,
+    übernimmt die andere Anlage den Sender.
   icon: mdi:speaker
   fields:
     player:
@@ -170,9 +174,72 @@ radio_player_umschalten:
           - wohnzimmer
           - kueche
   sequence:
+  - variables:
+      alle:
+      - media_player.wohnzimmer_anlage
+      - media_player.kuche_anlage_2
+      ziel: "{{ 'media_player.wohnzimmer_anlage' if player == 'wohnzimmer' else 'media_player.kuche_anlage_2'\
+        \ }}"
+      war_an: "{{ is_state('binary_sensor.radio_' ~ player, 'on') }}"
+      spielend: "{{ alle | select('is_state', 'playing') | list }}"
+      laeuft: "{{ not is_state('sensor.radio_sender', 'Aus') and spielend | count > 0 }}"
+      gekoppelt: "{{ is_state('binary_sensor.multiroom_wohnzimmer_kueche', 'on') }}"
+      leiter: "{{ state_attr('binary_sensor.multiroom_wohnzimmer_kueche', 'leiter') if\
+        \ gekoppelt else spielend | first | default('') }}"
+      url: "{{ state_attr('sensor.radio_sender', 'url') }}"
   - event: radio
     event_data:
       umschalten: '{{ player }}'
+  - condition: template
+    value_template: '{{ laeuft }}'
+  - choose:
+    - conditions:
+      - condition: template
+        value_template: '{{ not war_an and ziel != leiter }}'
+      sequence:
+      - action: media_player.join
+        target:
+          entity_id: '{{ leiter }}'
+        data:
+          group_members:
+          - '{{ ziel }}'
+    - conditions:
+      - condition: template
+        value_template: '{{ war_an and gekoppelt and ziel != leiter }}'
+      sequence:
+      - action: media_player.unjoin
+        target:
+          entity_id: '{{ ziel }}'
+    - conditions:
+      - condition: template
+        value_template: '{{ war_an and gekoppelt and ziel == leiter and url }}'
+      sequence:
+      - variables:
+          rest: "{{ alle | reject('equalto', ziel) | list }}"
+      - action: media_player.unjoin
+        target:
+          entity_id: '{{ rest }}'
+      - action: media_player.media_stop
+        target:
+          entity_id: '{{ ziel }}'
+      - delay:
+          seconds: 2
+      - action: media_player.play_media
+        target:
+          entity_id: '{{ rest[0] }}'
+        data:
+          media_content_id: '{{ url }}'
+          media_content_type: music
+    - conditions:
+      - condition: template
+        value_template: '{{ war_an and not gekoppelt and ziel in spielend }}'
+      sequence:
+      - action: media_player.media_stop
+        target:
+          entity_id: '{{ ziel }}'
+      - event: radio
+        event_data:
+          sender: Aus
   mode: queued
 radio_abspielen:
   alias: Radio abspielen
@@ -214,7 +281,8 @@ radio_abspielen:
     - delay:
         seconds: 2
   - variables:
-      leiter: "{{ leiter_alt if gekoppelt and auswahl | count == 2 else auswahl[0] }}"
+      leiter: "{{ leiter_alt if gekoppelt and auswahl | count == 2 else ((auswahl | select('is_state',\
+        \ 'playing') | list) + auswahl) | first }}"
   - if:
     - condition: template
       value_template: '{{ not gekoppelt and auswahl | count == 2 }}'
@@ -235,6 +303,7 @@ radio_abspielen:
   - event: radio
     event_data:
       sender: '{{ sender }}'
+      url: '{{ url }}'
   mode: restart
 radio_stopp:
   alias: Radio stoppen

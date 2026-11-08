@@ -398,3 +398,5 @@
       state: >
         {% set alt = this.state if this.state not in ['unknown', 'unavailable'] else 'Aus' %}
         {{ trigger.event.data.sender | default(alt) }}
+      attributes:
+        url: "{{ trigger.event.data.url | default(this.attributes.get('url')) }}"
