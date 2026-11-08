@@ -352,45 +352,49 @@
           data:
             hvac_mode: "{{ hvac_mode }}"
 
-# Multiroom der Arylic-Anlagen (Linkplay). Linkplay meldet group_members nur
-# am Mitglied, beim Leiter bleibt die Liste leer. Deshalb beide prüfen.
-- binary_sensor:
-    - unique_id: multiroom_wohnzimmer_kueche
-      default_entity_id: binary_sensor.multiroom_wohnzimmer_kueche
-      name: Multiroom Wohnzimmer Küche
+# Multiroom der Arylic-Anlagen (Linkplay). Liste der Anlagen und Gruppenlogik in
+# custom_templates/anlagen.jinja. Zustand: Anzahl der Gruppen. "gruppe_von"
+# ordnet jeder Anlage ihre Gruppe zu, Hauptgerät zuerst, allein nur sie selbst.
+- sensor:
+    - unique_id: multiroom
+      default_entity_id: sensor.multiroom
+      name: Multiroom
       icon: mdi:speaker-multiple
       state: >
-        {% set m = (state_attr('media_player.wohnzimmer_anlage', 'group_members') or [])
-                 + (state_attr('media_player.kuche_anlage_2', 'group_members') or []) %}
-        {{ 'media_player.wohnzimmer_anlage' in m and 'media_player.kuche_anlage_2' in m }}
+        {% from 'anlagen.jinja' import gruppen %}
+        {{ gruppen() | from_json | count }}
       attributes:
-        leiter: >
-          {% set m = (state_attr('media_player.wohnzimmer_anlage', 'group_members') or [])
-                   + (state_attr('media_player.kuche_anlage_2', 'group_members') or []) %}
-          {{ m[0] if m else none }}
+        gruppen: >
+          {% from 'anlagen.jinja' import gruppen %}
+          {{ gruppen() | from_json }}
+        gruppe_von: >
+          {% from 'anlagen.jinja' import anlagen, gruppe_von %}
+          {% set ns = namespace(p=[]) %}
+          {% for a in anlagen() | from_json %}
+            {% set ns.p = ns.p + [(a.entity, gruppe_von(a.entity) | from_json)] %}
+          {% endfor %}
+          {{ dict(ns.p) }}
 
-# Radio-Popup. Das Event "radio" mit "umschalten: wohnzimmer" oder
-# "umschalten: kueche" wechselt die Player-Auswahl, mit "sender" merkt es den
-# zuletzt gestarteten Sender. Ohne gespeicherten Zustand ist Wohnzimmer an.
+# Radio-Popup. Das Event "radio" mit "umschalten: <media_player>" nimmt eine
+# Anlage in die Auswahl oder heraus, "setzen: [...]" ersetzt sie. "sender",
+# "url" und "leiter" merken den laufenden Sender und das Hauptgerät dafür.
 - triggers:
     - trigger: event
       event_type: radio
-  binary_sensor:
-    - unique_id: radio_wohnzimmer
-      default_entity_id: binary_sensor.radio_wohnzimmer
-      name: Radio Wohnzimmer
-      icon: mdi:sofa
-      state: >
-        {% set an = this.state == 'on' if this.state in ['on', 'off'] else true %}
-        {{ not an if trigger.event.data.umschalten | default('') == 'wohnzimmer' else an }}
-    - unique_id: radio_kueche
-      default_entity_id: binary_sensor.radio_kueche
-      name: Radio Küche
-      icon: mdi:stove
-      state: >
-        {% set an = this.state == 'on' %}
-        {{ not an if trigger.event.data.umschalten | default('') == 'kueche' else an }}
   sensor:
+    - unique_id: radio_auswahl
+      default_entity_id: sensor.radio_auswahl
+      name: Radio Auswahl
+      icon: mdi:speaker-multiple
+      state: >
+        {% from 'anlagen.jinja' import auswahl_neu %}
+        {{ auswahl_neu(this.attributes.get('player'), trigger.event.data.umschalten | default(''),
+           trigger.event.data.setzen | default(none)) | from_json | count }}
+      attributes:
+        player: >
+          {% from 'anlagen.jinja' import auswahl_neu %}
+          {{ auswahl_neu(this.attributes.get('player'), trigger.event.data.umschalten | default(''),
+             trigger.event.data.setzen | default(none)) | from_json }}
     - unique_id: radio_sender
       default_entity_id: sensor.radio_sender
       name: Radio Sender
@@ -400,3 +404,4 @@
         {{ trigger.event.data.sender | default(alt) }}
       attributes:
         url: "{{ trigger.event.data.url | default(this.attributes.get('url')) }}"
+        leiter: "{{ trigger.event.data.leiter | default(this.attributes.get('leiter')) }}"

@@ -118,9 +118,11 @@ kueche_heizung_soll:
   mode: queued
 multiroom_umschalten:
   alias: Multiroom umschalten
-  description: Koppelt zwei Linkplay-Anlagen oder trennt sie. Beim Koppeln führt
-    die Anlage, die gerade spielt, sonst "hier". Die andere spielt dieselbe Quelle
-    mit, auch Line In, Optical und ARC.
+  description: Nimmt "dort" in die Gruppe von "hier" auf oder nimmt es heraus.
+    Beim Koppeln führt die Gruppe, in der "hier" schon ist, sonst die Anlage, die
+    gerade spielt, sonst "hier". Das Mitglied spielt dieselbe Quelle mit, auch Line
+    In, Optical und ARC. Verlässt das Hauptgerät die Gruppe, führt die nächste
+    Anlage den Rest.
   icon: mdi:speaker-multiple
   fields:
     hier:
@@ -139,54 +141,71 @@ multiroom_umschalten:
           integration: linkplay
   sequence:
   - variables:
-      gruppe: "{{ (state_attr(hier, 'group_members') or []) + (state_attr(dort, 'group_members')\
-        \ or []) }}"
+      g_hier: "{% from 'anlagen.jinja' import gruppe_von %}{{ gruppe_von(hier) | from_json }}"
+      g_dort: "{% from 'anlagen.jinja' import gruppe_von %}{{ gruppe_von(dort) | from_json }}"
   - if:
     - condition: template
-      value_template: '{{ hier in gruppe and dort in gruppe }}'
+      value_template: '{{ dort in g_hier }}'
     then:
-    - action: media_player.unjoin
-      target:
-        entity_id: "{{ gruppe | reject('equalto', gruppe[0]) | unique | list }}"
+    - if:
+      - condition: template
+        value_template: '{{ dort == g_hier[0] }}'
+      then:
+      - variables:
+          rest: "{{ g_hier | reject('equalto', dort) | list }}"
+      - action: media_player.unjoin
+        target:
+          entity_id: '{{ rest }}'
+      - if:
+        - condition: template
+          value_template: '{{ rest | count > 1 }}'
+        then:
+        - delay:
+            seconds: 3
+        - action: media_player.join
+          target:
+            entity_id: '{{ rest[0] }}'
+          data:
+            group_members: '{{ rest[1:] }}'
+      else:
+      - action: media_player.unjoin
+        target:
+          entity_id: '{{ dort }}'
     else:
     - variables:
-        leiter: "{{ dort if is_state(dort, 'playing') and not is_state(hier, 'playing')\
-          \ else hier }}"
+        leiter: "{{ g_hier[0] if g_hier | count > 1 else (g_dort[0] if g_dort | count > 1 and
+          not is_state(hier, 'playing') else (dort if is_state(dort, 'playing') and not is_state(hier,
+          'playing') else hier)) }}"
+        neu: "{% from 'anlagen.jinja' import gruppe_von %}{{ [hier, dort] | reject('in', gruppe_von(leiter) | from_json) | list }}"
     - action: media_player.join
       target:
         entity_id: '{{ leiter }}'
       data:
-        group_members: "{{ [hier, dort] | reject('equalto', leiter) | list }}"
+        group_members: '{{ neu }}'
   mode: single
 radio_player_umschalten:
   alias: Radio Player umschalten
-  description: Wählt eine Anlage für das Radio-Popup an oder ab. Läuft gerade ein
-    Sender, steigt die Anlage sofort ein oder hört auf. Hört das Hauptgerät auf,
-    übernimmt die andere Anlage den Sender.
+  description: Nimmt eine Anlage in die Radio-Auswahl auf oder heraus. Läuft gerade
+    ein Sender, steigt sie sofort ein oder hört auf. Hört das Hauptgerät auf,
+    übernimmt die nächste Anlage der Gruppe den Sender.
   icon: mdi:speaker
   fields:
     player:
       name: Player
       required: true
       selector:
-        select:
-          options:
-          - wohnzimmer
-          - kueche
+        entity:
+          domain: media_player
+          integration: linkplay
   sequence:
   - variables:
-      alle:
-      - media_player.wohnzimmer_anlage
-      - media_player.kuche_anlage_2
-      ziel: "{{ 'media_player.wohnzimmer_anlage' if player == 'wohnzimmer' else 'media_player.kuche_anlage_2'\
-        \ }}"
-      war_an: "{{ is_state('binary_sensor.radio_' ~ player, 'on') }}"
-      spielend: "{{ alle | select('is_state', 'playing') | list }}"
-      laeuft: "{{ not is_state('sensor.radio_sender', 'Aus') and spielend | count > 0 }}"
-      gekoppelt: "{{ is_state('binary_sensor.multiroom_wohnzimmer_kueche', 'on') }}"
-      leiter: "{{ state_attr('binary_sensor.multiroom_wohnzimmer_kueche', 'leiter') if\
-        \ gekoppelt else spielend | first | default('') }}"
-      url: "{{ state_attr('sensor.radio_sender', 'url') }}"
+      auswahl: "{{ state_attr('sensor.radio_auswahl', 'player') or [] }}"
+      war_an: '{{ player in auswahl }}'
+      rl: "{{ state_attr('sensor.radio_sender', 'leiter') or '' }}"
+      url: "{{ state_attr('sensor.radio_sender', 'url') or '' }}"
+      laeuft: "{{ not is_state('sensor.radio_sender', 'Aus') and rl != '' and is_state(rl, 'playing')
+        and url != '' }}"
+      g: "{% from 'anlagen.jinja' import gruppe_von %}{{ gruppe_von(rl) | from_json if rl else [] }}"
   - event: radio
     event_data:
       umschalten: '{{ player }}'
@@ -195,58 +214,73 @@ radio_player_umschalten:
   - choose:
     - conditions:
       - condition: template
-        value_template: '{{ not war_an and ziel != leiter }}'
+        value_template: '{{ not war_an and player not in g }}'
       sequence:
       - action: media_player.join
         target:
-          entity_id: '{{ leiter }}'
+          entity_id: '{{ rl }}'
         data:
           group_members:
-          - '{{ ziel }}'
+          - '{{ player }}'
     - conditions:
       - condition: template
-        value_template: '{{ war_an and gekoppelt and ziel != leiter }}'
+        value_template: '{{ war_an and player != rl and player in g }}'
       sequence:
       - action: media_player.unjoin
         target:
-          entity_id: '{{ ziel }}'
+          entity_id: '{{ player }}'
     - conditions:
       - condition: template
-        value_template: '{{ war_an and gekoppelt and ziel == leiter and url is string
-          and url | length > 0 }}'
+        value_template: '{{ war_an and player == rl }}'
       sequence:
       - variables:
-          rest: "{{ alle | reject('equalto', ziel) | list }}"
-      - action: media_player.unjoin
-        target:
-          entity_id: '{{ rest }}'
-      - action: media_player.media_stop
-        target:
-          entity_id: '{{ ziel }}'
-      - delay:
-          seconds: 2
-      - action: media_player.play_media
-        target:
-          entity_id: '{{ rest[0] }}'
-        data:
-          media_content_id: '{{ url }}'
-          media_content_type: music
-    - conditions:
-      - condition: template
-        value_template: '{{ war_an and not gekoppelt and ziel in spielend }}'
-      sequence:
-      - action: media_player.media_stop
-        target:
-          entity_id: '{{ ziel }}'
-      - event: radio
-        event_data:
-          sender: Aus
+          rest: "{{ g | reject('equalto', player) | list }}"
+      - if:
+        - condition: template
+          value_template: '{{ rest | count > 0 }}'
+        then:
+        - action: media_player.unjoin
+          target:
+            entity_id: '{{ rest }}'
+        - action: media_player.media_stop
+          target:
+            entity_id: '{{ player }}'
+        - delay:
+            seconds: 3
+        - action: media_player.play_media
+          target:
+            entity_id: '{{ rest[0] }}'
+          data:
+            media_content_id: '{{ url }}'
+            media_content_type: music
+        - if:
+          - condition: template
+            value_template: '{{ rest | count > 1 }}'
+          then:
+          - delay:
+              seconds: 3
+          - action: media_player.join
+            target:
+              entity_id: '{{ rest[0] }}'
+            data:
+              group_members: '{{ rest[1:] }}'
+        - event: radio
+          event_data:
+            leiter: '{{ rest[0] }}'
+        else:
+        - action: media_player.media_stop
+          target:
+            entity_id: '{{ player }}'
+        - event: radio
+          event_data:
+            sender: Aus
   mode: queued
 radio_abspielen:
   alias: Radio abspielen
-  description: Spielt einen Sender auf den im Radio-Popup gewählten Anlagen. Bei
-    beiden koppelt es sie über Linkplay, ist nur eine gewählt, trennt es eine
-    bestehende Kopplung.
+  description: Spielt einen Sender auf allen Anlagen der Radio-Auswahl. Führt schon
+    eine gewählte Anlage eine Gruppe, bleibt sie Hauptgerät, sonst eine, die gerade
+    spielt, sonst die erste. Gewählte Anlagen kommen dazu, nicht gewählte verlassen
+    die Gruppe.
   icon: mdi:radio
   fields:
     sender:
@@ -261,40 +295,52 @@ radio_abspielen:
         text: {}
   sequence:
   - variables:
-      alle:
-      - media_player.wohnzimmer_anlage
-      - media_player.kuche_anlage_2
-      auswahl: "{{ (['media_player.wohnzimmer_anlage'] if is_state('binary_sensor.radio_wohnzimmer',\
-        \ 'on') else []) + (['media_player.kuche_anlage_2'] if is_state('binary_sensor.radio_kueche',\
-        \ 'on') else []) }}"
-      gekoppelt: "{{ is_state('binary_sensor.multiroom_wohnzimmer_kueche', 'on') }}"
-      leiter_alt: "{{ state_attr('binary_sensor.multiroom_wohnzimmer_kueche', 'leiter')\
-        \ or 'media_player.wohnzimmer_anlage' }}"
+      auswahl: "{{ state_attr('sensor.radio_auswahl', 'player') or [] }}"
   - condition: template
     value_template: '{{ auswahl | count > 0 }}'
+  - variables:
+      leiter: >-
+        {% from 'anlagen.jinja' import gruppe_von %}
+        {%- set ns = namespace(f=[], s=[]) -%}
+        {%- for e in auswahl -%}
+          {%- set g = gruppe_von(e) | from_json -%}
+          {%- if g | count > 1 and g[0] == e %}{% set ns.f = ns.f + [e] %}{% endif -%}
+          {%- if g[0] == e and is_state(e, 'playing') %}{% set ns.s = ns.s + [e] %}{% endif -%}
+        {%- endfor -%}
+        {{ (ns.f + ns.s + auswahl) | first }}
   - if:
     - condition: template
-      value_template: '{{ gekoppelt and auswahl | count == 1 }}'
+      value_template: "{% from 'anlagen.jinja' import gruppe_von %}{{ (gruppe_von(leiter) | from_json)[0] != leiter }}"
     then:
     - action: media_player.unjoin
       target:
-        entity_id: "{{ alle | reject('equalto', leiter_alt) | list }}"
+        entity_id: '{{ leiter }}'
+    - delay:
+        seconds: 3
+  - variables:
+      raus: "{% from 'anlagen.jinja' import gruppe_von %}{{ gruppe_von(leiter) | from_json | reject('in', auswahl) | list }}"
+  - if:
+    - condition: template
+      value_template: '{{ raus | count > 0 }}'
+    then:
+    - action: media_player.unjoin
+      target:
+        entity_id: '{{ raus }}'
     - delay:
         seconds: 2
   - variables:
-      leiter: "{{ leiter_alt if gekoppelt and auswahl | count == 2 else ((auswahl | select('is_state',\
-        \ 'playing') | list) + auswahl) | first }}"
+      rein: "{% from 'anlagen.jinja' import gruppe_von %}{{ auswahl | reject('in', gruppe_von(leiter) | from_json) | list }}"
   - if:
     - condition: template
-      value_template: '{{ not gekoppelt and auswahl | count == 2 }}'
+      value_template: '{{ rein | count > 0 }}'
     then:
     - action: media_player.join
       target:
         entity_id: '{{ leiter }}'
       data:
-        group_members: "{{ auswahl | reject('equalto', leiter) | list }}"
+        group_members: '{{ rein }}'
     - delay:
-        seconds: 2
+        seconds: 3
   - action: media_player.play_media
     target:
       entity_id: '{{ leiter }}'
@@ -305,20 +351,18 @@ radio_abspielen:
     event_data:
       sender: '{{ sender }}'
       url: '{{ url }}'
+      leiter: '{{ leiter }}'
   mode: restart
 radio_stopp:
   alias: Radio stoppen
-  description: Stoppt die im Radio-Popup gewählten Anlagen, bei Kopplung auch
-    den Leiter.
+  description: Stoppt das Hauptgerät des Senders mit seiner Gruppe und alle Anlagen
+    der Radio-Auswahl.
   icon: mdi:stop
   sequence:
   - variables:
-      auswahl: "{{ (['media_player.wohnzimmer_anlage'] if is_state('binary_sensor.radio_wohnzimmer',\
-        \ 'on') else []) + (['media_player.kuche_anlage_2'] if is_state('binary_sensor.radio_kueche',\
-        \ 'on') else []) }}"
-      leiter: "{{ state_attr('binary_sensor.multiroom_wohnzimmer_kueche', 'leiter') }}"
-      ziel: "{{ (auswahl + ([leiter] if is_state('binary_sensor.multiroom_wohnzimmer_kueche',\
-        \ 'on') and leiter else [])) | unique | list }}"
+      rl: "{{ state_attr('sensor.radio_sender', 'leiter') or '' }}"
+      ziel: "{% from 'anlagen.jinja' import gruppe_von %}{{ ((gruppe_von(rl) | from_json if rl else []) + (state_attr('sensor.radio_auswahl',
+        'player') or [])) | unique | list }}"
   - condition: template
     value_template: '{{ ziel | count > 0 }}'
   - action: media_player.media_stop

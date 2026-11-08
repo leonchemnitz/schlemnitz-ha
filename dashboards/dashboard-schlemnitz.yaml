@@ -25,7 +25,7 @@ views:
               bottom: []
             styles: |
               .bubble-button-background {
-                opacity: ${(hass.states['sensor.radio_sender']?.state || 'Aus') !== 'Aus' && ['media_player.wohnzimmer_anlage', 'media_player.kuche_anlage_2'].some(e => hass.states[e]?.state === 'playing') ? '1' : '0'} !important;
+                opacity: ${(hass.states['sensor.radio_sender']?.state || 'Aus') !== 'Aus' && hass.states[hass.states['sensor.radio_sender']?.attributes.leiter]?.state === 'playing' ? '1' : '0'} !important;
                 background-color: var(--bubble-accent-color, var(--accent-color)) !important;
               }
             tap_action:
@@ -53,46 +53,76 @@ views:
                 cards:
                   - type: custom:bubble-card
                     card_type: button
-                    button_type: state
-                    entity: binary_sensor.radio_wohnzimmer
+                    button_type: name
                     name: Wohnzimmer
                     icon: mdi:sofa
                     show_state: false
                     sub_button:
-                      main: []
+                      main:
+                        - entity: sensor.radio_sender
+                          name: Hauptgerät
+                          icon: mdi:crown
+                          show_name: false
+                          show_state: false
+                          state_background: false
+                          tap_action:
+                            action: none
+                          visibility:
+                            - condition: template
+                              value_template: "{{ not is_state('sensor.radio_sender', 'Aus') and state_attr('sensor.radio_sender', 'leiter') == 'media_player.wohnzimmer_anlage' }}"
                       bottom: []
                     tap_action:
                       action: perform-action
                       perform_action: script.radio_player_umschalten
                       data:
-                        player: wohnzimmer
+                        player: media_player.wohnzimmer_anlage
                     button_action:
                       tap_action:
                         action: perform-action
                         perform_action: script.radio_player_umschalten
                         data:
-                          player: wohnzimmer
+                          player: media_player.wohnzimmer_anlage
+                    styles: |
+                      .bubble-button-background {
+                        opacity: ${(hass.states['sensor.radio_auswahl']?.attributes.player || []).includes('media_player.wohnzimmer_anlage') ? '1' : '0'} !important;
+                        background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                      }
                   - type: custom:bubble-card
                     card_type: button
-                    button_type: state
-                    entity: binary_sensor.radio_kueche
+                    button_type: name
                     name: Küche
                     icon: mdi:stove
                     show_state: false
                     sub_button:
-                      main: []
+                      main:
+                        - entity: sensor.radio_sender
+                          name: Hauptgerät
+                          icon: mdi:crown
+                          show_name: false
+                          show_state: false
+                          state_background: false
+                          tap_action:
+                            action: none
+                          visibility:
+                            - condition: template
+                              value_template: "{{ not is_state('sensor.radio_sender', 'Aus') and state_attr('sensor.radio_sender', 'leiter') == 'media_player.kuche_anlage_2' }}"
                       bottom: []
                     tap_action:
                       action: perform-action
                       perform_action: script.radio_player_umschalten
                       data:
-                        player: kueche
+                        player: media_player.kuche_anlage_2
                     button_action:
                       tap_action:
                         action: perform-action
                         perform_action: script.radio_player_umschalten
                         data:
-                          player: kueche
+                          player: media_player.kuche_anlage_2
+                    styles: |
+                      .bubble-button-background {
+                        opacity: ${(hass.states['sensor.radio_auswahl']?.attributes.player || []).includes('media_player.kuche_anlage_2') ? '1' : '0'} !important;
+                        background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                      }
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
@@ -990,8 +1020,34 @@ views:
                 rows: 2
                 hide:
                   power_button: true
+                styles: |
+                  .mit-kuche {
+                    background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.wohnzimmer_anlage'] || []).includes('media_player.kuche_anlage_2') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
+                  }
                 sub_button:
-                  main: []
+                  main:
+                    - entity: sensor.multiroom
+                      name: Hauptgerät
+                      icon: mdi:crown
+                      show_name: false
+                      show_state: false
+                      state_background: false
+                      tap_action:
+                        action: none
+                      visibility:
+                        - condition: template
+                          value_template: "{% set g = (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.wohnzimmer_anlage', []) %}{{ g | count > 1 and g[0] == 'media_player.wohnzimmer_anlage' }}"
+                    - entity: sensor.multiroom
+                      name: Folgt
+                      icon: mdi:link-variant
+                      show_name: false
+                      show_state: false
+                      state_background: false
+                      tap_action:
+                        action: none
+                      visibility:
+                        - condition: template
+                          value_template: "{% set g = (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.wohnzimmer_anlage', []) %}{{ g | count > 1 and g[0] != 'media_player.wohnzimmer_anlage' }}"
                   bottom:
                     - group:
                         - entity: media_player.wohnzimmer_anlage
@@ -1002,11 +1058,12 @@ views:
                           show_name: false
                           show_attribute: true
                           attribute: source
-                        - entity: binary_sensor.multiroom_wohnzimmer_kueche
+                        - entity: sensor.multiroom
                           name: Mit Küche
                           icon: mdi:speaker-multiple
                           show_name: true
                           show_state: false
+                          state_background: false
                           tap_action:
                             action: perform-action
                             perform_action: script.multiroom_umschalten
@@ -1020,9 +1077,8 @@ views:
                           name: Küche
                           icon: mdi:volume-high
                           visibility:
-                            - condition: state
-                              entity: binary_sensor.multiroom_wohnzimmer_kueche
-                              state: 'on'
+                            - condition: template
+                              value_template: "{{ 'media_player.kuche_anlage_2' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.wohnzimmer_anlage', []) }}"
                       buttons_layout: inline
                   bottom_layout: rows
               - type: custom:bubble-card
@@ -1795,8 +1851,34 @@ views:
                 rows: 2
                 hide:
                   power_button: true
+                styles: |
+                  .mit-wohnzimmer {
+                    background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.kuche_anlage_2'] || []).includes('media_player.wohnzimmer_anlage') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
+                  }
                 sub_button:
-                  main: []
+                  main:
+                    - entity: sensor.multiroom
+                      name: Hauptgerät
+                      icon: mdi:crown
+                      show_name: false
+                      show_state: false
+                      state_background: false
+                      tap_action:
+                        action: none
+                      visibility:
+                        - condition: template
+                          value_template: "{% set g = (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.kuche_anlage_2', []) %}{{ g | count > 1 and g[0] == 'media_player.kuche_anlage_2' }}"
+                    - entity: sensor.multiroom
+                      name: Folgt
+                      icon: mdi:link-variant
+                      show_name: false
+                      show_state: false
+                      state_background: false
+                      tap_action:
+                        action: none
+                      visibility:
+                        - condition: template
+                          value_template: "{% set g = (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.kuche_anlage_2', []) %}{{ g | count > 1 and g[0] != 'media_player.kuche_anlage_2' }}"
                   bottom:
                     - group:
                         - entity: media_player.kuche_anlage_2
@@ -1807,11 +1889,12 @@ views:
                           show_name: false
                           show_attribute: true
                           attribute: source
-                        - entity: binary_sensor.multiroom_wohnzimmer_kueche
+                        - entity: sensor.multiroom
                           name: Mit Wohnzimmer
                           icon: mdi:speaker-multiple
                           show_name: true
                           show_state: false
+                          state_background: false
                           tap_action:
                             action: perform-action
                             perform_action: script.multiroom_umschalten
@@ -1825,9 +1908,8 @@ views:
                           name: Wohnzimmer
                           icon: mdi:volume-high
                           visibility:
-                            - condition: state
-                              entity: binary_sensor.multiroom_wohnzimmer_kueche
-                              state: 'on'
+                            - condition: template
+                              value_template: "{{ 'media_player.wohnzimmer_anlage' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.kuche_anlage_2', []) }}"
                       buttons_layout: inline
                   bottom_layout: rows
               - type: horizontal-stack

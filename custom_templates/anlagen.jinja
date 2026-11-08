@@ -1,0 +1,44 @@
+{#- Arylic-Anlagen (Linkplay) für Multiroom und Radio. Eine neue Anlage nur hier
+    eintragen, dazu je eine Kachel im Radio-Popup und an den Anlagen-Karten.
+    Die Reihenfolge entscheidet, wer führt, wenn sonst nichts dafür spricht. -#}
+{% macro anlagen() -%}
+{{ [
+  {'id': 'wohnzimmer', 'name': 'Wohnzimmer', 'entity': 'media_player.wohnzimmer_anlage'},
+  {'id': 'kueche', 'name': 'Küche', 'entity': 'media_player.kuche_anlage_2'},
+] | to_json }}
+{%- endmacro %}
+
+{#- Linkplay meldet group_members mit dem Hauptgerät zuerst, aber nicht immer an
+    jedem Gerät der Gruppe. Deshalb alle Listen sammeln. -#}
+{% macro gruppen() -%}
+{%- set ns = namespace(g=[]) -%}
+{%- for a in anlagen() | from_json -%}
+  {%- set gm = state_attr(a.entity, 'group_members') or [] -%}
+  {%- if gm | count > 1 and gm[0] not in ns.g | map('first') | list -%}
+    {%- set ns.g = ns.g + [gm | list] -%}
+  {%- endif -%}
+{%- endfor -%}
+{{ ns.g | to_json }}
+{%- endmacro %}
+
+{#- Gruppe einer Anlage, Hauptgerät zuerst. Allein: nur die Anlage selbst. -#}
+{% macro gruppe_von(entity) -%}
+{%- set ns = namespace(r=[entity]) -%}
+{%- for g in gruppen() | from_json if entity in g -%}
+  {%- set ns.r = g -%}
+{%- endfor -%}
+{{ ns.r | to_json }}
+{%- endmacro %}
+
+{#- Neue Radio-Auswahl: "setzen" ersetzt die Liste, "umschalten" nimmt eine
+    Anlage dazu oder heraus. Ohne gespeicherte Auswahl gilt die erste Anlage. -#}
+{% macro auswahl_neu(alt, umschalten='', setzen=none) -%}
+{%- set alle = anlagen() | from_json | map(attribute='entity') | list -%}
+{%- set basis = setzen if setzen is iterable and setzen is not string
+    else (alt if alt is iterable and alt is not string else alle[:1]) -%}
+{%- if umschalten in alle -%}
+  {%- set basis = basis | reject('equalto', umschalten) | list if umschalten in basis
+      else basis + [umschalten] -%}
+{%- endif -%}
+{{ alle | select('in', basis) | list | to_json }}
+{%- endmacro %}
