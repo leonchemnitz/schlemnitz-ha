@@ -55,18 +55,18 @@ Multiroom läuft über Linkplay (`media_player.join`/`unjoin`), nicht über Musi
 
 Die Anlagen-Karten in den Popups Wohnzimmer und Küche haben unten Quelle (Select auf `source_list`, zeigt `source`, die S10+ meldet im Leerlauf keine Quelle) und den Kopplungs-Knopf. Die eigene Lautstärke läuft über das Lautsprecher-Icon der Karte, der Regler des anderen Raums erscheint in derselben Zeile nur, wenn gekoppelt. Die Karten haben `rows: 2`, weil Bubble Card im Popup die Höhe nicht selbst berechnet. Nach dem Trennen meldet die S10+ weiter `source: Follower` (Modus 99, `group: 0`), sie ist dann aber in keiner Gruppe. Eine andere Quelle wählen beendet das.
 
-Radio: Bubble „Radio“ über dem Tageszeit-Modus öffnet `#radio`. Oben die Player-Auswahl `binary_sensor.radio_wohnzimmer` und `binary_sensor.radio_kueche` (Trigger-Template auf Event `radio`, `script.radio_player_umschalten`), darunter die Sender-Kacheln. `script.radio_abspielen` (Felder `sender`, `url`) koppelt bei zwei gewählten Anlagen über Linkplay, trennt bei einer und spielt die URL per `media_player.play_media` auf dem Leiter. `script.radio_stopp` stoppt. `sensor.radio_sender` merkt den zuletzt gestarteten Sender, die Kachel dazu ist hervorgehoben. Kein Music Assistant. Stream-URLs (am 7. November 2026 geprüft, alle MP3):
+Radio: Bubble „Radio“ über dem Tageszeit-Modus öffnet `#radio`. Oben die Player-Auswahl `binary_sensor.radio_wohnzimmer` und `binary_sensor.radio_kueche` (Trigger-Template auf Event `radio`, `script.radio_player_umschalten`), darunter die Sender-Kacheln. `script.radio_abspielen` (Felder `sender`, `url`) koppelt bei zwei gewählten Anlagen über Linkplay, trennt bei einer und spielt die URL per `media_player.play_media` auf dem Leiter. `script.radio_stopp` stoppt. `sensor.radio_sender` merkt den zuletzt gestarteten Sender, die Kachel dazu ist hervorgehoben. Kein Music Assistant. Stream-URLs (am 8. November 2026 an beiden Anlagen geprüft, alle MP3). Die S10+ in der Küche spielt keine HTTPS-Streams, sie geht kurz auf „buffering“ und dann auf „idle“. Deshalb nur `http://`-Adressen, auch nach Weiterleitungen. NTS leitet über `stream-mixtape-geo.ntslive.net` immer auf HTTPS weiter, deshalb direkt Radiomast:
 
 | Sender | URL |
 |---|---|
-| Jazzradio 106,8 | `https://streaming.radio.co/s774887f7b/listen` |
-| ByteFM | `https://bytefm.stream14.radiohost.de/bytefm-mainhq_mp3-192` |
-| radioeins | `https://dispatcher.rndfnk.com/rbb/radioeins/live/mp3/128/stream.mp3` |
-| BRF 91,4 (Berliner Rundfunk) | `https://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/` |
-| Antenne (Antenne Brandenburg) | `https://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3` |
-| NTS Poolside | `https://stream-mixtape-geo.ntslive.net/mixtape4` (NTS Infinite Mixtapes, Liste unter `https://www.nts.live/api/v2/mixtapes`) |
+| Jazzradio 106,8 | `http://streaming.radio.co/s774887f7b/listen` |
+| ByteFM | `http://bytefm.stream14.radiohost.de/bytefm-mainhq_mp3-192` |
+| radioeins | `http://dispatcher.rndfnk.com/rbb/radioeins/live/mp3/128/stream.mp3` |
+| BRF 91,4 (Berliner Rundfunk) | `http://stream.berliner-rundfunk.de/brf/mp3-128/internetradio/` |
+| Antenne (Antenne Brandenburg) | `http://dispatcher.rndfnk.com/rbb/antennebrandenburg/live/mp3/128/stream.mp3` |
+| NTS Poolside | `http://streams.radiomast.io/052d2e3c-389c-44cf-a91a-8f5e1854f4c6` (NTS Infinite Mixtapes, Liste unter `https://www.nts.live/api/v2/mixtapes`) |
 
-Neue Sender: URL über `https://de1.api.radio-browser.info/json/stations/search?name=…` suchen, mit `curl` prüfen, Kachel im Popup `#radio` kopieren.
+Neue Sender: URL über `https://de1.api.radio-browser.info/json/stations/search?name=…` suchen, mit `curl -L -w '%{url_effective}'` prüfen, dass sie bis zum Ende HTTP bleibt, Kachel im Popup `#radio` kopieren.
 
 Wohnzimmer TV (Google TV): `media_player.wohnzimmer_tv` (Cast, die Bubble über der Anlage), `media_player.wohnzimmer_tv_2` und `remote.wohnzimmer_tv` (Android TV Remote), `media_player.wohnzimmer_tv_3` (Music Assistant). Das Fernbedienungs-Icon öffnet `#wohnzimmer-fernbedienung`, gleich aufgebaut wie bei Ems.
 
