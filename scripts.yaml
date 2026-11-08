@@ -212,7 +212,8 @@ radio_player_umschalten:
           entity_id: '{{ ziel }}'
     - conditions:
       - condition: template
-        value_template: '{{ war_an and gekoppelt and ziel == leiter and url }}'
+        value_template: '{{ war_an and gekoppelt and ziel == leiter and url is string
+          and url | length > 0 }}'
       sequence:
       - variables:
           rest: "{{ alle | reject('equalto', ziel) | list }}"
