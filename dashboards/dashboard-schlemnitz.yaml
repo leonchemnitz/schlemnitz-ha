@@ -1104,6 +1104,7 @@ views:
                           attribute: source
                         - entity: select.multiroom_wohnzimmer
                           sub_button_type: select
+                          scrolling_effect: false
                           name: Multiroom
                           icon: mdi:speaker-multiple
                           show_name: false
@@ -1448,6 +1449,7 @@ views:
                           attribute: source
                         - entity: select.multiroom_leon
                           sub_button_type: select
+                          scrolling_effect: false
                           name: Multiroom
                           icon: mdi:speaker-multiple
                           show_name: false
@@ -1983,6 +1985,7 @@ views:
                           attribute: source
                         - entity: select.multiroom_kueche
                           sub_button_type: select
+                          scrolling_effect: false
                           name: Multiroom
                           icon: mdi:speaker-multiple
                           show_name: false
