@@ -182,7 +182,7 @@ multiroom_umschalten:
         entity_id: '{{ leiter }}'
       data:
         group_members: '{{ neu }}'
-  mode: single
+  mode: queued
 multiroom_auswahl:
   alias: Multiroom Auswahl
   description: Wertet eine Option von select.multiroom_<anlage> aus und schaltet die

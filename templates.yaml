@@ -386,10 +386,13 @@
       state: "{% from 'anlagen.jinja' import multiroom_zustand %}{{ multiroom_zustand('media_player.wohnzimmer_anlage') }}"
       options: "{% from 'anlagen.jinja' import multiroom_optionen %}{{ multiroom_optionen('media_player.wohnzimmer_anlage') | from_json }}"
       select_option:
-        - action: script.multiroom_auswahl
+        - action: script.turn_on
+          target:
+            entity_id: script.multiroom_auswahl
           data:
-            hier: media_player.wohnzimmer_anlage
-            option: "{{ option }}"
+            variables:
+              hier: media_player.wohnzimmer_anlage
+              option: "{{ option }}"
     - unique_id: multiroom_kueche
       default_entity_id: select.multiroom_kueche
       name: Multiroom Küche
@@ -397,10 +400,13 @@
       state: "{% from 'anlagen.jinja' import multiroom_zustand %}{{ multiroom_zustand('media_player.kuche_anlage_2') }}"
       options: "{% from 'anlagen.jinja' import multiroom_optionen %}{{ multiroom_optionen('media_player.kuche_anlage_2') | from_json }}"
       select_option:
-        - action: script.multiroom_auswahl
+        - action: script.turn_on
+          target:
+            entity_id: script.multiroom_auswahl
           data:
-            hier: media_player.kuche_anlage_2
-            option: "{{ option }}"
+            variables:
+              hier: media_player.kuche_anlage_2
+              option: "{{ option }}"
     - unique_id: multiroom_leon
       default_entity_id: select.multiroom_leon
       name: Multiroom Leon
@@ -408,10 +414,13 @@
       state: "{% from 'anlagen.jinja' import multiroom_zustand %}{{ multiroom_zustand('media_player.leon_anlage') }}"
       options: "{% from 'anlagen.jinja' import multiroom_optionen %}{{ multiroom_optionen('media_player.leon_anlage') | from_json }}"
       select_option:
-        - action: script.multiroom_auswahl
+        - action: script.turn_on
+          target:
+            entity_id: script.multiroom_auswahl
           data:
-            hier: media_player.leon_anlage
-            option: "{{ option }}"
+            variables:
+              hier: media_player.leon_anlage
+              option: "{{ option }}"
 
 # Radio-Popup. Das Event "radio" mit "umschalten: <media_player>" nimmt eine
 # Anlage in die Auswahl oder heraus, "setzen: [...]" ersetzt sie. "sender",
