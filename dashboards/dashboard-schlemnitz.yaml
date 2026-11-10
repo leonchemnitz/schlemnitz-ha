@@ -1061,7 +1061,7 @@ views:
                 card_type: media-player
                 entity: media_player.wohnzimmer_anlage
                 name: Anlage
-                rows: 2
+                rows: 2.6
                 hide:
                   power_button: true
                 styles: |
@@ -1445,7 +1445,7 @@ views:
                 card_type: media-player
                 entity: media_player.leon_anlage
                 name: Anlage
-                rows: 2
+                rows: 2.6
                 hide:
                   power_button: true
                 styles: |
@@ -2020,7 +2020,7 @@ views:
                 card_type: media-player
                 entity: media_player.kuche_anlage_2
                 name: Anlage
-                rows: 2
+                rows: 2.6
                 hide:
                   power_button: true
                 styles: |
