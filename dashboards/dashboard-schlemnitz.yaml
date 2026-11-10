@@ -123,6 +123,42 @@ views:
                         opacity: ${(hass.states['sensor.radio_auswahl']?.attributes.player || []).includes('media_player.kuche_anlage_2') ? '1' : '0'} !important;
                         background-color: var(--bubble-accent-color, var(--accent-color)) !important;
                       }
+                  - type: custom:bubble-card
+                    card_type: button
+                    button_type: name
+                    name: Leon
+                    icon: mdi:desk
+                    show_state: false
+                    sub_button:
+                      main:
+                        - entity: sensor.radio_sender
+                          name: Hauptgerät
+                          icon: mdi:crown
+                          show_name: false
+                          show_state: false
+                          state_background: false
+                          tap_action:
+                            action: none
+                          visibility:
+                            - condition: template
+                              value_template: "{{ not is_state('sensor.radio_sender', 'Aus') and state_attr('sensor.radio_sender', 'leiter') == 'media_player.leon_anlage' }}"
+                      bottom: []
+                    tap_action:
+                      action: perform-action
+                      perform_action: script.radio_player_umschalten
+                      data:
+                        player: media_player.leon_anlage
+                    button_action:
+                      tap_action:
+                        action: perform-action
+                        perform_action: script.radio_player_umschalten
+                        data:
+                          player: media_player.leon_anlage
+                    styles: |
+                      .bubble-button-background {
+                        opacity: ${(hass.states['sensor.radio_auswahl']?.attributes.player || []).includes('media_player.leon_anlage') ? '1' : '0'} !important;
+                        background-color: var(--bubble-accent-color, var(--accent-color)) !important;
+                      }
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
@@ -339,6 +375,14 @@ views:
               - type: custom:bubble-card
                 card_type: media-player
                 entity: media_player.kuche_anlage_2
+                hide:
+                  power_button: true
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: media-player
+                entity: media_player.leon_anlage
                 hide:
                   power_button: true
                 sub_button:
@@ -1021,8 +1065,11 @@ views:
                 hide:
                   power_button: true
                 styles: |
-                  .mit-kuche {
+                  .bubble-sub-button.kuche {
                     background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.wohnzimmer_anlage'] || []).includes('media_player.kuche_anlage_2') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
+                  }
+                  .bubble-sub-button.leon {
+                    background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.wohnzimmer_anlage'] || []).includes('media_player.leon_anlage') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
                   }
                 sub_button:
                   main:
@@ -1059,8 +1106,8 @@ views:
                           show_attribute: true
                           attribute: source
                         - entity: sensor.multiroom
-                          name: Mit Küche
-                          icon: mdi:speaker-multiple
+                          name: Küche
+                          icon: mdi:stove
                           show_name: true
                           show_state: false
                           state_background: false
@@ -1070,15 +1117,38 @@ views:
                             data:
                               hier: media_player.wohnzimmer_anlage
                               dort: media_player.kuche_anlage_2
+                        - entity: sensor.multiroom
+                          name: Leon
+                          icon: mdi:desk
+                          show_name: true
+                          show_state: false
+                          state_background: false
+                          tap_action:
+                            action: perform-action
+                            perform_action: script.multiroom_umschalten
+                            data:
+                              hier: media_player.wohnzimmer_anlage
+                              dort: media_player.leon_anlage
+                      buttons_layout: inline
+                    - group:
                         - entity: media_player.kuche_anlage_2
                           sub_button_type: slider
                           always_visible: true
                           show_button_info: true
                           name: Küche
-                          icon: mdi:volume-high
+                          icon: mdi:stove
                           visibility:
                             - condition: template
                               value_template: "{{ 'media_player.kuche_anlage_2' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.wohnzimmer_anlage', []) }}"
+                        - entity: media_player.leon_anlage
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Leon
+                          icon: mdi:desk
+                          visibility:
+                            - condition: template
+                              value_template: "{{ 'media_player.leon_anlage' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.wohnzimmer_anlage', []) }}"
                       buttons_layout: inline
                   bottom_layout: rows
               - type: custom:bubble-card
@@ -1363,6 +1433,108 @@ views:
                       state_background: true
                   bottom: []
                 entity: climate.leon_heizung
+              - type: custom:bubble-card
+                card_type: separator
+                name: ''
+                icon: ''
+                sub_button:
+                  main: []
+                  bottom: []
+                rows: '0.4'
+              - type: custom:bubble-card
+                card_type: media-player
+                entity: media_player.leon_anlage
+                name: Anlage
+                rows: 2
+                hide:
+                  power_button: true
+                styles: |
+                  .bubble-sub-button.wohnzimmer {
+                    background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.leon_anlage'] || []).includes('media_player.wohnzimmer_anlage') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
+                  }
+                  .bubble-sub-button.kuche {
+                    background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.leon_anlage'] || []).includes('media_player.kuche_anlage_2') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
+                  }
+                sub_button:
+                  main:
+                    - entity: sensor.multiroom
+                      name: Hauptgerät
+                      icon: mdi:crown
+                      show_name: false
+                      show_state: false
+                      state_background: false
+                      tap_action:
+                        action: none
+                      visibility:
+                        - condition: template
+                          value_template: "{% set g = (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.leon_anlage', []) %}{{ g | count > 1 and g[0] == 'media_player.leon_anlage' }}"
+                    - entity: sensor.multiroom
+                      name: Folgt
+                      icon: mdi:link-variant
+                      show_name: false
+                      show_state: false
+                      state_background: false
+                      tap_action:
+                        action: none
+                      visibility:
+                        - condition: template
+                          value_template: "{% set g = (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.leon_anlage', []) %}{{ g | count > 1 and g[0] != 'media_player.leon_anlage' }}"
+                  bottom:
+                    - group:
+                        - entity: media_player.leon_anlage
+                          sub_button_type: select
+                          select_attribute: source_list
+                          name: Quelle
+                          icon: mdi:import
+                          show_name: false
+                          show_attribute: true
+                          attribute: source
+                        - entity: sensor.multiroom
+                          name: Wohnzimmer
+                          icon: mdi:sofa
+                          show_name: true
+                          show_state: false
+                          state_background: false
+                          tap_action:
+                            action: perform-action
+                            perform_action: script.multiroom_umschalten
+                            data:
+                              hier: media_player.leon_anlage
+                              dort: media_player.wohnzimmer_anlage
+                        - entity: sensor.multiroom
+                          name: Küche
+                          icon: mdi:stove
+                          show_name: true
+                          show_state: false
+                          state_background: false
+                          tap_action:
+                            action: perform-action
+                            perform_action: script.multiroom_umschalten
+                            data:
+                              hier: media_player.leon_anlage
+                              dort: media_player.kuche_anlage_2
+                      buttons_layout: inline
+                    - group:
+                        - entity: media_player.wohnzimmer_anlage
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Wohnzimmer
+                          icon: mdi:sofa
+                          visibility:
+                            - condition: template
+                              value_template: "{{ 'media_player.wohnzimmer_anlage' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.leon_anlage', []) }}"
+                        - entity: media_player.kuche_anlage_2
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Küche
+                          icon: mdi:stove
+                          visibility:
+                            - condition: template
+                              value_template: "{{ 'media_player.kuche_anlage_2' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.leon_anlage', []) }}"
+                      buttons_layout: inline
+                  bottom_layout: rows
               - type: custom:bubble-card
                 card_type: separator
                 name: ''
@@ -1852,8 +2024,11 @@ views:
                 hide:
                   power_button: true
                 styles: |
-                  .mit-wohnzimmer {
+                  .bubble-sub-button.wohnzimmer {
                     background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.kuche_anlage_2'] || []).includes('media_player.wohnzimmer_anlage') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
+                  }
+                  .bubble-sub-button.leon {
+                    background-color: ${(hass.states['sensor.multiroom']?.attributes.gruppe_von?.['media_player.kuche_anlage_2'] || []).includes('media_player.leon_anlage') ? 'var(--bubble-accent-color, var(--accent-color))' : ''} !important;
                   }
                 sub_button:
                   main:
@@ -1890,8 +2065,8 @@ views:
                           show_attribute: true
                           attribute: source
                         - entity: sensor.multiroom
-                          name: Mit Wohnzimmer
-                          icon: mdi:speaker-multiple
+                          name: Wohnzimmer
+                          icon: mdi:sofa
                           show_name: true
                           show_state: false
                           state_background: false
@@ -1901,15 +2076,38 @@ views:
                             data:
                               hier: media_player.kuche_anlage_2
                               dort: media_player.wohnzimmer_anlage
+                        - entity: sensor.multiroom
+                          name: Leon
+                          icon: mdi:desk
+                          show_name: true
+                          show_state: false
+                          state_background: false
+                          tap_action:
+                            action: perform-action
+                            perform_action: script.multiroom_umschalten
+                            data:
+                              hier: media_player.kuche_anlage_2
+                              dort: media_player.leon_anlage
+                      buttons_layout: inline
+                    - group:
                         - entity: media_player.wohnzimmer_anlage
                           sub_button_type: slider
                           always_visible: true
                           show_button_info: true
                           name: Wohnzimmer
-                          icon: mdi:volume-high
+                          icon: mdi:sofa
                           visibility:
                             - condition: template
                               value_template: "{{ 'media_player.wohnzimmer_anlage' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.kuche_anlage_2', []) }}"
+                        - entity: media_player.leon_anlage
+                          sub_button_type: slider
+                          always_visible: true
+                          show_button_info: true
+                          name: Leon
+                          icon: mdi:desk
+                          visibility:
+                            - condition: template
+                              value_template: "{{ 'media_player.leon_anlage' in (state_attr('sensor.multiroom', 'gruppe_von') or {}).get('media_player.kuche_anlage_2', []) }}"
                       buttons_layout: inline
                   bottom_layout: rows
               - type: horizontal-stack
