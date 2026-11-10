@@ -375,6 +375,44 @@
           {% endfor %}
           {{ dict(ns.p) }}
 
+# Multiroom-Auswahl je Anlage für die Anlagen-Karten. Die Optionen kommen aus
+# anlagen.jinja, eine gewählte Anlage wird dazugekoppelt oder herausgenommen.
+# Neue Anlage: hier einen Eintrag kopieren.
+- select:
+    - unique_id: multiroom_wohnzimmer
+      default_entity_id: select.multiroom_wohnzimmer
+      name: Multiroom Wohnzimmer
+      icon: mdi:speaker-multiple
+      state: "{% from 'anlagen.jinja' import multiroom_zustand %}{{ multiroom_zustand('media_player.wohnzimmer_anlage') }}"
+      options: "{% from 'anlagen.jinja' import multiroom_optionen %}{{ multiroom_optionen('media_player.wohnzimmer_anlage') | from_json }}"
+      select_option:
+        - action: script.multiroom_auswahl
+          data:
+            hier: media_player.wohnzimmer_anlage
+            option: "{{ option }}"
+    - unique_id: multiroom_kueche
+      default_entity_id: select.multiroom_kueche
+      name: Multiroom Küche
+      icon: mdi:speaker-multiple
+      state: "{% from 'anlagen.jinja' import multiroom_zustand %}{{ multiroom_zustand('media_player.kuche_anlage_2') }}"
+      options: "{% from 'anlagen.jinja' import multiroom_optionen %}{{ multiroom_optionen('media_player.kuche_anlage_2') | from_json }}"
+      select_option:
+        - action: script.multiroom_auswahl
+          data:
+            hier: media_player.kuche_anlage_2
+            option: "{{ option }}"
+    - unique_id: multiroom_leon
+      default_entity_id: select.multiroom_leon
+      name: Multiroom Leon
+      icon: mdi:speaker-multiple
+      state: "{% from 'anlagen.jinja' import multiroom_zustand %}{{ multiroom_zustand('media_player.leon_anlage') }}"
+      options: "{% from 'anlagen.jinja' import multiroom_optionen %}{{ multiroom_optionen('media_player.leon_anlage') | from_json }}"
+      select_option:
+        - action: script.multiroom_auswahl
+          data:
+            hier: media_player.leon_anlage
+            option: "{{ option }}"
+
 # Radio-Popup. Das Event "radio" mit "umschalten: <media_player>" nimmt eine
 # Anlage in die Auswahl oder heraus, "setzen: [...]" ersetzt sie. "sender",
 # "url" und "leiter" merken den laufenden Sender und das Hauptgerät dafür.

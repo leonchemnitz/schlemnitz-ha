@@ -43,3 +43,27 @@
 {%- endif -%}
 {{ alle | select('in', basis) | list | to_json }}
 {%- endmacro %}
+
+{#- Multiroom-Auswahl an einer Anlagen-Karte (select.multiroom_<id>). Die erste
+    Option ist der Zustand, danach alle anderen Anlagen, gekoppelte mit ✓. -#}
+{% macro multiroom_zustand(entity) -%}
+{%- set g = gruppe_von(entity) | from_json -%}
+{%- set namen = anlagen() | from_json | selectattr('entity', 'in', g) | rejectattr('entity', 'eq', entity)
+    | map(attribute='name') | list -%}
+{{ 'Mit ' ~ namen | join(', ') if namen else 'Allein' }}
+{%- endmacro %}
+
+{% macro multiroom_optionen(entity) -%}
+{%- set g = gruppe_von(entity) | from_json -%}
+{%- set ns = namespace(o=[multiroom_zustand(entity)]) -%}
+{%- for a in anlagen() | from_json if a.entity != entity -%}
+  {%- set ns.o = ns.o + [('✓ ' if a.entity in g else '') ~ a.name] -%}
+{%- endfor -%}
+{{ ns.o | to_json }}
+{%- endmacro %}
+
+{#- Anlage zu einer gewählten Option, leer beim Zustand. -#}
+{% macro anlage_zu_option(option) -%}
+{%- set name = option | regex_replace('^✓ ', '') -%}
+{{ (anlagen() | from_json | selectattr('name', 'eq', name) | map(attribute='entity') | list + [''])[0] }}
+{%- endmacro %}

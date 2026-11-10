@@ -183,6 +183,34 @@ multiroom_umschalten:
       data:
         group_members: '{{ neu }}'
   mode: single
+multiroom_auswahl:
+  alias: Multiroom Auswahl
+  description: Wertet eine Option von select.multiroom_<anlage> aus und schaltet die
+    gewählte Anlage über multiroom_umschalten um.
+  icon: mdi:speaker-multiple
+  fields:
+    hier:
+      name: Hier
+      required: true
+      selector:
+        entity:
+          domain: media_player
+          integration: linkplay
+    option:
+      name: Option
+      required: true
+      selector:
+        text: {}
+  sequence:
+  - variables:
+      dort: "{% from 'anlagen.jinja' import anlage_zu_option %}{{ anlage_zu_option(option) }}"
+  - condition: template
+    value_template: '{{ dort != '''' and dort != hier }}'
+  - action: script.multiroom_umschalten
+    data:
+      hier: '{{ hier }}'
+      dort: '{{ dort }}'
+  mode: queued
 radio_player_umschalten:
   alias: Radio Player umschalten
   description: Nimmt eine Anlage in die Radio-Auswahl auf oder heraus. Läuft gerade
