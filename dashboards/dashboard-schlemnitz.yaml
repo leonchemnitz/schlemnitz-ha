@@ -1108,7 +1108,7 @@ views:
                           name: Multiroom
                           icon: mdi:speaker-multiple
                           show_name: false
-                          show_state: true
+                          show_state: false
                           state_background: false
                       buttons_layout: inline
                   bottom_layout: rows
@@ -1453,7 +1453,7 @@ views:
                           name: Multiroom
                           icon: mdi:speaker-multiple
                           show_name: false
-                          show_state: true
+                          show_state: false
                           state_background: false
                       buttons_layout: inline
                   bottom_layout: rows
@@ -1989,7 +1989,7 @@ views:
                           name: Multiroom
                           icon: mdi:speaker-multiple
                           show_name: false
-                          show_state: true
+                          show_state: false
                           state_background: false
                       buttons_layout: inline
                   bottom_layout: rows
