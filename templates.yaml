@@ -56,6 +56,59 @@
         {% set es = 6.112 * e ** ((17.67 * t) / (t + 243.5)) %}
         {{ (216.7 * es * rh / 100 / (273.15 + t)) | round(1) }}
 
+# Heizung global: Tag- und Nachtwert der Zeitpläne (script.heizung_zeitplan) und
+# der Wert, den script.heizung_alle_jetzt sofort in alle Räume schreibt.
+# Gesetzt nur über das Event heizung_global. Bleibt über Neustarts erhalten.
+- triggers:
+    - trigger: event
+      event_type: heizung_global
+  number:
+    - unique_id: heizung_tag_soll
+      default_entity_id: number.heizung_tag_soll
+      name: Heizung Tag
+      icon: mdi:white-balance-sunny
+      unit_of_measurement: "°C"
+      min: 4
+      max: 30
+      step: 0.5
+      state: >
+        {% set v = trigger.event.data.get('tag') %}
+        {{ v | float if v is not none and v | string | is_number else this.state | float(21) }}
+      set_value:
+        - event: heizung_global
+          event_data:
+            tag: "{{ value }}"
+    - unique_id: heizung_nacht_soll
+      default_entity_id: number.heizung_nacht_soll
+      name: Heizung Nacht
+      icon: mdi:weather-night
+      unit_of_measurement: "°C"
+      min: 4
+      max: 30
+      step: 0.5
+      state: >
+        {% set v = trigger.event.data.get('nacht') %}
+        {{ v | float if v is not none and v | string | is_number else this.state | float(19.5) }}
+      set_value:
+        - event: heizung_global
+          event_data:
+            nacht: "{{ value }}"
+    - unique_id: heizung_jetzt_soll
+      default_entity_id: number.heizung_jetzt_soll
+      name: Heizung jetzt
+      icon: mdi:thermometer-chevron-up
+      unit_of_measurement: "°C"
+      min: 4
+      max: 30
+      step: 0.5
+      state: >
+        {% set v = trigger.event.data.get('jetzt') %}
+        {{ v | float if v is not none and v | string | is_number else this.state | float(21) }}
+      set_value:
+        - event: heizung_global
+          event_data:
+            jetzt: "{{ value }}"
+
 # Leon Heizung: Raum-Soll und ob das Fenster das Ventil ausgeschaltet hat.
 # Gesetzt nur über das Event leon_heizung (Skript leon_heizung_soll und
 # Automation "Leon - Heizung"). Bleibt über Neustarts erhalten.

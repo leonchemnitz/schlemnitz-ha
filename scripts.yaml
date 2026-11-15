@@ -116,6 +116,69 @@ kueche_heizung_soll:
     event_data:
       soll: '{{ temperatur | float }}'
   mode: queued
+heizung_zeitplan:
+  alias: Heizung Zeitplan
+  description: Setzt das Raum-Soll aller Räume auf number.heizung_tag_soll oder
+    number.heizung_nacht_soll. Die Scheduler-Zeitpläne "Heizung Tag" und "Heizung
+    Nacht" rufen das auf. Im Bad gilt der Wert als Zeitplanwert, beim Wäschetrocknen
+    erst danach.
+  icon: mdi:calendar-clock
+  fields:
+    phase:
+      name: Phase
+      required: true
+      selector:
+        select:
+          options:
+          - tag
+          - nacht
+  sequence:
+  - variables:
+      temperatur: >
+        {% if phase == 'nacht' %}{{ states('number.heizung_nacht_soll') | float(19.5) }}
+        {% else %}{{ states('number.heizung_tag_soll') | float(21) }}{% endif %}
+  - action: script.leon_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  - action: script.wohnzimmer_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  - action: script.bad_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+      zeitplan: true
+  - action: script.ems_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  - action: script.kueche_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  mode: queued
+heizung_alle_jetzt:
+  alias: Heizung jetzt für alle
+  description: Setzt das Raum-Soll aller Räume sofort auf number.heizung_jetzt_soll.
+    Gilt bis zum nächsten Zeitplan. Im Bad auch während des Wäschetrocknens, wie
+    eine Änderung an der Karte.
+  icon: mdi:thermometer-chevron-up
+  sequence:
+  - variables:
+      temperatur: "{{ states('number.heizung_jetzt_soll') | float(21) }}"
+  - action: script.leon_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  - action: script.wohnzimmer_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  - action: script.bad_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  - action: script.ems_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  - action: script.kueche_heizung_soll
+    data:
+      temperatur: '{{ temperatur }}'
+  mode: queued
 multiroom_umschalten:
   alias: Multiroom umschalten
   description: Nimmt "dort" in die Gruppe von "hier" auf oder nimmt es heraus.

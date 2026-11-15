@@ -400,6 +400,119 @@ views:
           - type: custom:bubble-card
             card_type: button
             button_type: name
+            name: Heizung
+            icon: mdi:radiator
+            show_state: false
+            sub_button:
+              main:
+                - entity: number.heizung_tag_soll
+                  icon: mdi:white-balance-sunny
+                  show_name: false
+                  show_state: true
+                  show_icon: true
+                  show_background: false
+                  tap_action:
+                    action: navigate
+                    navigation_path: '#heizung'
+                - entity: number.heizung_nacht_soll
+                  icon: mdi:weather-night
+                  show_name: false
+                  show_state: true
+                  show_icon: true
+                  show_background: false
+                  tap_action:
+                    action: navigate
+                    navigation_path: '#heizung'
+              bottom: []
+            tap_action:
+              action: navigate
+              navigation_path: '#heizung'
+            button_action:
+              tap_action:
+                action: navigate
+                navigation_path: '#heizung'
+          - type: custom:bubble-card
+            card_type: pop-up
+            name: Heizung
+            icon: mdi:radiator
+            hash: '#heizung'
+            show_state: false
+            show_name: true
+            sub_button:
+              main: []
+              bottom: []
+            grid_options:
+              rows: auto
+            cards:
+              - type: custom:bubble-card
+                card_type: separator
+                name: Zeitplan für alle Räume
+                icon: mdi:calendar-clock
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: number.heizung_tag_soll
+                name: Tag
+                icon: mdi:white-balance-sunny
+                slider_fill_orientation: left
+                slider_value_position: right
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: number.heizung_nacht_soll
+                name: Nacht
+                icon: mdi:weather-night
+                slider_fill_orientation: left
+                slider_value_position: right
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: separator
+                name: Jetzt für alle Räume
+                icon: mdi:thermometer-chevron-up
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: slider
+                entity: number.heizung_jetzt_soll
+                name: Soll
+                icon: mdi:thermometer
+                slider_fill_orientation: left
+                slider_value_position: right
+                scrolling_effect: false
+                sub_button:
+                  main: []
+                  bottom: []
+              - type: custom:bubble-card
+                card_type: button
+                button_type: name
+                name: Jetzt überall setzen
+                icon: mdi:check-all
+                show_state: false
+                sub_button:
+                  main: []
+                  bottom: []
+                tap_action:
+                  action: perform-action
+                  perform_action: script.heizung_alle_jetzt
+                button_action:
+                  tap_action:
+                    action: perform-action
+                    perform_action: script.heizung_alle_jetzt
+          - type: custom:bubble-card
+            card_type: button
+            button_type: name
             name: Naddel
             icon: mdi:robot-happy-outline
             show_state: false
