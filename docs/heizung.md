@@ -1,6 +1,6 @@
-# Heizung: Sonoff TRVZB mit externem Fühler, ohne Better Thermostat
+# Heizung: Sonoff TRVZB mit externem Fühler
 
-Stand 19. Oktober 2026. Läuft in Leons Zimmer, im Wohnzimmer, im Bad, bei Ems und in der Küche.
+Stand 15. November 2026. Läuft in Leons Zimmer, im Wohnzimmer, im Bad, bei Ems und in der Küche. Leon und Wohnzimmer seit 15. November 2026 wieder mit Better Thermostat (Abschnitt unten), die anderen drei ohne.
 
 ## Aufbau
 
@@ -11,6 +11,36 @@ Stand 19. Oktober 2026. Läuft in Leons Zimmer, im Wohnzimmer, im Bad, bei Ems u
 - Dashboard: Bubble-Klima-Karte auf `climate.leon_heizung`. Die zeigt den Raum-Soll, auch wenn das Ventil im Modus Aus 7° meldet. Modus und Flamme kommen vom Ventil.
 
 Bis 15. Oktober 2026 lief Better Thermostat dazwischen. Es hat nur noch Fenster, Zeitpläne und Außentemperatur verwaltet und dabei die Fehler 1, 3, 4 und 6 unten verursacht. Ausgebaut, weil der TRVZB den externen Fühler selbst kann.
+
+## Better Thermostat in Leon und Wohnzimmer (seit 15. November 2026)
+
+Grund: Ohne Better Thermostat regelt der TRVZB als Zweipunktregler und überschießt (7, 7a). Mit Better Thermostat lief Leons Zimmer im Februar und März 2026 auf ±0,3° (7b). Better Thermostat 1.9.3 aus HACS, Einträge angelegt am 15. November 2026 um 12:09 (MEZ):
+
+| | Wohnzimmer | Leon |
+|---|---|---|
+| Eintrag | „Wohnzimmer Better Thermostat“ | „Leon Better Thermostat“ |
+| Klima-Entity | `climate.wohnzimmer_better_thermostat` | `climate.leon_better_thermostat` |
+| Raumfühler | `sensor.wohnzimmer_sensor_env_temperature` | `sensor.leon_temperatur` |
+| Feuchte | `sensor.wohnzimmer_sensor_env_humidity` | `sensor.leon_sensor_env_humidity` |
+
+Beide gleich eingestellt (liegt in `.storage`, nicht im Repo; Optionen über Einstellungen → Geräte → Better Thermostat → Konfigurieren):
+
+- Wetter `weather.forecast_home`, kein Außenfühler, keine Fenster- oder Türsensoren (das Fenster schaltet weiter die Automation „<Raum> - Heizung“), keine Presets
+- `off_temperature` 20, `tolerance` 0, `target_temp_min`/`max` auto, `target_temp_step` auto
+- `calibration: target_temp_based` (verschiebt das Ventil-Soll), `calibration_mode: heating_power_calibration` („AI Time Based“)
+- Überhitzungsschutz, Kindersicherung, `no_off_system_mode`, `heat_auto_swapped`, Ventilwartung, HomematicIP: aus
+
+Abweichend vom Februar `target_temp_based` statt `local_calibration_based`: Better Thermostat 1.9.3 schreibt beim TRVZB den Raumwert selbst an `number.<raum>_thermostat_external_temperature_input` (Keepalive alle 30 Minuten) und stellt `select.<raum>_thermostat_temperature_sensor_select` auf `remote_temperature`. Im externen Modus wendet der TRVZB `local_temperature_calibration` nicht an. Beim Anlegen hat Better Thermostat den Offset im Wohnzimmer aus dem Gehäusefühler (29,7° bei 22,3° Raum) auf −7,4 gesetzt, das Ventil zeigte trotzdem 22,3°. Ein Offset ohne Wirkung kann unbemerkt bis an die Grenze laufen, vermutlich Fehler 1. Mit `target_temp_based` regelt Better Thermostat über das Ventil-Soll, der Offset bleibt 0.
+
+Damit entfallen für die zwei Räume die Fühler-Automationen. Ihre Automation-IDs tragen jetzt den „Ventil-Wächter“ (`automation.leon_trv_follower`, `automation.wohnzimmer_trv_follower`):
+
+- `temperature_accuracy` zurück auf −0,2, `smart_temperature_control` aus (Better Thermostat und die PID-Regelung im Ventil würden gegeneinander regeln)
+- `local_temperature_calibration`, die 5 Minuten nicht 0 ist, zurück auf 0
+- Benachrichtigung (`persistent_notification`, ID `<raum>_better_thermostat`), wenn die Better-Thermostat-Entity 15 Minuten `unavailable` ist. Das Ventil regelt dann mit dem letzten Soll und dem letzten externen Wert weiter und fällt nach zwei Stunden auf den Gehäusefühler.
+
+„<Raum> - Heizung“ spricht `climate.<raum>_better_thermostat` an: Fenster aus/an, Raum-Soll in beide Richtungen. Nur „Ventil springt auf Auto“ bleibt am Ventil. Die Karten `climate.leon_heizung` und `climate.wohnzimmer_heizung` nehmen Modus, Heizanzeige und Moduswechsel von Better Thermostat. Better Thermostat kennt nur Heizen und Aus, deshalb haben diese zwei Karten kein Auto mehr.
+
+Bewertung nach zwei Tagen Lernen (ab 17. November 2026): Tagesspanne und Überschwingen nach 04:00 mit 7 und 7a vergleichen, `number.<raum>_thermostat_local_temperature_calibration` und das Ventil-Soll prüfen. Klappt es, auch für Bad, Ems und Küche. Zurück ohne Better Thermostat: Eintrag löschen, die Fühler-Automationen aus Commit `40402eb` zurückholen, Karten und „<Raum> - Heizung“ wieder auf `climate.<raum>_thermostat`.
 
 Leon:
 
@@ -26,6 +56,9 @@ Leon:
 | Raum-Soll | `sensor.leon_heizung_soll` |
 | Soll setzen | `script.leon_heizung_soll` |
 | Karte | `climate.leon_heizung` |
+| Better Thermostat | `climate.leon_better_thermostat` |
+| Ventil-Wächter | `'1770107769590'` (`automation.leon_trv_follower`) |
+| Fenster und Soll | `leon_heizung` |
 | Zeitplan 04:00 auf 21° | `switch.schedule_3a20f1` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_f66468` |
 
@@ -43,7 +76,8 @@ Wohnzimmer:
 | Raum-Soll | `sensor.wohnzimmer_heizung_soll` |
 | Soll setzen | `script.wohnzimmer_heizung_soll` |
 | Karte | `climate.wohnzimmer_heizung` |
-| Fühler-Automation | `wohnzimmer_trv_follower` |
+| Better Thermostat | `climate.wohnzimmer_better_thermostat` |
+| Ventil-Wächter | `wohnzimmer_trv_follower` |
 | Fenster und Soll | `wohnzimmer_heizung` |
 | Zeitplan 04:00 auf 21° | `switch.schedule_wohnzimmer_04_00` |
 | Zeitplan 20:00 auf 19,5° | `switch.schedule_wohnzimmer_20_00` |
@@ -113,7 +147,7 @@ Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:0
 
 `automations.yaml`:
 
-- „Leon - TRV follower“: schreibt `sensor.leon_temperatur` an `number.leon_thermostat_external_temperature_input`, nur wenn der Fühler eine Zahl liefert. Zusätzlich alle 30 Minuten. Dieselbe Zahl schickt Zigbee2MQTT nicht erneut, deshalb geht der Wert dafür zwei Sekunden um 0,1° nach oben und dann zurück. Ohne neue Meldung fällt das Ventil nach zwei Stunden auf den eigenen Fühler zurück (`remote_source_offline`) und regelt dann nach `sensor.leon_thermostat_local_temperature`. Die Automation stellt danach `select.leon_thermostat_temperature_sensor_select` wieder auf `remote_temperature`.
+- Bad, Ems und Küche, „<Raum> - TRV follower“ (Beispiel Leon bis 15. November 2026): schreibt `sensor.leon_temperatur` an `number.leon_thermostat_external_temperature_input`, nur wenn der Fühler eine Zahl liefert. Zusätzlich alle 30 Minuten. Dieselbe Zahl schickt Zigbee2MQTT nicht erneut, deshalb geht der Wert dafür zwei Sekunden um 0,1° nach oben und dann zurück. Ohne neue Meldung fällt das Ventil nach zwei Stunden auf den eigenen Fühler zurück (`remote_source_offline`) und regelt dann nach `sensor.leon_thermostat_local_temperature`. Die Automation stellt danach `select.leon_thermostat_temperature_sensor_select` wieder auf `remote_temperature`.
 - „Leon - Heizung“ (`leon_heizung`):
   - Fenster auf (`on`) und Ventil nicht aus: merkt `fenster_aus`, schaltet das Ventil aus.
   - Fenster zu (`off`) und `fenster_aus` gesetzt: löscht es, schaltet auf Heizen. Ein Aus, das schon vor dem Öffnen galt, bleibt Aus.
@@ -126,7 +160,7 @@ Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:0
 
 `scripts.yaml`: `script.leon_heizung_soll` mit Feld `temperatur`. Feuert `leon_heizung` mit `soll`.
 
-`templates.yaml`: `climate.leon_heizung` für die Karte. Solltemperatur ist `sensor.leon_heizung_soll`, Isttemperatur `sensor.leon_temperatur`. HVAC-Modus und `hvac_action` kommen von `climate.leon_thermostat`. Eine Solländerung ruft das Skript auf, ein Moduswechsel das Ventil.
+`templates.yaml`: `climate.leon_heizung` für die Karte. Solltemperatur ist `sensor.leon_heizung_soll`, Isttemperatur `sensor.leon_temperatur`. HVAC-Modus und `hvac_action` kommen von `climate.leon_better_thermostat` (bei Bad, Ems und Küche vom Ventil). Eine Solländerung ruft das Skript auf, ein Moduswechsel Better Thermostat beziehungsweise das Ventil.
 
 Zeitpläne: Aktion `script.turn_on`, Entity `script.leon_heizung_soll`, Daten `variables: {temperatur: 21}`. Läuft ein Zeitplan, während das Ventil aus ist, gilt der Wert beim nächsten Einschalten.
 
@@ -134,8 +168,8 @@ Am Ventil:
 
 - `local_temperature_calibration` = 0.
 - Tastensperre aus.
-- `temperature_accuracy` = −0,2, hält die Fühler-Automation, solange `smart_temperature_control` aus ist.
-- `smart_temperature_control` (PID-Regelung im Ventil): im Wohnzimmer seit 7. November 2026, 21:47, an, sonst aus. Ist sie an, gelten Genauigkeit und Öffnungsweite nicht, und die Fühler-Automation lässt die Genauigkeit in Ruhe.
+- `temperature_accuracy` = −0,2, hält die Fühler-Automation, solange `smart_temperature_control` aus ist, in Leon und Wohnzimmer der Ventil-Wächter.
+- `smart_temperature_control` (PID-Regelung im Ventil): im Wohnzimmer vom 7. November 2026, 21:47, bis 15. November 2026 an, sonst überall aus. Ist sie an, gelten Genauigkeit und Öffnungsweite nicht, und die Fühler-Automation lässt die Genauigkeit in Ruhe. In Leon und Wohnzimmer schaltet der Ventil-Wächter sie aus.
 
 Fenster: `on` am Sensor ist offen, `off` ist zu. Zigbee2MQTT meldet `contact: true`, solange der Kontakt geschlossen ist. `unknown` und `unavailable` schalten nichts. Die Klima-Karte zeigt ein Fenster-Icon. Der Hintergrund färbt sich, wenn der Sensor `on` ist.
 
@@ -211,7 +245,7 @@ Aus dem Backup vom 14. Oktober 2026 (`/backup/6cf3d6c9.tar`, Better Thermostat 1
 
 Ergebnis laut Langzeitstatistik (`sensor.leon_sensor_env_temperature`, Stundenmittel, 07 bis 20 Uhr): im Januar 2026 ohne Better Thermostat Tagesspanne 0,6 bis 2,8°, Tagesmittel zwischen 19,4 und 22,8°. Ab 4. Februar, nach zwei Tagen Lernen, Spanne meist 0,3 bis 0,8°, im März Stundenmittel fast immer 20,7 bis 21,2° bei Soll 21°. Ausreißer über 1° nur an einzelnen Tagen, vermutlich Fenster.
 
-Das Backup vom 25. Januar 2026 enthält noch keinen Better-Thermostat-Eintrag und keine Heizungs-Automationen. Installiert ist heute Better Thermostat 1.9.3, ohne Eintrag. Fehler 1 (Offset auf +12,6°) trat später mit genau diesem Modus auf. Bei einer Rückkehr deshalb den Offset überwachen.
+Das Backup vom 25. Januar 2026 enthält noch keinen Better-Thermostat-Eintrag und keine Heizungs-Automationen. Fehler 1 (Offset auf +12,6°) trat später mit genau diesem Modus auf. Seit 15. November 2026 wieder im Einsatz, mit `target_temp_based` (Abschnitt Better Thermostat oben).
 
 ### 8. Ems: Ventilstift klemmte
 
@@ -242,8 +276,8 @@ Prüfen bei Verdacht an einem anderen Ventil: Grenzspannung Öffnen deutlich üb
 
 ## Offen
 
-- PID-Versuch im Wohnzimmer: ausgewertet am 15. November 2026 (Fehler 7a), Entscheidung offen.
+- PID-Versuch im Wohnzimmer: ausgewertet am 15. November 2026 (Fehler 7a), beendet. Ersetzt durch Better Thermostat.
 - Wärme im Wohnzimmer am 14. November 2026 abends und nachts bei geschlossenem Ventil: Ursache klären.
 - Ob Ems nach dem Ölen (Fehler 8) jetzt 21° erreicht. Verlauf ab 15. November 2026 ansehen.
 - Ob Fehler 2 wiederkommt. Morgens nach 04:00 sollte das Ventil öffnen, wenn der Raum unter 21° liegt.
-- Better Thermostat ist als HACS-Integration noch installiert, aber ohne Eintrag. Entfernen über HACS, danach Neustart.
+- Better Thermostat in Leon und Wohnzimmer ab 17. November 2026 bewerten (Abschnitt Better Thermostat oben).

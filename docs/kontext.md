@@ -110,9 +110,9 @@ Temperatur steht im Popup-Kopf, Feuchte als Sub-Button daneben.
 
 Aufbau, Einstellungen, gefundene Fehler und Checkliste für weitere Räume: `docs/heizung.md`.
 
-Ohne Better Thermostat seit 15. Oktober 2026. Sonoff TRVZB `climate.leon_thermostat` regelt nach dem Raumfühler `sensor.leon_temperatur` (Gruppe um `sensor.leon_sensor_env_temperature`), den „Leon - TRV follower“ an `number.leon_thermostat_external_temperature_input` schreibt, bei Änderung und alle 30 Minuten. Sonst fällt das Ventil nach zwei Stunden auf den Gehäusefühler zurück. `number.leon_thermostat_local_temperature_calibration` bleibt 0.
+Leon und Wohnzimmer seit 15. November 2026 mit Better Thermostat: `climate.leon_better_thermostat` und `climate.wohnzimmer_better_thermostat` (Soll-Verschiebung, „AI Time Based“). Better Thermostat schreibt den Raumfühler (`sensor.leon_temperatur`, Gruppe um `sensor.leon_sensor_env_temperature`, bzw. `sensor.wohnzimmer_sensor_env_temperature`) selbst an den externen Eingang des Sonoff TRVZB (`climate.<raum>_thermostat`). Der „Ventil-Wächter“ (`automation.leon_trv_follower`, `automation.wohnzimmer_trv_follower`) hält Genauigkeit −0,2, PID aus, Offset 0. Bad, Ems und Küche laufen ohne Better Thermostat, dort schreibt „<Raum> - TRV follower“ den Fühler ans Ventil, bei Änderung und alle 30 Minuten. Sonst fällt das Ventil nach zwei Stunden auf den Gehäusefühler zurück.
 
-Raum-Soll: `sensor.leon_heizung_soll` (Template, Attribut `fenster_aus`), gesetzt über `script.leon_heizung_soll` (Feld `temperatur`). Die Automation „Leon - Heizung“ (`leon_heizung`) hält ihn und das Ventil-Soll gleich, schaltet bei offenem Fenster (`binary_sensor.leon_fenstersensor_contact`) aus und danach wieder auf Heizen.
+Raum-Soll: `sensor.leon_heizung_soll` (Template, Attribut `fenster_aus`), gesetzt über `script.leon_heizung_soll` (Feld `temperatur`). Die Automation „Leon - Heizung“ (`leon_heizung`) hält ihn und das Soll von Better Thermostat gleich, schaltet bei offenem Fenster (`binary_sensor.leon_fenstersensor_contact`) aus und danach wieder auf Heizen.
 
 `switch.schedule_3a20f1` setzt täglich 04:00 auf 21°, `switch.schedule_f66468` täglich 20:00 auf 19,5°. Beide rufen `script.turn_on` auf `script.leon_heizung_soll` mit `variables: {temperatur: …}`.
 
