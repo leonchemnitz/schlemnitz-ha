@@ -200,6 +200,19 @@ Typischer PID-Tag (12.11.): Ab 04:00 Soll 21°, der Raum steigt von 19,5° auf 2
 
 Die Karten (`climate.<raum>_heizung`) hatten `precision: 0.5` und rundeten die Ist-Temperatur im Verlauf auf 0,5°. Seit 15. November 2026 `precision: 0.1`. Das Ventil bekam immer Zehntel. Der Raumfühler Wohnzimmer meldet in 0,2°-Schritten, der externe Eingang zeigt zusätzlich die +0,1°-Wachhaltewerte der Fühler-Automation.
 
+### 7b. Vorbild: Better Thermostat in Leons Zimmer, Februar und März 2026
+
+Aus dem Backup vom 14. Oktober 2026 (`/backup/6cf3d6c9.tar`, Better Thermostat 1.7.0). Eintrag „Leon Thermostat“, angelegt am 2. Februar 2026:
+
+- Ventil `climate.leon_thermostat`, Raumfühler `sensor.leon_sensor_env_temperature`, Feuchte `sensor.leon_sensor_env_humidity`, Außen über `weather.forecast_home`
+- `calibration: local_calibration_based`: Better Thermostat verschiebt `local_temperature_calibration`, das Ventil regelt mit eigenem Fühler und Zweipunkt
+- `calibration_mode: heating_power_calibration` (in der Oberfläche „AI Time Based“): lernt die Aufheizgeschwindigkeit und nimmt den Offset vor dem Soll zurück, damit die Restwärme nicht überschießt
+- `tolerance: 0`, `target_temp_step: 0`, `off_temperature: 20`, keine Fenstersensoren, Kindersicherung und Überhitzungsschutz aus
+
+Ergebnis laut Langzeitstatistik (`sensor.leon_sensor_env_temperature`, Stundenmittel, 07 bis 20 Uhr): im Januar 2026 ohne Better Thermostat Tagesspanne 0,6 bis 2,8°, Tagesmittel zwischen 19,4 und 22,8°. Ab 4. Februar, nach zwei Tagen Lernen, Spanne meist 0,3 bis 0,8°, im März Stundenmittel fast immer 20,7 bis 21,2° bei Soll 21°. Ausreißer über 1° nur an einzelnen Tagen, vermutlich Fenster.
+
+Das Backup vom 25. Januar 2026 enthält noch keinen Better-Thermostat-Eintrag und keine Heizungs-Automationen. Installiert ist heute Better Thermostat 1.9.3, ohne Eintrag. Fehler 1 (Offset auf +12,6°) trat später mit genau diesem Modus auf. Bei einer Rückkehr deshalb den Offset überwachen.
+
 ### 8. Ems: Ventilstift klemmte
 
 Bei Ems lag der Raum tagelang um 20,3°, während das Ventil „heizt“ meldete. Die Kalibrierung vom 11. November 2026 zeigte das Muster eines klemmenden Stifts: Grenzspannung Öffnen 3326, Schließen 2408, also mehr Kraft zum Öffnen als zum Schließen. Gesunde Ventile liegen umgekehrt (Leon 1803/3053, Wohnzimmer 1522/2647, Küche 2034/2713).
