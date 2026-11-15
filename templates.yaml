@@ -68,8 +68,8 @@
       name: Heizung Tag
       icon: mdi:white-balance-sunny
       unit_of_measurement: "°C"
-      min: 4
-      max: 30
+      min: 16
+      max: 26
       step: 0.5
       state: >
         {% set v = trigger.event.data.get('tag') %}
@@ -83,8 +83,8 @@
       name: Heizung Nacht
       icon: mdi:weather-night
       unit_of_measurement: "°C"
-      min: 4
-      max: 30
+      min: 16
+      max: 26
       step: 0.5
       state: >
         {% set v = trigger.event.data.get('nacht') %}
@@ -98,8 +98,8 @@
       name: Heizung jetzt
       icon: mdi:thermometer-chevron-up
       unit_of_measurement: "°C"
-      min: 4
-      max: 30
+      min: 16
+      max: 26
       step: 0.5
       state: >
         {% set v = trigger.event.data.get('jetzt') %}
