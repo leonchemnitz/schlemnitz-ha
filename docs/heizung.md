@@ -177,7 +177,15 @@ Im Modus External Sensor Offset Only hat Better Thermostat das Ventil-Soll alle 
 
 Mit Genauigkeit −0,2 arbeitet der TRVZB als Zweipunktregler: ganz auf bei 0,3° unter Soll, ganz zu bei 0,1° darüber. Der Heizkörper gibt danach noch etwa zehn Minuten Wärme ab. Wohnzimmer am 7. November 2026 bei Soll 21°: auf bei 20,7°, nach etwa 10 Minuten zu bei 21,1°, Spitze 21,5°, dann knapp zwei Stunden Abkühlen bis 20,7°. Seit 21:47 läuft dort `smart_temperature_control` als Versuch. Vergleich nach zwei, drei Tagen, danach entscheiden, ob die anderen Räume folgen. Ausweichlösung: `valve_opening_degree` auf etwa 40 %.
 
-### 8. Sonst beobachtet
+### 8. Ems: Ventilstift klemmte
+
+Bei Ems lag der Raum tagelang um 20,3°, während das Ventil „heizt“ meldete. Die Kalibrierung vom 11. November 2026 zeigte das Muster eines klemmenden Stifts: Grenzspannung Öffnen 3326, Schließen 2408, also mehr Kraft zum Öffnen als zum Schließen. Gesunde Ventile liegen umgekehrt (Leon 1803/3053, Wohnzimmer 1522/2647, Küche 2034/2713).
+
+Am 15. November 2026 hat Leon das Ventil abgenommen und den Stift geölt. Neue Kalibrierung um 11:38: Öffnen 2126, Schließen 2707, Leerlaufschritte 141, Schließschritte 277. Danach von 11:42 bis 11:55 zweimal zu (Soll 5°) und zweimal auf (Soll 30°), mit `automation.ems_heizung` pausiert. Der Motor fuhr jedes Mal etwa sieben Sekunden nach dem Befehl (`valve_motor_running_voltage` neu: rund 1436 nach dem Schließen, rund 1340 nach dem Öffnen), und Leon hörte den Durchfluss jedes Mal stoppen und wieder anlaufen.
+
+Prüfen bei Verdacht an einem anderen Ventil: Grenzspannung Öffnen deutlich über Schließen heißt Stift prüfen.
+
+### 9. Sonst beobachtet
 
 - `temporary_mode_select: boost` mit Dauer 0 steht seit Mai so und ist kein aktiver Boost.
 - `valve_opening_degree` und `valve_closing_degree` = 100 sind die Grenzen, nicht die aktuelle Stellung. Der TRVZB meldet keine Stellung.
@@ -199,5 +207,6 @@ Mit Genauigkeit −0,2 arbeitet der TRVZB als Zweipunktregler: ganz auf bei 0,3�
 ## Offen
 
 - PID-Versuch im Wohnzimmer (Fehler 7) ab 10. November 2026 auswerten.
+- Ob Ems nach dem Ölen (Fehler 8) jetzt 21° erreicht. Verlauf ab 15. November 2026 ansehen.
 - Ob Fehler 2 wiederkommt. Morgens nach 04:00 sollte das Ventil öffnen, wenn der Raum unter 21° liegt.
 - Better Thermostat ist als HACS-Integration noch installiert, aber ohne Eintrag. Entfernen über HACS, danach Neustart.
