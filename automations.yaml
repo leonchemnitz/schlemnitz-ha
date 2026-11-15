@@ -1284,73 +1284,86 @@
   mode: queued
   max: 10
 - id: kueche_trv_follower
-  alias: Küche - TRV follower
-  description: Sendet die Raumtemperatur an den externen Eingang des TRV. Alle 30 Minuten
-    auch ohne neue Messung, sonst nutzt das Ventil nach zwei Stunden wieder den eigenen
-    Fühler.
+  alias: Küche - Ventil-Wächter
+  description: Better Thermostat schreibt die Raumtemperatur selbst an den externen
+    Eingang und regelt über das Ventil-Soll oder die Ventilöffnung. Hält die
+    Ventileinstellungen, die das voraussetzt, und meldet, wenn Better Thermostat
+    ausfällt.
   triggers:
   - trigger: state
     entity_id: number.kueche_thermostat_temperature_accuracy
-  - entity_id: sensor.kueche_sensor_env_temperature
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 1
-    trigger: state
-  - trigger: time_pattern
-    minutes: /30
   - trigger: state
-    entity_id: select.kueche_thermostat_temperature_sensor_select
-    to:
-    - remote_source_offline
-    - local_temperature
-  conditions:
-  - condition: template
-    value_template: '{{ states(''sensor.kueche_sensor_env_temperature'') | is_number }}'
+    entity_id: switch.kueche_thermostat_smart_temperature_control
+    to: 'on'
+  # Im externen Modus wendet der TRVZB den Offset nicht an. Läuft er trotzdem weg,
+  # zählt er beim Rückfall auf den Gehäusefühler.
+  - trigger: state
+    entity_id: number.kueche_thermostat_local_temperature_calibration
+    for:
+      minutes: 5
+  - trigger: state
+    entity_id: climate.kuche_better_thermostat
+    to: unavailable
+    for:
+      minutes: 15
+    id: bt_weg
+  - trigger: homeassistant
+    event: start
+  conditions: []
   actions:
-  - variables:
-      raum: '{{ states(''sensor.kueche_sensor_env_temperature'') | float | round(1) }}'
-  - choose:
-    - conditions:
-      - condition: template
-        value_template: '{{ (states(''number.kueche_thermostat_external_temperature_input'')
-          | float(-99)) | round(1) == raum | float }}'
-      sequence:
-      - action: number.set_value
-        target:
-          entity_id: number.kueche_thermostat_external_temperature_input
-        data:
-          value: '{{ (raum | float + 0.1) | round(1) }}'
-      - delay:
-          seconds: 2
-  - action: number.set_value
-    target:
-      entity_id: number.kueche_thermostat_external_temperature_input
-    data:
-      value: '{{ raum }}'
+  - if:
+    - condition: trigger
+      id: bt_weg
+    then:
+    - action: persistent_notification.create
+      data:
+        notification_id: kueche_better_thermostat
+        title: Küche Heizung
+        message: Better Thermostat ist seit 15 Minuten nicht verfügbar. Das Ventil regelt
+          bis dahin allein mit dem letzten Soll, die Ventilöffnung ist wieder 100 %.
+    - action: number.set_value
+      target:
+        entity_id:
+        - number.kueche_thermostat_valve_opening_degree
+        - number.kueche_thermostat_valve_closing_degree
+      data:
+        value: 100
+    - stop: Better Thermostat fehlt
   - if:
     - condition: template
-      value_template: '{{ states(''number.kueche_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 and not is_state(''switch.kueche_thermostat_smart_temperature_control'', ''on'') }}'
+      value_template: '{{ states(''number.kueche_thermostat_temperature_accuracy'') | float(-0.2) != -0.2 }}'
     then:
     - action: number.set_value
       target:
         entity_id: number.kueche_thermostat_temperature_accuracy
       data:
         value: -0.2
-  - condition: template
-    value_template: '{{ states(''select.kueche_thermostat_temperature_sensor_select'')
-      != ''remote_temperature'' }}'
-  - action: select.select_option
-    target:
-      entity_id: select.kueche_thermostat_temperature_sensor_select
-    data:
-      option: remote_temperature
-  mode: single
+  - if:
+    - condition: state
+      entity_id: switch.kueche_thermostat_smart_temperature_control
+      state: 'on'
+    then:
+    - action: switch.turn_off
+      target:
+        entity_id: switch.kueche_thermostat_smart_temperature_control
+  - if:
+    - condition: template
+      value_template: '{{ states(''number.kueche_thermostat_local_temperature_calibration'') | is_number
+        and states(''number.kueche_thermostat_local_temperature_calibration'') | float != 0 }}'
+    then:
+    - action: number.set_value
+      target:
+        entity_id: number.kueche_thermostat_local_temperature_calibration
+      data:
+        value: 0
+  mode: queued
+  max: 5
 - id: kueche_heizung
   alias: Küche - Heizung
-  description: Fenster auf schaltet das Ventil aus, Fenster zu wieder auf Heizen, wenn
-    das Fenster es ausgeschaltet hat. Hält das Ventil-Soll und sensor.kueche_heizung_soll
-    gleich, in beide Richtungen.
+  description: Fenster auf schaltet Better Thermostat aus, Fenster zu wieder auf Heizen,
+    wenn das Fenster es ausgeschaltet hat. Hält das Soll von Better Thermostat und
+    sensor.kueche_heizung_soll gleich, in beide Richtungen. Die Ventilöffnung stellt
+    Better Thermostat selbst.
   triggers:
   - trigger: state
     entity_id: climate.kueche_thermostat
@@ -1369,11 +1382,11 @@
     entity_id: sensor.kueche_heizung_soll
     id: soll_zum_ventil
   - trigger: state
-    entity_id: climate.kueche_thermostat
+    entity_id: climate.kuche_better_thermostat
     to: heat
     id: soll_zum_ventil
   - trigger: state
-    entity_id: climate.kueche_thermostat
+    entity_id: climate.kuche_better_thermostat
     attribute: temperature
     for:
       seconds: 10
@@ -1396,7 +1409,7 @@
       - condition: not
         conditions:
         - condition: state
-          entity_id: climate.kueche_thermostat
+          entity_id: climate.kuche_better_thermostat
           state: 'off'
       sequence:
       - event: kueche_heizung
@@ -1404,7 +1417,7 @@
           fenster_aus: true
       - action: climate.set_hvac_mode
         target:
-          entity_id: climate.kueche_thermostat
+          entity_id: climate.kuche_better_thermostat
         data:
           hvac_mode: 'off'
     - conditions:
@@ -1420,30 +1433,30 @@
           fenster_aus: false
       - action: climate.set_hvac_mode
         target:
-          entity_id: climate.kueche_thermostat
+          entity_id: climate.kuche_better_thermostat
         data:
           hvac_mode: heat
     - conditions:
       - condition: trigger
         id: soll_zum_ventil
       - condition: state
-        entity_id: climate.kueche_thermostat
+        entity_id: climate.kuche_better_thermostat
         state: heat
       - condition: template
         value_template: '{{ states(''sensor.kueche_heizung_soll'') | is_number and states(''sensor.kueche_heizung_soll'')
-          | float != state_attr(''climate.kueche_thermostat'', ''temperature'') | float(0)
+          | float != state_attr(''climate.kuche_better_thermostat'', ''temperature'') | float(0)
           }}'
       sequence:
       - action: climate.set_temperature
         target:
-          entity_id: climate.kueche_thermostat
+          entity_id: climate.kuche_better_thermostat
         data:
           temperature: '{{ states(''sensor.kueche_heizung_soll'') | float }}'
     - conditions:
       - condition: trigger
         id: ventil_zum_soll
       - condition: state
-        entity_id: climate.kueche_thermostat
+        entity_id: climate.kuche_better_thermostat
         state: heat
       - condition: template
         value_template: '{{ trigger.to_state.attributes.temperature is number and trigger.to_state.attributes.temperature
