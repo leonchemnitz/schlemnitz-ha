@@ -7,7 +7,7 @@ Stand 15. November 2026. Läuft in Leons Zimmer, im Wohnzimmer, im Bad, bei Ems 
 - Ventil: Sonoff TRVZB über Zigbee2MQTT (2.14.2), Firmware 1.4.4 (Datecode 20251229)
 - Raumfühler: externer Temperatursensor in HA. Eine Automation schreibt ihn an den externen Eingang des Ventils. Das Ventil regelt damit selbst.
 - Raum-Soll: Template-Sensor, gesetzt über ein Skript. Eine Automation hält ihn und das Ventil-Soll gleich und schaltet bei offenem Fenster aus.
-- Zeitpläne (Scheduler-Komponente, nicht im Repo) rufen das Skript auf.
+- Zeitpläne: zwei Scheduler-Einträge (nicht im Repo) rufen `script.heizung_zeitplan` auf, das die globalen Werte in alle Räume schreibt (Abschnitt Zeitpläne unten).
 - Dashboard: Bubble-Klima-Karte auf `climate.leon_heizung`. Die zeigt den Raum-Soll, auch wenn das Ventil im Modus Aus 7° meldet. Modus und Flamme kommen vom Ventil.
 
 Bis 15. Oktober 2026 lief Better Thermostat dazwischen. Es hat nur noch Fenster, Zeitpläne und Außentemperatur verwaltet und dabei die Fehler 1, 3, 4 und 6 unten verursacht. Ausgebaut, weil der TRVZB den externen Fühler selbst kann.
@@ -84,8 +84,7 @@ Leon:
 | Better Thermostat | `climate.leon_better_thermostat` |
 | Ventil-Wächter | `'1770107769590'` (`automation.leon_trv_follower`) |
 | Fenster und Soll | `leon_heizung` |
-| Zeitplan 04:00 auf 21° | `switch.schedule_3a20f1` |
-| Zeitplan 20:00 auf 19,5° | `switch.schedule_f66468` |
+| Zeitplan | global (Abschnitt Zeitpläne) |
 
 Wohnzimmer:
 
@@ -104,8 +103,7 @@ Wohnzimmer:
 | Better Thermostat | `climate.wohnzimmer_better_thermostat` |
 | Ventil-Wächter | `wohnzimmer_trv_follower` |
 | Fenster und Soll | `wohnzimmer_heizung` |
-| Zeitplan 04:00 auf 21° | `switch.schedule_wohnzimmer_04_00` |
-| Zeitplan 20:00 auf 19,5° | `switch.schedule_wohnzimmer_20_00` |
+| Zeitplan | global (Abschnitt Zeitpläne) |
 
 Bad:
 
@@ -124,10 +122,9 @@ Bad:
 | Better Thermostat | `climate.bad_better_thermostat` |
 | Ventil-Wächter | `bad_trv_follower` |
 | Fenster und Soll | `bad_heizung` |
-| Zeitplan 04:00 auf 21° | `switch.schedule_bad_04_00` |
-| Zeitplan 20:00 auf 19,5° | `switch.schedule_bad_20_00` |
+| Zeitplan | global (Abschnitt Zeitpläne) |
 
-Wäsche trocknen im Bad (`bad_waesche_trocknen`): Steigt `sensor.bad_sensor_env_humidity` über 68 %, geht der Raum-Soll sofort auf 25° und `sensor.bad_heizung_soll` bekommt `trocknen: true`. Das Ende misst `sensor.bad_absolute_feuchte` (g/m³ aus Temperatur und relativer Feuchte), weil das Aufheizen allein die relative Feuchte von 68 % auf etwa 54 % drückt. Fällt die absolute Feuchte unter 11 g/m³ (60 % bei 21°), gilt sofort wieder der letzte Zeitplanwert (Attribut `zeitplan_soll`, ohne Wert 21°). Die Bad-Zeitpläne rufen `script.bad_heizung_soll` mit `zeitplan: true` auf. Während des Trocknens merkt sich das Skript diesen Wert nur. Eine Änderung an der Karte gilt sofort, auch beim Trocknen. Fenster auf schaltet das Ventil weiterhin aus. Auch Duschen kann die 68 % auslösen. Der Start braucht zusätzlich mehr als 11 g/m³, sonst käme das Ende nie, etwa bei 68 % in einem kalten Bad.
+Wäsche trocknen im Bad (`bad_waesche_trocknen`): Steigt `sensor.bad_sensor_env_humidity` über 68 %, geht der Raum-Soll sofort auf 25° und `sensor.bad_heizung_soll` bekommt `trocknen: true`. Das Ende misst `sensor.bad_absolute_feuchte` (g/m³ aus Temperatur und relativer Feuchte), weil das Aufheizen allein die relative Feuchte von 68 % auf etwa 54 % drückt. Fällt die absolute Feuchte unter 11 g/m³ (60 % bei 21°), gilt sofort wieder der letzte Zeitplanwert (Attribut `zeitplan_soll`, ohne Wert 21°). `script.heizung_zeitplan` ruft `script.bad_heizung_soll` mit `zeitplan: true` auf. Während des Trocknens merkt sich das Skript diesen Wert nur. Eine Änderung an der Karte gilt sofort, auch beim Trocknen. Fenster auf schaltet das Ventil weiterhin aus. Auch Duschen kann die 68 % auslösen. Der Start braucht zusätzlich mehr als 11 g/m³, sonst käme das Ende nie, etwa bei 68 % in einem kalten Bad.
 
 Ems:
 
@@ -145,8 +142,7 @@ Ems:
 | Karte | `climate.ems_heizung` |
 | Fühler-Automation | `ems_trv_follower` |
 | Fenster und Soll | `ems_heizung` |
-| Zeitplan 04:00 auf 21° | `switch.schedule_ems_04_00` |
-| Zeitplan 20:00 auf 19,5° | `switch.schedule_ems_20_00` |
+| Zeitplan | global (Abschnitt Zeitpläne) |
 
 Küche (seit 19. Oktober 2026):
 
@@ -164,10 +160,9 @@ Küche (seit 19. Oktober 2026):
 | Karte | `climate.kueche_heizung` |
 | Fühler-Automation | `kueche_trv_follower` (`automation.kuche_trv_follower`) |
 | Fenster und Soll | `kueche_heizung` (`automation.kuche_heizung`) |
-| Zeitplan 04:00 auf 21° | `switch.schedule_kueche_04_00` |
-| Zeitplan 20:00 auf 19,5° | `switch.schedule_kueche_20_00` |
+| Zeitplan | global (Abschnitt Zeitpläne) |
 
-Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:00 auf 19,5°. Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` soll an allen Ventilen −0,2° sein. Ein neues Ventil kommt mit −1,0°. Das Wohnzimmer stand vom 16. Oktober 2026, 22:43, bis 4. November wieder auf −1,0°, Ursache unbekannt. Mit −1,0° öffnete es bei Soll 22° erst bei 21,0° Raum. Die Fühler-Automation jedes Raums setzt den Wert seitdem auf −0,2° zurück, sobald er abweicht. Bei Ems ist der Raumfühler der Luftreiniger, nicht ein eigener Umweltsensor.
+Alle Räume bekommen dieselben Zeitplanwerte: täglich 04:00 Tag (21°), 20:00 Nacht (19,5°). Die Abendtemperatur ist 19,5°, nicht 19°. `temperature_accuracy` soll an allen Ventilen −0,2° sein. Ein neues Ventil kommt mit −1,0°. Das Wohnzimmer stand vom 16. Oktober 2026, 22:43, bis 4. November wieder auf −1,0°, Ursache unbekannt. Mit −1,0° öffnete es bei Soll 22° erst bei 21,0° Raum. Die Fühler-Automation jedes Raums setzt den Wert seitdem auf −0,2° zurück, sobald er abweicht. Bei Ems ist der Raumfühler der Luftreiniger, nicht ein eigener Umweltsensor.
 
 ## Bausteine
 
@@ -188,9 +183,31 @@ Dieselben Uhrzeiten und Temperaturen wie bei Leon: täglich 04:00 auf 21°, 20:0
 
 `templates.yaml`: `climate.leon_heizung` für die Karte. Solltemperatur ist `sensor.leon_heizung_soll`, Isttemperatur `sensor.leon_temperatur`. HVAC-Modus und `hvac_action` kommen von `climate.leon_better_thermostat` (bei Ems und Küche vom Ventil). Eine Solländerung ruft das Skript auf, ein Moduswechsel Better Thermostat beziehungsweise das Ventil.
 
-Zeitpläne: Aktion `script.turn_on`, Entity `script.leon_heizung_soll`, Daten `variables: {temperatur: 21}`. Läuft ein Zeitplan, während das Ventil aus ist, gilt der Wert beim nächsten Einschalten.
+## Zeitpläne und globale Werte (seit 15. November 2026)
 
-Am Ventil:
+| Rolle | Entity |
+|---|---|
+| Tagwert | `number.heizung_tag_soll` (21°) |
+| Nachtwert | `number.heizung_nacht_soll` (19,5°) |
+| Jetzt-Wert | `number.heizung_jetzt_soll` |
+| Zeitplan setzen | `script.heizung_zeitplan`, Feld `phase` (`tag`/`nacht`) |
+| Jetzt für alle | `script.heizung_alle_jetzt` |
+| Zeitplan 04:00 | `switch.schedule_heizung_tag` (Scheduler „Heizung Tag“) |
+| Zeitplan 20:00 | `switch.schedule_heizung_nacht` (Scheduler „Heizung Nacht“) |
+
+Die drei Zahlen sind Template-Entities in `templates.yaml`, gesetzt nur über das Event `heizung_global` (Daten `tag`, `nacht`, `jetzt`, jeweils optional). Bereich 16 bis 26°, Schritt 0,5. Sie behalten den Wert über Neustarts. Neue Grenzen in `templates.yaml` gelten erst nach dem nächsten Event, notfalls eins ohne Daten feuern.
+
+Die Scheduler-Einträge rufen `script.turn_on` auf `script.heizung_zeitplan` mit `variables: {phase: tag}` bzw. `{phase: nacht}`. Das Skript liest den Tag- oder Nachtwert und ruft die fünf Raum-Skripte auf, im Bad mit `zeitplan: true` (beim Wäschetrocknen gilt der Wert erst danach). Die Uhrzeiten stellt man im Dashboard Zeitsteuerung. Eine Änderung am Tag- oder Nachtwert gilt ab dem nächsten Zeitplan, nicht sofort.
+
+`script.heizung_alle_jetzt` schreibt `number.heizung_jetzt_soll` sofort in alle fünf Räume, im Bad auch beim Wäschetrocknen, wie eine Änderung an der Karte. Es gilt bis zum nächsten Zeitplan.
+
+Dashboard: Bubble „Heizung“ unter dem Tageszeit-Modus, zeigt Tag- und Nachtwert. Tippen öffnet das Popup `#heizung` mit Slidern für Tag, Nacht und Jetzt und dem Knopf „Jetzt überall setzen“.
+
+Bis 15. November 2026 hatte jeder Raum zwei eigene Scheduler-Einträge mit festen Werten (`switch.schedule_3a20f1`, `switch.schedule_f66468`, `switch.schedule_<raum>_04_00`, `switch.schedule_<raum>_20_00`). Sie sind aus, nicht gelöscht.
+
+Läuft ein Zeitplan, während ein Raum aus ist, gilt der Wert beim nächsten Einschalten.
+
+## Ventileinstellungen
 
 - `local_temperature_calibration` = 0.
 - Tastensperre aus.
@@ -306,7 +323,7 @@ Ob es jetzt dicht schließt, zeigt der Abend des 15. November: Ventil zu, der Ra
 5. Skript in `scripts.yaml` kopieren, Event tauschen.
 6. „Leon - Heizung“ kopieren, Ventil, Fenstersensor, Sensor und Event tauschen.
 7. `local_temperature_calibration` am Ventil auf 0, Tastensperre aus, `temperature_accuracy` auf −0,2. Ventil und Fenstersensor in den Bereich des Raums.
-8. Zeitpläne: `script.turn_on` auf das neue Skript mit `variables: {temperatur: …}`.
+8. Zeitpläne: das Raum-Skript in `script.heizung_zeitplan` und `script.heizung_alle_jetzt` ergänzen.
 9. Bubble-Klima-Karte auf die Template-Klima-Entity, Name „Heizung“, nur mit Fenster-Icon (`state_background: true`), im Raum-Popup in `dashboards/dashboard-schlemnitz.yaml`.
 10. Prüfen: Soll auf der Karte ändern, nach 10 Sekunden steht es im Sensor. Fenster auf → Ventil aus, zu → Heizen mit altem Soll. Aus auf der Karte, Fenster auf und zu → bleibt Aus.
 
