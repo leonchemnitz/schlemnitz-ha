@@ -40,7 +40,17 @@ Damit entfallen für die zwei Räume die Fühler-Automationen. Ihre Automation-I
 
 „<Raum> - Heizung“ spricht `climate.<raum>_better_thermostat` an: Fenster aus/an, Raum-Soll in beide Richtungen. Nur „Ventil springt auf Auto“ bleibt am Ventil. Die Karten `climate.leon_heizung` und `climate.wohnzimmer_heizung` nehmen Modus, Heizanzeige und Moduswechsel von Better Thermostat. Better Thermostat kennt nur Heizen und Aus, deshalb haben diese zwei Karten kein Auto mehr.
 
-Bewertung nach zwei Tagen Lernen (ab 17. November 2026): Tagesspanne und Überschwingen nach 04:00 mit 7 und 7a vergleichen, `number.<raum>_thermostat_local_temperature_calibration` und das Ventil-Soll prüfen. Klappt es, auch für Bad, Ems und Küche. Zurück ohne Better Thermostat: Eintrag löschen, die Fühler-Automationen aus Commit `40402eb` zurückholen, Karten und „<Raum> - Heizung“ wieder auf `climate.<raum>_thermostat`.
+Anzeige am Ventil: Mit `target_temp_based` zeigt das Display des TRVZB das verschobene Soll, nicht das Raum-Soll. Am 15. November 2026 um 17:00 stand das Wohnzimmer-Ventil auf 19° bei Raum-Soll 19,5° und 22,5° Raum. Beim Aufheizen zeigt es auch 25° bis 35° (16:56). Die Ist-Temperatur auf dem Display stimmt, das ist der externe Wert. Das richtige Soll steht auf der Karte und in `climate.<raum>_better_thermostat`. Drehen am Ventil geht: Better Thermostat übernimmt den Wert als sein Soll, „<Raum> - Heizung“ schreibt ihn ins Raum-Soll. Gezählt wird dabei aber vom verschobenen Wert aus. Mit `local_calibration_based` bliebe das Display-Soll gleich dem Raum-Soll. Das wirkt beim TRVZB im externen Modus aber nicht (oben). Eine Lösung, bei der das Soll am Ventil stimmt und trotzdem besser geregelt wird, ist offen. Erst die Regelung bewerten, dann entscheiden.
+
+Bewertung nach zwei Tagen Lernen, ab 17. November 2026, je Raum:
+
+- Stundenmittel 07 bis 20 Uhr: Tagesspanne und Abstand zum Soll (Vorbild 7b: Spanne 0,3 bis 0,8°, Mittel 20,7 bis 21,2° bei 21°)
+- Spitze nach dem Sprung um 04:00 von 19,5° auf 21° (Zweipunkt 21,5 bis 21,7°, PID bis 22,7°, 7a)
+- Abfall nach 20:00 auf 19,5°: Wie schnell, und steigt der Raum bei geschlossenem Ventil (8a)?
+- Wie oft der Motor fährt (`sensor.<raum>_thermostat_valve_motor_running_voltage` ändert sich nach jeder Fahrt, Batterie), und ob das Ventil-Soll flattert (Fehler 6)
+- `number.<raum>_thermostat_local_temperature_calibration` bleibt 0, `select.<raum>_thermostat_temperature_sensor_select` bleibt `remote_temperature`
+
+Wohnzimmer erst ab der neuen Montage am 15. November 2026, 16:55, werten (8a). Davon hängt ab, ob Bad, Ems und Küche folgen und wie es mit der Anzeige weitergeht. Zurück ohne Better Thermostat: Eintrag löschen, die Fühler-Automationen aus Commit `40402eb` zurückholen, Karten und „<Raum> - Heizung“ wieder auf `climate.<raum>_thermostat`.
 
 Leon:
 
@@ -230,7 +240,7 @@ Typischer PID-Tag (12.11.): Ab 04:00 Soll 21°, der Raum steigt von 19,5° auf 2
 
 `hvac_action` „heizt“ heißt im PID-Modus nur „Ventil nicht ganz zu“. Der Anteil „heizt“ stieg von 3 bis 19 % (Zweipunkt) auf 58 bis 70 % (PID) und taugt nicht als Maß für die Öffnung.
 
-14.11. ab 19:00 bis 15.11. mittags: Raum bis 24,1° um 23:00 und nachts 22,3 bis 22,9°, ohne dass das Ventil seit 17:30 gefahren ist (Motorspannung unverändert, „idle“). Die anderen Räume blieben normal. Wärme kam also von woanders, Ursache offen. Diese Zeit nicht zur Bewertung der Regelung nutzen.
+14.11. ab 19:00 bis 15.11. mittags: Raum bis 24,1° um 23:00 und nachts 22,3 bis 22,9°, ohne dass das Ventil seit 17:30 gefahren ist (Motorspannung unverändert, „idle“). Die anderen Räume blieben normal. Vermutlich ließ das locker montierte Ventil trotz „zu“ Wasser durch (8a). Mögliche Folge auch für die PID-Tage davor: Wie lange der Kopf schon locker saß, ist unbekannt. Diese Zeit nicht zur Bewertung der Regelung nutzen.
 
 Die Karten (`climate.<raum>_heizung`) hatten `precision: 0.5` und rundeten die Ist-Temperatur im Verlauf auf 0,5°. Seit 15. November 2026 `precision: 0.1`. Das Ventil bekam immer Zehntel. Der Raumfühler Wohnzimmer meldet in 0,2°-Schritten, der externe Eingang zeigt zusätzlich die +0,1°-Wachhaltewerte der Fühler-Automation.
 
@@ -255,6 +265,16 @@ Am 15. November 2026 hat Leon das Ventil abgenommen und den Stift geölt. Neue K
 
 Prüfen bei Verdacht an einem anderen Ventil: Grenzspannung Öffnen deutlich über Schließen heißt Stift prüfen.
 
+### 8a. Wohnzimmer: Ventil saß locker
+
+Am 14. November 2026 fuhr der Motor um 17:18 zum letzten Mal, mit `valve_motor_running_voltage` 2134 (sonst 1300 bis 1500). Danach meldete das Ventil zu, ab 20:00 bei Soll 19,5°. Der Raum stieg trotzdem von 21,7° auf 24,3° um 23:08 und lag am 15. November bis Mittag über 22°. Um 12:08 zeigte der Gehäusefühler 29,7° bei 22,3° Raum. Der Heizkörper war laut Leon komplett warm.
+
+Leons Test am 15. November um 12:17 (Fenster auf und zu, Karte 24,5° und 19,5°): Motor und Durchfluss hörbar, Spannung 995 beim Öffnen, 1307 beim Schließen, normal. Danach trotzdem den ganzen Nachmittag 21,9 bis 22,3° bei Soll 19,5° und geschlossenem Ventil. Die Kalibrierwerte zeigten kein Klemmen (Öffnen 1522, Schließen 2647).
+
+Ursache nach Leon: Ventilkopf zu locker auf dem Ventil, der Stift wurde nicht ganz eingedrückt. Am 15. November gegen 16:50 Stift geölt und Kopf fester verschraubt. Neue Kalibrierung um 16:55: Öffnen 1530, Schließen 2445, Schließschritte 267, Leerlaufschritte 129. Fahrten um 16:56 und 16:57: 979/1324 und 987/1318. Während der Montage maß das Ventil etwa zwei Minuten mit dem Gehäusefühler (29 bis 30°), Better Thermostat schob das Ventil-Soll dabei zwischen 19 und 35°. Ab 16:57 wieder Raumfühler, Soll ruhig.
+
+Ob es jetzt dicht schließt, zeigt der Abend des 15. November: Ventil zu, der Raum sollte unter 22° fallen. Die Wärme vom 14. November (7a) erklärt das vermutlich, Ems (8) hatte dagegen mehr Kraft zum Öffnen als zum Schließen. Ein locker sitzender Kopf zeigt sich nicht in den Grenzspannungen, nur im Verlauf: Raum steigt bei geschlossenem Ventil, Heizkörper bleibt warm.
+
 ### 9. Sonst beobachtet
 
 - `temporary_mode_select: boost` mit Dauer 0 steht seit Mai so und ist kein aktiver Boost.
@@ -277,7 +297,8 @@ Prüfen bei Verdacht an einem anderen Ventil: Grenzspannung Öffnen deutlich üb
 ## Offen
 
 - PID-Versuch im Wohnzimmer: ausgewertet am 15. November 2026 (Fehler 7a), beendet. Ersetzt durch Better Thermostat.
-- Wärme im Wohnzimmer am 14. November 2026 abends und nachts bei geschlossenem Ventil: Ursache klären.
+- Wärme im Wohnzimmer am 14. und 15. November 2026 bei geschlossenem Ventil: vermutlich der locker montierte Kopf (8a). Prüfen, ob der Raum ab 15. November abends bei geschlossenem Ventil fällt.
 - Ob Ems nach dem Ölen (Fehler 8) jetzt 21° erreicht. Verlauf ab 15. November 2026 ansehen.
 - Ob Fehler 2 wiederkommt. Morgens nach 04:00 sollte das Ventil öffnen, wenn der Raum unter 21° liegt.
-- Better Thermostat in Leon und Wohnzimmer ab 17. November 2026 bewerten (Abschnitt Better Thermostat oben).
+- Better Thermostat in Leon und Wohnzimmer ab 17. November 2026 bewerten (Abschnitt Better Thermostat oben, Wohnzimmer ab der neuen Montage).
+- Danach: eine Lösung, bei der das Soll am Ventil-Display wieder das Raum-Soll zeigt und die Regelung trotzdem gut bleibt (Anzeige am Ventil, Abschnitt Better Thermostat oben).
