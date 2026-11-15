@@ -88,7 +88,7 @@
       availability: "{{ states('climate.leon_thermostat') not in ['unknown', 'unavailable'] }}"
       optimistic: true
       temperature_unit: "°C"
-      precision: 0.5
+      precision: 0.1
       min_temperature: 4
       max_temperature: 35
       target_temperature_step: 0.5
@@ -145,7 +145,7 @@
       availability: "{{ states('climate.wohnzimmer_thermostat') not in ['unknown', 'unavailable'] }}"
       optimistic: true
       temperature_unit: "°C"
-      precision: 0.5
+      precision: 0.1
       min_temperature: 4
       max_temperature: 35
       target_temperature_step: 0.5
@@ -208,7 +208,7 @@
       availability: "{{ states('climate.bad_thermostat') not in ['unknown', 'unavailable'] }}"
       optimistic: true
       temperature_unit: "°C"
-      precision: 0.5
+      precision: 0.1
       min_temperature: 4
       max_temperature: 35
       target_temperature_step: 0.5
@@ -265,7 +265,7 @@
       availability: "{{ states('climate.ems_thermostat') not in ['unknown', 'unavailable'] }}"
       optimistic: true
       temperature_unit: "°C"
-      precision: 0.5
+      precision: 0.1
       min_temperature: 4
       max_temperature: 35
       target_temperature_step: 0.5
@@ -322,7 +322,7 @@
       availability: "{{ states('climate.kueche_thermostat') not in ['unknown', 'unavailable'] }}"
       optimistic: true
       temperature_unit: "°C"
-      precision: 0.5
+      precision: 0.1
       min_temperature: 4
       max_temperature: 35
       target_temperature_step: 0.5

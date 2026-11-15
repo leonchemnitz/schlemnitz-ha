@@ -177,6 +177,29 @@ Im Modus External Sensor Offset Only hat Better Thermostat das Ventil-Soll alle 
 
 Mit Genauigkeit −0,2 arbeitet der TRVZB als Zweipunktregler: ganz auf bei 0,3° unter Soll, ganz zu bei 0,1° darüber. Der Heizkörper gibt danach noch etwa zehn Minuten Wärme ab. Wohnzimmer am 7. November 2026 bei Soll 21°: auf bei 20,7°, nach etwa 10 Minuten zu bei 21,1°, Spitze 21,5°, dann knapp zwei Stunden Abkühlen bis 20,7°. Seit 21:47 läuft dort `smart_temperature_control` als Versuch. Vergleich nach zwei, drei Tagen, danach entscheiden, ob die anderen Räume folgen. Ausweichlösung: `valve_opening_degree` auf etwa 40 %.
 
+### 7a. Auswertung PID-Versuch Wohnzimmer (15. November 2026)
+
+Verlauf 5. bis 15. November 2026, Raumfühler, Phase Soll 21° (04:00 bis 20:00):
+
+| Tag | min | max | Mittel | Anteil über 21,3° | Regelung |
+|---|---|---|---|---|---|
+| 5.11. | 20,7 | 21,7 | 21,17 | 25 % | Zweipunkt, Genauigkeit −0,2 |
+| 6.11. | 20,1 | 21,5 | 21,15 | 21 % | Zweipunkt |
+| 7.11. | 19,7 | 21,7 | 21,14 | 15 % | Zweipunkt, ab 21:47 PID |
+| 10.11. | 19,5 | 22,1 | 21,01 | 23 % | PID |
+| 11.11. | 19,5 | 22,7 | 21,11 | 23 % | PID |
+| 12.11. | 19,5 | 22,5 | 21,11 | 35 % | PID |
+| 13.11. | 19,5 | 22,3 | 21,31 | 38 % | PID |
+| 14.11. | 19,7 | 22,5 | 21,49 | 55 % | PID, Fenster 12:40 bis 15:13 |
+
+Typischer PID-Tag (12.11.): Ab 04:00 Soll 21°, der Raum steigt von 19,5° auf 22,3° um 07:30. Das Ventil meldet bis 07:30 „heizt“, obwohl der Raum schon ab etwa 05:00 über dem Soll liegt. Danach fällt er bis 20,1° um 12:00, das Ventil heizt von 09:00 bis 20:00 durch, zweite Spitze 21,7° um 16:00. Pendeln um etwa ±1° mit 8 bis 10 Stunden Periode. Die PID-Regelung im Ventil reagiert zu träge und schießt nach dem Morgensprung von 19,5° auf 21° deutlich über. Gegenüber Zweipunkt (Spitzen 21,5 bis 21,7°) ist das schlechter.
+
+`hvac_action` „heizt“ heißt im PID-Modus nur „Ventil nicht ganz zu“. Der Anteil „heizt“ stieg von 3 bis 19 % (Zweipunkt) auf 58 bis 70 % (PID) und taugt nicht als Maß für die Öffnung.
+
+14.11. ab 19:00 bis 15.11. mittags: Raum bis 24,1° um 23:00 und nachts 22,3 bis 22,9°, ohne dass das Ventil seit 17:30 gefahren ist (Motorspannung unverändert, „idle“). Die anderen Räume blieben normal. Wärme kam also von woanders, Ursache offen. Diese Zeit nicht zur Bewertung der Regelung nutzen.
+
+Die Karten (`climate.<raum>_heizung`) hatten `precision: 0.5` und rundeten die Ist-Temperatur im Verlauf auf 0,5°. Seit 15. November 2026 `precision: 0.1`. Das Ventil bekam immer Zehntel. Der Raumfühler Wohnzimmer meldet in 0,2°-Schritten, der externe Eingang zeigt zusätzlich die +0,1°-Wachhaltewerte der Fühler-Automation.
+
 ### 8. Ems: Ventilstift klemmte
 
 Bei Ems lag der Raum tagelang um 20,3°, während das Ventil „heizt“ meldete. Die Kalibrierung vom 11. November 2026 zeigte das Muster eines klemmenden Stifts: Grenzspannung Öffnen 3326, Schließen 2408, also mehr Kraft zum Öffnen als zum Schließen. Gesunde Ventile liegen umgekehrt (Leon 1803/3053, Wohnzimmer 1522/2647, Küche 2034/2713).
@@ -206,7 +229,8 @@ Prüfen bei Verdacht an einem anderen Ventil: Grenzspannung Öffnen deutlich üb
 
 ## Offen
 
-- PID-Versuch im Wohnzimmer (Fehler 7) ab 10. November 2026 auswerten.
+- PID-Versuch im Wohnzimmer: ausgewertet am 15. November 2026 (Fehler 7a), Entscheidung offen.
+- Wärme im Wohnzimmer am 14. November 2026 abends und nachts bei geschlossenem Ventil: Ursache klären.
 - Ob Ems nach dem Ölen (Fehler 8) jetzt 21° erreicht. Verlauf ab 15. November 2026 ansehen.
 - Ob Fehler 2 wiederkommt. Morgens nach 04:00 sollte das Ventil öffnen, wenn der Raum unter 21° liegt.
 - Better Thermostat ist als HACS-Integration noch installiert, aber ohne Eintrag. Entfernen über HACS, danach Neustart.
