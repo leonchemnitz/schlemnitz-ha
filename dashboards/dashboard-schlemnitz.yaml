@@ -402,6 +402,7 @@ views:
             button_type: name
             name: Heizung
             icon: mdi:radiator
+            show_name: true
             show_state: false
             sub_button:
               main:
@@ -456,6 +457,8 @@ views:
                 button_type: slider
                 entity: number.heizung_tag_soll
                 name: Tag
+                show_name: true
+                show_state: true
                 icon: mdi:white-balance-sunny
                 slider_fill_orientation: left
                 slider_value_position: right
@@ -468,6 +471,8 @@ views:
                 button_type: slider
                 entity: number.heizung_nacht_soll
                 name: Nacht
+                show_name: true
+                show_state: true
                 icon: mdi:weather-night
                 slider_fill_orientation: left
                 slider_value_position: right
@@ -487,6 +492,8 @@ views:
                 button_type: slider
                 entity: number.heizung_jetzt_soll
                 name: Soll
+                show_name: true
+                show_state: true
                 icon: mdi:thermometer
                 slider_fill_orientation: left
                 slider_value_position: right
@@ -498,6 +505,7 @@ views:
                 card_type: button
                 button_type: name
                 name: Jetzt überall setzen
+                show_name: true
                 icon: mdi:check-all
                 show_state: false
                 sub_button:
