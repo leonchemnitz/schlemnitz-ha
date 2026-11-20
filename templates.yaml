@@ -132,8 +132,7 @@
 
 # Anzeige für die Klima-Karte. Die Karte zeigt sensor.leon_heizung_soll.
 # Modus und Heizanzeige kommen von Better Thermostat, Eingaben gehen an Skript
-# und Better Thermostat. Better Thermostat kennt kein Auto. Ems läuft ohne
-# Better Thermostat direkt am Ventil, ihre Karte zeigt Auto noch.
+# und Better Thermostat. Better Thermostat kennt kein Auto.
 - climate:
     - unique_id: leon_heizung_karte
       default_entity_id: climate.leon_heizung
@@ -292,7 +291,7 @@
           data:
             hvac_mode: "{{ hvac_mode }}"
 
-# Ems Heizung. Raumfühler ist der Luftreiniger.
+# Ems Heizung. Gleiches Muster wie Leon, mit Better Thermostat (Ventilöffnung). Raumfühler ist der Luftreiniger.
 - triggers:
     - trigger: event
       event_type: ems_heizung
@@ -316,19 +315,19 @@
       default_entity_id: climate.ems_heizung
       name: Ems Heizung
       icon: mdi:thermostat
-      availability: "{{ states('climate.ems_thermostat') not in ['unknown', 'unavailable'] }}"
+      availability: "{{ states('climate.ems_better_thermostat') not in ['unknown', 'unavailable'] }}"
       optimistic: true
       temperature_unit: "°C"
       precision: 0.1
       min_temperature: 4
       max_temperature: 35
       target_temperature_step: 0.5
-      hvac_modes: "{{ ['off', 'auto', 'heat'] }}"
+      hvac_modes: "{{ ['off', 'heat'] }}"
       hvac_mode: >
-        {% set mode = states('climate.ems_thermostat') %}
-        {{ mode if mode in ['off', 'auto', 'heat'] else 'off' }}
+        {% set mode = states('climate.ems_better_thermostat') %}
+        {{ mode if mode in ['off', 'heat'] else 'off' }}
       hvac_action: >
-        {% set action = state_attr('climate.ems_thermostat', 'hvac_action') %}
+        {% set action = state_attr('climate.ems_better_thermostat', 'hvac_action') %}
         {{ action if action in ['cooling', 'defrosting', 'drying', 'fan', 'heating', 'idle', 'off', 'preheating'] else 'idle' }}
       current_temperature: >
         {% if states('sensor.zhimi_mb5_c00e_temperature') | is_number %}
@@ -345,7 +344,7 @@
       set_hvac_mode:
         - action: climate.set_hvac_mode
           target:
-            entity_id: climate.ems_thermostat
+            entity_id: climate.ems_better_thermostat
           data:
             hvac_mode: "{{ hvac_mode }}"
 
